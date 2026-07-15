@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Supplementary readings for the Industrial Organization & Competition cohort.">
+<title>Industrial Organization &amp; Competition — Supplementary Readings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   Design language: the front matter of a journal.
+   Dot-leader contents rows, Oxford rule under the masthead,
+   STIX Two (the scholarly-publishing face) + Plex Mono for meta.
+   ============================================================ */
+
+:root{
+  --paper:   #F6F5EF;
+  --panel:   #FCFBF6;
+  --ink:     #1F2A24;
+  --muted:   #5D6B62;
+  --rule:    #D8DACB;
+  --dots:    #B7BCAA;
+  --green:   #1F5C43;  /* interactive / active */
+  --ox:      #7C2F2B;  /* secondary accent      */
+}
+
+*{ box-sizing:border-box; }
+html{ -webkit-text-size-adjust:100%; }
+
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"STIX Two Text", Georgia, "Times New Roman", serif;
+  font-size:17px;
+  line-height:1.55;
+}
+
+::selection{ background:var(--green); color:var(--paper); }
+
+a{ color:inherit; }
+
+:focus-visible{
+  outline:2px solid var(--green);
+  outline-offset:2px;
+  border-radius:2px;
+}
+
+.wrap{
+  max-width:1020px;
+  margin:0 auto;
+  padding:0 24px;
+}
+
+/* ---------- Masthead ---------- */
+
+.masthead{
+  padding:56px 0 26px;
+  position:relative;
+}
+/* Oxford rule: one heavy line, one hairline beneath it */
+.masthead::after{
+  content:"";
+  display:block;
+  margin-top:26px;
+  border-top:2.5px solid var(--ink);
+  border-bottom:1px solid var(--ink);
+  height:4px;
+}
+
+.eyebrow{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:.72rem;
+  font-weight:500;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin:0 0 18px;
+}
+.eyebrow b{ color:var(--green); font-weight:600; }
+
+h1{
+  font-size:clamp(2.35rem, 5.4vw, 3.5rem);
+  font-weight:600;
+  line-height:1.05;
+  letter-spacing:-.012em;
+  margin:0 0 16px;
+  max-width:18ch;
+}
+h1 .amp{
+  font-style:italic;
+  font-weight:500;
+  color:var(--green);
+  padding:0 .04em;
+}
+
+.dek{
+  font-size:1.06rem;
+  font-style:italic;
+  color:var(--muted);
+  max-width:52ch;
+  margin:0;
+}
+.dek b{ font-style:normal; font-weight:600; color:var(--ink); }
+
+/* ---------- Frame: contents rail + list ---------- */
+
+.frame{
+  display:grid;
+  grid-template-columns:225px minmax(0,1fr);
+  gap:56px;
+  padding:40px 0 24px;
+  align-items:start;
+}
+
+.rail{
+  position:sticky;
+  top:28px;
+}
+.rail-head{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:.7rem;
+  font-weight:600;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--ink);
+  margin:0 0 12px;
+  padding-bottom:8px;
+  border-bottom:1px solid var(--rule);
+}
+
+.theme-btn{
+  display:block;
+  width:100%;
+  text-align:left;
+  background:none;
+  border:none;
+  border-left:2px solid transparent;
+  padding:6px 0 6px 10px;
+  margin:1px 0;
+  font-family:"IBM Plex Mono", monospace;
+  font-size:.76rem;
+  line-height:1.4;
+  color:var(--muted);
+  cursor:pointer;
+  transition:color .15s ease, border-color .15s ease;
+}
+.theme-btn:hover{ color:var(--ink); }
+.theme-btn[aria-pressed="true"]{
+  color:var(--green);
+  font-weight:600;
+  border-left-color:var(--green);
+}
+.theme-btn .n{ opacity:.65; font-weight:400; }
+
+.rail-note{
+  margin:20px 0 0;
+  font-family:"IBM Plex Mono", monospace;
+  font-size:.68rem;
+  line-height:1.7;
+  color:var(--muted);
+}
+kbd{
+  font-family:inherit;
+  border:1px solid var(--rule);
+  border-bottom-width:2px;
+  border-radius:3px;
+  padding:0 5px;
+  background:var(--panel);
+}
+
+/* ---------- Toolbar ---------- */
+
+.toolbar{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:18px;
+  margin-bottom:34px;
+}
+#q{
+  flex:1;
+  max-width:400px;
+  font-family:"IBM Plex Mono", monospace;
+  font-size:.84rem;
+  color:var(--ink);
+  background:var(--panel);
+  border:1px solid var(--rule);
+  border-radius:3px;
+  padding:9px 12px;
+}
+#q::placeholder{ color:var(--muted); opacity:.8; }
+#q:focus{ border-color:var(--green); outline:none; }
+.count{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:.72rem;
+  color:var(--muted);
+  white-space:nowrap;
+}
+
+/* ---------- Theme sections ---------- */
+
+.section{ margin-bottom:44px; }
+
+.section-head{
+  display:flex;
+  align-items:baseline;
+  gap:12px;
+  margin:0 0 6px;
+  padding-bottom:9px;
+  border-bottom:1px solid var(--rule);
+}
+.section-head .numeral{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:.78rem;
+  font-weight:600;
+  color:var(--ox);
+  min-width:1.6em;
+}
+.section-head h2{
+  font-size:1.08rem;
+  font-weight:600;
+  font-variant-caps:small-caps;
+  letter-spacing:.05em;
+  margin:0;
+}
+.section-head .n{
+  margin-left:auto;
+  font-family:"IBM Plex Mono", monospace;
+  font-size:.7rem;
+  color:var(--muted);
+}
+
+.entries{ list-style:none; margin:0; padding:0; }
+
+.entry{ padding:13px 0; border-bottom:1px solid transparent; }
+
+/* Row 1 — the dot-leader contents line */
+.entry-line{
+  display:flex;
+  align-items:baseline;
+  flex-wrap:wrap;
+  gap:0 10px;
+}
+.authors{
+  font-variant-caps:small-caps;
+  letter-spacing:.02em;
+  font-weight:500;
+  white-space:nowrap;
+}
+.title a, .title .link-missing{
+  font-style:italic;
+  text-decoration:none;
+  transition:color .15s ease;
+}
+.title a:hover{ color:var(--green); }
+.title .link-missing{
+  color:var(--muted);
+  border-bottom:1px dashed var(--dots);
+  cursor:help;
+}
+/* the leader itself: a run of printed dots */
+.leader{
+  flex:1 1 28px;
+  min-width:28px;
+  height:.85em;
+  align-self:baseline;
+  background-image:radial-gradient(circle, var(--dots) 1.15px, transparent 1.6px);
+  background-size:9px 3px;
+  background-repeat:repeat-x;
+  background-position:left calc(100% - 2px);
+}
+.entry:hover .leader{
+  background-image:radial-gradient(circle, var(--green) 1.15px, transparent 1.6px);
+}
+.year{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:.78rem;
+  font-weight:500;
+  color:var(--ink);
+}
+
+/* Row 2 — quiet meta line */
+.entry-meta{
+  margin-top:3px;
+  font-family:"IBM Plex Mono", monospace;
+  font-size:.7rem;
+  letter-spacing:.01em;
+  color:var(--muted);
+  display:flex;
+  flex-wrap:wrap;
+  align-items:baseline;
+  gap:4px 8px;
+}
+.entry-meta .sep{ opacity:.55; }
+.pick{ font-weight:600; }
+.pick-junio{ color:var(--green); }
+.pick-edward{ color:var(--ox); }
+
+.copy-btn{
+  font-family:inherit;
+  font-size:inherit;
+  background:none;
+  border:none;
+  padding:0;
+  color:var(--green);
+  border-bottom:1px dotted var(--green);
+  cursor:pointer;
+}
+.copy-btn:hover{ color:var(--ink); border-bottom-color:var(--ink); }
+.copy-btn.done{ color:var(--muted); border-bottom-color:transparent; cursor:default; }
+
+/* ---------- Empty state ---------- */
+
+#empty{
+  padding:44px 0;
+  text-align:left;
+}
+#empty p{
+  font-style:italic;
+  color:var(--muted);
+  margin:0 0 14px;
+}
+#empty button{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:.76rem;
+  color:var(--green);
+  background:none;
+  border:1px solid var(--green);
+  border-radius:3px;
+  padding:7px 14px;
+  cursor:pointer;
+}
+#empty button:hover{ background:var(--green); color:var(--paper); }
+
+/* ---------- Footer ---------- */
+
+footer{
+  border-top:1px solid var(--rule);
+  margin-top:28px;
+  padding:22px 0 52px;
+  font-family:"IBM Plex Mono", monospace;
+  font-size:.7rem;
+  line-height:1.8;
+  color:var(--muted);
+}
+footer code{
+  font-family:inherit;
+  color:var(--ink);
+  background:var(--panel);
+  border:1px solid var(--rule);
+  border-radius:3px;
+  padding:1px 5px;
+}
+
+/* ---------- Load motion (one quiet settle) ---------- */
+
+@media (prefers-reduced-motion: no-preference){
+  .masthead .eyebrow, .masthead h1, .masthead .dek{
+    animation:settle .55s cubic-bezier(.2,.7,.3,1) both;
+  }
+  .masthead h1{ animation-delay:.06s; }
+  .masthead .dek{ animation-delay:.12s; }
+  .section{ animation:settle .5s cubic-bezier(.2,.7,.3,1) both; }
+}
+@keyframes settle{
+  from{ opacity:0; transform:translateY(9px); }
+  to{ opacity:1; transform:none; }
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 860px){
+  .frame{ display:block; padding-top:30px; }
+  .rail{ position:static; margin-bottom:30px; }
+  .rail-head{ border-bottom:none; padding-bottom:2px; }
+  #themeNav{ display:flex; flex-wrap:wrap; gap:2px 18px; }
+  .theme-btn{ width:auto; padding:5px 0 5px 8px; }
+  .rail-note{ margin-top:10px; }
+  .masthead{ padding-top:40px; }
+}
+@media (max-width: 540px){
+  body{ font-size:16px; }
+  .toolbar{ flex-direction:column; align-items:stretch; gap:8px; }
+  #q{ max-width:none; }
+  .count{ text-align:right; }
+}
+
+/* ---------- Print: hand it out ---------- */
+
+@media print{
+  .rail, .toolbar, footer .edit-note, #empty{ display:none; }
+  body{ background:#fff; color:#000; }
+  .masthead{ padding-top:0; }
+  .title a{ color:#000; }
+  .entry{ break-inside:avoid; }
+}
+</style>
+</head>
+<body>
+
+<header class="masthead wrap">
+  <p class="eyebrow">Supplementary readings · <b id="updated"></b></p>
+  <h1>Industrial Organization <span class="amp">&amp;</span> Competition</h1>
+  <p class="dek">A running index of papers, articles, and books for cohort members who want to read past the syllabus. Kept by <b>Junio</b> and <b>Edward</b>.</p>
+</header>
+
+<div class="frame wrap">
+
+  <nav class="rail" aria-label="Filter by theme">
+    <p class="rail-head">Contents</p>
+    <div id="themeNav"></div>
+    <p class="rail-note">Select a theme to filter the list.<br>Press <kbd>/</kbd> to search.</p>
+  </nav>
+
+  <main>
+    <div class="toolbar">
+      <input id="q" type="search" placeholder="Search titles, authors, themes…" aria-label="Search readings">
+      <span class="count" id="shown"></span>
+    </div>
+
+    <div id="list"></div>
+
+    <div id="empty" hidden>
+      <p>Nothing matches “<span id="emptyQ"></span>”.</p>
+      <button id="clearBtn" type="button">Clear search</button>
+    </div>
+  </main>
+
+</div>
+
+<footer class="wrap">
+  <div class="edit-note">
+    This page is self-contained. To add a reading, open the file and append an entry to the
+    <code>READINGS</code> array at the top of the script — theme, title, authors, year, venue, type, url.
+    Theme names and their order live in <code>THEMES</code>.
+  </div>
+  <div id="total"></div>
+</footer>
+
+<script>
+/* =====================================================================
+   HOW TO MAINTAIN THIS PAGE
+   ---------------------------------------------------------------------
+   1. THEMES controls which sections exist and the order they appear in
+      (the roman numerals are generated from this order). Rename, add,
+      or reorder freely. If an entry's theme isn't listed here, its
+      section is appended automatically at the end.
+
+   2. READINGS is the whole reading list. One object per entry:
+
+        {
+          theme:   "Barriers to Entry",            // must match a THEMES name
+          title:   "Barriers to Entry",
+          authors: "Demsetz, H.",                  // free text, any format
+          year:    1982,
+          venue:   "American Economic Review",     // journal / publisher / site
+          type:    "paper",                        // "paper" | "article" | "book"
+                                                   //   books render italic,
+                                                   //   everything else in quotes
+          url:     "#",                            // "#" = not filled in yet;
+                                                   //   renders as a dashed stub
+          pick:    "junio"                         // optional: "junio" | "edward"
+        }
+
+      Entries within a theme are sorted oldest → newest automatically
+      (delete the .sort(...) line in render() if you'd rather order
+      them by hand).
+
+   3. The sample entries below are placeholders to show the schema —
+      replace them with your own.
+   ===================================================================== */
+
+const LAST_UPDATED = "July 2026";
+
+const THEMES = [
+  "Theory of the Firm",
+  "Market Structure & Concentration",
+  "Barriers to Entry",
+  "Antitrust & Competition Policy"
+];
+
+const CURATORS = {
+  junio:  { label: "Junio’s pick",  cls: "pick-junio"  },
+  edward: { label: "Edward’s pick", cls: "pick-edward" }
+};
+
+const READINGS = [
+  // ---- SAMPLE ENTRIES — replace with real ones ----------------------
+  { theme:"Theory of the Firm", title:"The Nature of the Firm", authors:"Coase, R. H.", year:1937, venue:"Economica", type:"paper", url:"#" },
+  { theme:"Theory of the Firm", title:"The Division of Labor Is Limited by the Extent of the Market", authors:"Stigler, G. J.", year:1951, venue:"Journal of Political Economy", type:"paper", url:"#" },
+  { theme:"Theory of the Firm", title:"Production, Information Costs, and Economic Organization", authors:"Alchian, A. A. & Demsetz, H.", year:1972, venue:"American Economic Review", type:"paper", url:"#" },
+
+  { theme:"Market Structure & Concentration", title:"A Theory of Oligopoly", authors:"Stigler, G. J.", year:1964, venue:"Journal of Political Economy", type:"paper", url:"#" },
+  { theme:"Market Structure & Concentration", title:"Industry Structure, Market Rivalry, and Public Policy", authors:"Demsetz, H.", year:1973, venue:"Journal of Law and Economics", type:"paper", url:"#" },
+
+  { theme:"Barriers to Entry", title:"Barriers to New Competition", authors:"Bain, J. S.", year:1956, venue:"Harvard University Press", type:"book", url:"#" },
+  { theme:"Barriers to Entry", title:"Barriers to Entry", authors:"Demsetz, H.", year:1982, venue:"American Economic Review", type:"paper", url:"#", pick:"junio" },
+
+  { theme:"Antitrust & Competition Policy", title:"Law and the Future: Trade Regulation", authors:"Director, A. & Levi, E. H.", year:1956, venue:"Northwestern University Law Review", type:"paper", url:"#" },
+  { theme:"Antitrust & Competition Policy", title:"The Antitrust Paradox", authors:"Bork, R. H.", year:1978, venue:"Basic Books", type:"book", url:"#", pick:"edward" }
+  // --------------------------------------------------------------------
+];
+
+/* ============================ machinery ============================ */
+
+const state = { theme: "all", q: "" };
+
+const $list  = document.getElementById("list");
+const $nav   = document.getElementById("themeNav");
+const $q     = document.getElementById("q");
+const $shown = document.getElementById("shown");
+const $empty = document.getElementById("empty");
+
+const ROMAN = ["I","II","III","IV","V","VI","VII","VIII","IX","X",
+               "XI","XII","XIII","XIV","XV","XVI","XVII","XVIII","XIX","XX"];
+const roman = i => ROMAN[i] || String(i + 1);
+
+const esc = s => String(s).replace(/[&<>"']/g, c =>
+  ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+
+// Theme order = THEMES, plus any theme found only in the data.
+function themeOrder(){
+  const order = [...THEMES];
+  for (const r of READINGS){
+    if (!order.includes(r.theme)) order.push(r.theme);
+  }
+  return order;
+}
+
+function matches(r, q){
+  if (!q) return true;
+  const hay = [r.title, r.authors, r.venue, r.theme, r.year].join(" ").toLowerCase();
+  return hay.includes(q);
+}
+
+function titleHTML(r){
+  // Books italic; papers & articles in quotes (both are set in italic type,
+  // quotes distinguish the shorter forms — Chicago-ish, close enough).
+  const t = esc(r.title);
+  const text = r.type === "book" ? t : "\u201C" + t + "\u201D";
+  if (!r.url || r.url === "#"){
+    return `<span class="link-missing" title="No URL yet — add one to this entry in READINGS.">${text}</span>`;
+  }
+  return `<a href="${esc(r.url)}" target="_blank" rel="noopener">${text}</a>`;
+}
+
+function metaHTML(r){
+  const bits = [];
+  if (r.venue) bits.push(esc(r.venue));
+  if (r.pick && CURATORS[r.pick]){
+    const c = CURATORS[r.pick];
+    bits.push(`<span class="pick ${c.cls}">${esc(c.label)}</span>`);
+  }
+  if (r.url && r.url !== "#"){
+    bits.push(`<button class="copy-btn" type="button" data-url="${esc(r.url)}">copy link</button>`);
+  }
+  return bits.join(`<span class="sep">·</span>`);
+}
+
+function entryHTML(r){
+  return `<li class="entry">
+    <div class="entry-line">
+      <span class="authors">${esc(r.authors)}</span>
+      <span class="title">${titleHTML(r)}</span>
+      <span class="leader" aria-hidden="true"></span>
+      <span class="year">${esc(r.year)}</span>
+    </div>
+    <div class="entry-meta">${metaHTML(r)}</div>
+  </li>`;
+}
+
+function render(){
+  const q = state.q.trim().toLowerCase();
+  const order = themeOrder();
+  let shown = 0, html = "", sectionIndex = 0;
+
+  order.forEach((theme, i) => {
+    if (state.theme !== "all" && state.theme !== theme) return;
+
+    const rows = READINGS
+      .filter(r => r.theme === theme && matches(r, q))
+      .sort((a, b) => (a.year - b.year) || String(a.title).localeCompare(b.title));
+
+    if (!rows.length) return;
+    shown += rows.length;
+
+    html += `<section class="section" style="animation-delay:${Math.min(sectionIndex * 60, 300)}ms">
+      <div class="section-head">
+        <span class="numeral">${roman(i)}</span>
+        <h2>${esc(theme)}</h2>
+        <span class="n">${rows.length}</span>
+      </div>
+      <ul class="entries">${rows.map(entryHTML).join("")}</ul>
+    </section>`;
+    sectionIndex++;
+  });
+
+  $list.innerHTML = html;
+  $shown.textContent = `showing ${shown} of ${READINGS.length}`;
+
+  const none = shown === 0;
+  $empty.hidden = !none;
+  if (none) document.getElementById("emptyQ").textContent = state.q.trim();
+}
+
+function renderNav(){
+  const order = themeOrder();
+  const counts = {};
+  READINGS.forEach(r => counts[r.theme] = (counts[r.theme] || 0) + 1);
+
+  let html = `<button class="theme-btn" type="button" data-theme="all"
+    aria-pressed="${state.theme === "all"}">All readings <span class="n">(${READINGS.length})</span></button>`;
+
+  order.forEach((theme, i) => {
+    html += `<button class="theme-btn" type="button" data-theme="${esc(theme)}"
+      aria-pressed="${state.theme === theme}">${roman(i)} — ${esc(theme)} <span class="n">(${counts[theme] || 0})</span></button>`;
+  });
+
+  $nav.innerHTML = html;
+}
+
+/* ---------------------------- events ---------------------------- */
+
+$nav.addEventListener("click", e => {
+  const btn = e.target.closest(".theme-btn");
+  if (!btn) return;
+  state.theme = btn.dataset.theme;
+  renderNav();
+  render();
+});
+
+$q.addEventListener("input", () => {
+  state.q = $q.value;
+  render();
+});
+
+document.getElementById("clearBtn").addEventListener("click", () => {
+  state.q = ""; $q.value = "";
+  render(); $q.focus();
+});
+
+document.addEventListener("keydown", e => {
+  if (e.key === "/" && document.activeElement !== $q){
+    e.preventDefault(); $q.focus();
+  }
+  if (e.key === "Escape" && document.activeElement === $q){
+    state.q = ""; $q.value = ""; render();
+  }
+});
+
+$list.addEventListener("click", e => {
+  const btn = e.target.closest(".copy-btn");
+  if (!btn || btn.classList.contains("done")) return;
+  const url = btn.dataset.url;
+  const done = () => {
+    btn.classList.add("done");
+    const prev = btn.textContent;
+    btn.textContent = "copied";
+    setTimeout(() => { btn.classList.remove("done"); btn.textContent = prev; }, 1400);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(url).then(done).catch(done);
+  } else {
+    const ta = document.createElement("textarea");
+    ta.value = url; document.body.appendChild(ta);
+    ta.select(); try{ document.execCommand("copy"); }catch(_){}
+    document.body.removeChild(ta); done();
+  }
+});
+
+/* ---------------------------- boot ---------------------------- */
+
+document.getElementById("updated").textContent = LAST_UPDATED;
+document.getElementById("total").textContent =
+  `${READINGS.length} readings · updated ${LAST_UPDATED}`;
+
+renderNav();
+render();
+</script>
+</body>
+</html>

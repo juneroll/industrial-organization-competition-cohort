@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Supplementary readings for the Industrial Organization and Competition cohort.">
-<title>Industrial Organization &amp; Competition — Supplementary Readings</title>
+<meta name="description" content="Supplementary readings for the Industrial Organization & Competition cohort.">
+<title>Industrial Organization and Competition — Supplementary Readings</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -14,6 +14,7 @@
    Dot-leader contents rows, Oxford rule under the masthead,
    STIX Two (the scholarly-publishing face) + Plex Mono for meta.
    ============================================================ */
+
 :root{
   --paper:   #F6F5EF;
   --panel:   #FCFBF6;
@@ -88,11 +89,10 @@ h1{
   margin:0 0 16px;
   max-width:18ch;
 }
-h1 .amp{
+h1 .conj{
   font-style:italic;
   font-weight:500;
   color:var(--green);
-  padding:0 .04em;
 }
 
 .dek{
@@ -103,6 +103,20 @@ h1 .amp{
   margin:0;
 }
 .dek b{ font-style:normal; font-weight:600; color:var(--ink); }
+
+.masthead-grid{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:48px;
+}
+.masthead-text{ min-width:0; }
+.club-mark{
+  width:clamp(170px, 24vw, 260px);
+  height:auto;
+  flex-shrink:0;
+  margin-top:6px;
+}
 
 /* ---------- Frame: contents rail + list ---------- */
 
@@ -357,10 +371,11 @@ footer code{
 /* ---------- Load motion (one quiet settle) ---------- */
 
 @media (prefers-reduced-motion: no-preference){
-  .masthead .eyebrow, .masthead h1, .masthead .dek{
+  .masthead .eyebrow, .masthead h1, .masthead .dek, .club-mark{
     animation:settle .55s cubic-bezier(.2,.7,.3,1) both;
   }
   .masthead h1{ animation-delay:.06s; }
+  .club-mark{ animation-delay:.09s; }
   .masthead .dek{ animation-delay:.12s; }
   .section{ animation:settle .5s cubic-bezier(.2,.7,.3,1) both; }
 }
@@ -379,6 +394,10 @@ footer code{
   .theme-btn{ width:auto; padding:5px 0 5px 8px; }
   .rail-note{ margin-top:10px; }
   .masthead{ padding-top:40px; }
+}
+@media (max-width: 640px){
+  .masthead-grid{ flex-direction:column-reverse; gap:24px; }
+  .club-mark{ width:180px; margin-top:0; }
 }
 @media (max-width: 540px){
   body{ font-size:16px; }
@@ -401,9 +420,14 @@ footer code{
 <body>
 
 <header class="masthead wrap">
-  <p class="eyebrow">Supplementary readings · <b id="updated"></b></p>
-  <h1>Industrial Organization <span class="amp">&amp;</span> Competition</h1>
-  <p class="dek">A running index of papers and articles related to industrial organization theory and antitrust. Kept by <b>Junio</b> and <b>Edward</b>.</p>
+  <div class="masthead-grid">
+    <div class="masthead-text">
+      <p class="eyebrow">Supplementary readings · <b id="updated"></b></p>
+      <h1>Industrial Organization and Competition</h1>
+      <p class="dek">A running index of papers and articles related to industrial organization theory and antitrust for cohort members. Kept by <b>Junio</b> and <b>Edward</b>.</p>
+    </div>
+    <img class="club-mark" src="oeconomica.png" alt="Oeconomica" width="1255" height="179">
+  </div>
 </header>
 
 <div class="frame wrap">

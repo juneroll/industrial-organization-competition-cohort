@@ -1,3 +1,6 @@
+
+
+Index · HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,7 +17,7 @@
    Dot-leader contents rows, Oxford rule under the masthead,
    STIX Two (the scholarly-publishing face) + Plex Mono for meta.
    ============================================================ */
-
+ 
 :root{
   --paper:   #F6F5EF;
   --panel:   #FCFBF6;
@@ -25,10 +28,10 @@
   --green:   #1F5C43;  /* interactive / active */
   --ox:      #7C2F2B;  /* secondary accent      */
 }
-
+ 
 *{ box-sizing:border-box; }
 html{ -webkit-text-size-adjust:100%; }
-
+ 
 body{
   margin:0;
   background:var(--paper);
@@ -37,25 +40,25 @@ body{
   font-size:17px;
   line-height:1.55;
 }
-
+ 
 ::selection{ background:var(--green); color:var(--paper); }
-
+ 
 a{ color:inherit; }
-
+ 
 :focus-visible{
   outline:2px solid var(--green);
   outline-offset:2px;
   border-radius:2px;
 }
-
+ 
 .wrap{
   max-width:1020px;
   margin:0 auto;
   padding:0 24px;
 }
-
+ 
 /* ---------- Masthead ---------- */
-
+ 
 .masthead{
   padding:56px 0 26px;
   position:relative;
@@ -69,7 +72,7 @@ a{ color:inherit; }
   border-bottom:1px solid var(--ink);
   height:4px;
 }
-
+ 
 .eyebrow{
   font-family:"IBM Plex Mono", monospace;
   font-size:.72rem;
@@ -80,7 +83,7 @@ a{ color:inherit; }
   margin:0 0 18px;
 }
 .eyebrow b{ color:var(--green); font-weight:600; }
-
+ 
 h1{
   font-size:clamp(2.35rem, 5.4vw, 3.5rem);
   font-weight:600;
@@ -94,7 +97,7 @@ h1 .conj{
   font-weight:500;
   color:var(--green);
 }
-
+ 
 .dek{
   font-size:1.06rem;
   font-style:italic;
@@ -103,7 +106,7 @@ h1 .conj{
   margin:0;
 }
 .dek b{ font-style:normal; font-weight:600; color:var(--ink); }
-
+ 
 .masthead-grid{
   display:flex;
   align-items:flex-start;
@@ -117,9 +120,9 @@ h1 .conj{
   flex-shrink:0;
   margin-top:6px;
 }
-
+ 
 /* ---------- Frame: contents rail + list ---------- */
-
+ 
 .frame{
   display:grid;
   grid-template-columns:225px minmax(0,1fr);
@@ -127,7 +130,7 @@ h1 .conj{
   padding:40px 0 24px;
   align-items:start;
 }
-
+ 
 .rail{
   position:sticky;
   top:28px;
@@ -143,7 +146,7 @@ h1 .conj{
   padding-bottom:8px;
   border-bottom:1px solid var(--rule);
 }
-
+ 
 .theme-btn{
   display:block;
   width:100%;
@@ -167,7 +170,7 @@ h1 .conj{
   border-left-color:var(--green);
 }
 .theme-btn .n{ opacity:.65; font-weight:400; }
-
+ 
 .rail-note{
   margin:20px 0 0;
   font-family:"IBM Plex Mono", monospace;
@@ -183,9 +186,12 @@ kbd{
   padding:0 5px;
   background:var(--panel);
 }
-
+ 
+#sessionNav{ margin-top:22px; }
+.rail-note.legend{ margin-top:12px; letter-spacing:.02em; }
+ 
 /* ---------- Toolbar ---------- */
-
+ 
 .toolbar{
   display:flex;
   align-items:baseline;
@@ -212,11 +218,23 @@ kbd{
   color:var(--muted);
   white-space:nowrap;
 }
-
+.pill{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:.7rem;
+  color:var(--green);
+  background:none;
+  border:1px solid var(--green);
+  border-radius:999px;
+  padding:3px 11px;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.pill:hover{ background:var(--green); color:var(--paper); }
+ 
 /* ---------- Theme sections ---------- */
-
+ 
 .section{ margin-bottom:44px; }
-
+ 
 .section-head{
   display:flex;
   align-items:baseline;
@@ -239,17 +257,25 @@ kbd{
   letter-spacing:.05em;
   margin:0;
 }
-.section-head .n{
+.section-head .perma{
   margin-left:auto;
+  font-family:"IBM Plex Mono", monospace;
+  font-size:.75rem;
+  color:var(--dots);
+  text-decoration:none;
+  padding:0 2px;
+}
+.section-head .perma:hover{ color:var(--green); }
+.section-head .n{
   font-family:"IBM Plex Mono", monospace;
   font-size:.7rem;
   color:var(--muted);
 }
-
+ 
 .entries{ list-style:none; margin:0; padding:0; }
-
+ 
 .entry{ padding:13px 0; border-bottom:1px solid transparent; }
-
+ 
 /* Row 1 — the dot-leader contents line */
 .entry-line{
   display:flex;
@@ -294,7 +320,7 @@ kbd{
   font-weight:500;
   color:var(--ink);
 }
-
+ 
 /* Row 2 — quiet meta line */
 .entry-meta{
   margin-top:3px;
@@ -311,7 +337,23 @@ kbd{
 .pick{ font-weight:600; }
 .pick-junio{ color:var(--green); }
 .pick-edward{ color:var(--ox); }
-
+ 
+.start{ color:var(--green); font-weight:600; }
+.level{ color:var(--muted); }
+ 
+.week-tag{
+  font-family:inherit;
+  font-size:inherit;
+  background:none;
+  border:none;
+  padding:0;
+  color:var(--muted);
+  border-bottom:1px dotted var(--dots);
+  cursor:pointer;
+}
+.week-tag:hover{ color:var(--ink); border-bottom-color:var(--ink); }
+.week-tag.active{ color:var(--green); border-bottom-color:var(--green); font-weight:600; }
+ 
 .copy-btn{
   font-family:inherit;
   font-size:inherit;
@@ -324,9 +366,9 @@ kbd{
 }
 .copy-btn:hover{ color:var(--ink); border-bottom-color:var(--ink); }
 .copy-btn.done{ color:var(--muted); border-bottom-color:transparent; cursor:default; }
-
+ 
 /* ---------- Empty state ---------- */
-
+ 
 #empty{
   padding:44px 0;
   text-align:left;
@@ -347,9 +389,9 @@ kbd{
   cursor:pointer;
 }
 #empty button:hover{ background:var(--green); color:var(--paper); }
-
+ 
 /* ---------- Footer ---------- */
-
+ 
 footer{
   border-top:1px solid var(--rule);
   margin-top:28px;
@@ -367,9 +409,17 @@ footer code{
   border-radius:3px;
   padding:1px 5px;
 }
-
+footer .suggest{
+  display:inline-block;
+  margin-top:8px;
+  color:var(--green);
+  text-decoration:none;
+  border-bottom:1px dotted var(--green);
+}
+footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
+ 
 /* ---------- Load motion (one quiet settle) ---------- */
-
+ 
 @media (prefers-reduced-motion: no-preference){
   .masthead .eyebrow, .masthead h1, .masthead .dek, .club-mark{
     animation:settle .55s cubic-bezier(.2,.7,.3,1) both;
@@ -383,14 +433,15 @@ footer code{
   from{ opacity:0; transform:translateY(9px); }
   to{ opacity:1; transform:none; }
 }
-
+ 
 /* ---------- Responsive ---------- */
-
+ 
 @media (max-width: 860px){
   .frame{ display:block; padding-top:30px; }
   .rail{ position:static; margin-bottom:30px; }
   .rail-head{ border-bottom:none; padding-bottom:2px; }
-  #themeNav{ display:flex; flex-wrap:wrap; gap:2px 18px; }
+  #themeNav, #sessionNav .nav-btns{ display:flex; flex-wrap:wrap; gap:2px 18px; }
+  #sessionNav{ margin-top:14px; }
   .theme-btn{ width:auto; padding:5px 0 5px 8px; }
   .rail-note{ margin-top:10px; }
   .masthead{ padding-top:40px; }
@@ -405,11 +456,11 @@ footer code{
   #q{ max-width:none; }
   .count{ text-align:right; }
 }
-
+ 
 /* ---------- Print: hand it out ---------- */
-
+ 
 @media print{
-  .rail, .toolbar, footer .edit-note, #empty{ display:none; }
+  .rail, .toolbar, footer .edit-note, footer .suggest, .perma, #empty{ display:none; }
   body{ background:#fff; color:#000; }
   .masthead{ padding-top:0; }
   .title a{ color:#000; }
@@ -418,42 +469,45 @@ footer code{
 </style>
 </head>
 <body>
-
+ 
 <header class="masthead wrap">
   <div class="masthead-grid">
     <div class="masthead-text">
       <p class="eyebrow">Supplementary readings · <b id="updated"></b></p>
-      <h1>Industrial Organization and Competition</h1>
-      <p class="dek">A running index of papers and articles related to industrial organization theory and antitrust for cohort members. Kept by <b>Junio</b> and <b>Edward</b>.</p>
+      <h1>Industrial Organization <span class="conj">and</span> Competition</h1>
+      <p class="dek">A running index of papers, articles, and books for cohort members who want to read past the syllabus. Kept by <b>Junio</b> and <b>Edward</b>.</p>
     </div>
     <img class="club-mark" src="oeconomica.png" alt="Oeconomica" width="1255" height="179">
   </div>
 </header>
-
+ 
 <div class="frame wrap">
-
+ 
   <nav class="rail" aria-label="Filter by theme">
     <p class="rail-head">Contents</p>
     <div id="themeNav"></div>
+    <div id="sessionNav"></div>
     <p class="rail-note">Select a theme to filter the list.<br>Press <kbd>/</kbd> to search.</p>
+    <p class="rail-note legend">○ gateway &nbsp;·&nbsp; ◐ core &nbsp;·&nbsp; ● deep end</p>
   </nav>
-
+ 
   <main>
     <div class="toolbar">
       <input id="q" type="search" placeholder="Search titles, authors, themes…" aria-label="Search readings">
+      <button id="weekPill" class="pill" type="button" title="Clear week filter" hidden></button>
       <span class="count" id="shown"></span>
     </div>
-
+ 
     <div id="list"></div>
-
+ 
     <div id="empty" hidden>
       <p>Nothing matches “<span id="emptyQ"></span>”.</p>
       <button id="clearBtn" type="button">Clear search</button>
     </div>
   </main>
-
+ 
 </div>
-
+ 
 <footer class="wrap">
   <div class="edit-note">
     This page is self-contained. To add a reading, open the file and append an entry to the
@@ -461,8 +515,9 @@ footer code{
     Theme names and their order live in <code>THEMES</code>.
   </div>
   <div id="total"></div>
+  <a id="suggestLink" class="suggest" hidden>Suggest a reading →</a>
 </footer>
-
+ 
 <script>
 /* =====================================================================
    HOW TO MAINTAIN THIS PAGE
@@ -471,9 +526,9 @@ footer code{
       (the roman numerals are generated from this order). Rename, add,
       or reorder freely. If an entry's theme isn't listed here, its
       section is appended automatically at the end.
-
+ 
    2. READINGS is the whole reading list. One object per entry:
-
+ 
         {
           theme:   "Barriers to Entry",            // must match a THEMES name
           title:   "Barriers to Entry",
@@ -485,65 +540,95 @@ footer code{
                                                    //   everything else in quotes
           url:     "#",                            // "#" = not filled in yet;
                                                    //   renders as a dashed stub
-          pick:    "junio"                         // optional: "junio" | "edward"
+          pick:    "junio",                        // optional: "junio" | "edward"
+          level:   "core",                         // optional: "gateway" | "core" | "deep"
+          start:   true,                           // optional: the one ☞ start-here
+                                                   //   entry for its theme
+          week:    4                               // optional session number; adds a
+                                                   //   clickable "wk 4" tag and a
+                                                   //   Sessions filter in the rail
         }
-
+ 
       Entries within a theme are sorted oldest → newest automatically
       (delete the .sort(...) line in render() if you'd rather order
       them by hand).
-
-   3. The sample entries below are placeholders to show the schema —
+ 
+   3. Every theme has a permalink: click the § beside a section title
+      to copy a link that opens the page already filtered to that
+      theme (the address is just this page's URL + #theme-slug).
+ 
+   4. SUGGEST_URL powers the "Suggest a reading" link in the footer.
+      Point it at a mailto: address or a Google Form URL. Leave it ""
+      to hide the link.
+ 
+   5. The sample entries below are placeholders to show the schema —
       replace them with your own.
    ===================================================================== */
-
+ 
 const LAST_UPDATED = "July 2026";
-
+ 
+const SUGGEST_URL = "mailto:you@uchicago.edu?subject=Reading%20suggestion%20%E2%80%94%20IO%20cohort"; // EDIT ME (or set to "")
+ 
 const THEMES = [
   "Theory of the Firm",
   "Market Structure & Concentration",
   "Barriers to Entry",
   "Antitrust & Competition Policy"
 ];
-
+ 
 const CURATORS = {
   junio:  { label: "Junio’s pick",  cls: "pick-junio"  },
   edward: { label: "Edward’s pick", cls: "pick-edward" }
 };
-
+ 
 const READINGS = [
   // ---- SAMPLE ENTRIES — replace with real ones ----------------------
-  { theme:"Theory of the Firm", title:"The Nature of the Firm", authors:"Coase, R. H.", year:1937, venue:"Economica", type:"paper", url:"#" },
-  { theme:"Theory of the Firm", title:"The Division of Labor Is Limited by the Extent of the Market", authors:"Stigler, G. J.", year:1951, venue:"Journal of Political Economy", type:"paper", url:"#" },
-  { theme:"Theory of the Firm", title:"Production, Information Costs, and Economic Organization", authors:"Alchian, A. A. & Demsetz, H.", year:1972, venue:"American Economic Review", type:"paper", url:"#" },
-
-  { theme:"Market Structure & Concentration", title:"A Theory of Oligopoly", authors:"Stigler, G. J.", year:1964, venue:"Journal of Political Economy", type:"paper", url:"#" },
-  { theme:"Market Structure & Concentration", title:"Industry Structure, Market Rivalry, and Public Policy", authors:"Demsetz, H.", year:1973, venue:"Journal of Law and Economics", type:"paper", url:"#" },
-
-  { theme:"Barriers to Entry", title:"Barriers to New Competition", authors:"Bain, J. S.", year:1956, venue:"Harvard University Press", type:"book", url:"#" },
-  { theme:"Barriers to Entry", title:"Barriers to Entry", authors:"Demsetz, H.", year:1982, venue:"American Economic Review", type:"paper", url:"#", pick:"junio" },
-
-  { theme:"Antitrust & Competition Policy", title:"Law and the Future: Trade Regulation", authors:"Director, A. & Levi, E. H.", year:1956, venue:"Northwestern University Law Review", type:"paper", url:"#" },
-  { theme:"Antitrust & Competition Policy", title:"The Antitrust Paradox", authors:"Bork, R. H.", year:1978, venue:"Basic Books", type:"book", url:"#", pick:"edward" }
+  { theme:"Theory of the Firm", title:"The Nature of the Firm", authors:"Coase, R. H.", year:1937, venue:"Economica", type:"paper", url:"#", level:"gateway", start:true, week:1 },
+  { theme:"Theory of the Firm", title:"The Division of Labor Is Limited by the Extent of the Market", authors:"Stigler, G. J.", year:1951, venue:"Journal of Political Economy", type:"paper", url:"#", level:"core", week:1 },
+  { theme:"Theory of the Firm", title:"Production, Information Costs, and Economic Organization", authors:"Alchian, A. A. & Demsetz, H.", year:1972, venue:"American Economic Review", type:"paper", url:"#", level:"core", week:2 },
+ 
+  { theme:"Market Structure & Concentration", title:"A Theory of Oligopoly", authors:"Stigler, G. J.", year:1964, venue:"Journal of Political Economy", type:"paper", url:"#", level:"deep", week:3 },
+  { theme:"Market Structure & Concentration", title:"Industry Structure, Market Rivalry, and Public Policy", authors:"Demsetz, H.", year:1973, venue:"Journal of Law and Economics", type:"paper", url:"#", level:"gateway", start:true, week:3 },
+ 
+  { theme:"Barriers to Entry", title:"Barriers to New Competition", authors:"Bain, J. S.", year:1956, venue:"Harvard University Press", type:"book", url:"#", level:"deep", week:4 },
+  { theme:"Barriers to Entry", title:"Barriers to Entry", authors:"Demsetz, H.", year:1982, venue:"American Economic Review", type:"paper", url:"#", pick:"junio", level:"core", start:true, week:4 },
+ 
+  { theme:"Antitrust & Competition Policy", title:"Law and the Future: Trade Regulation", authors:"Director, A. & Levi, E. H.", year:1956, venue:"Northwestern University Law Review", type:"paper", url:"#", level:"core", week:5 },
+  { theme:"Antitrust & Competition Policy", title:"The Antitrust Paradox", authors:"Bork, R. H.", year:1978, venue:"Basic Books", type:"book", url:"#", pick:"edward", level:"gateway", start:true, week:5 }
   // --------------------------------------------------------------------
 ];
-
+ 
 /* ============================ machinery ============================ */
-
-const state = { theme: "all", q: "" };
-
+ 
+const state = { theme: "all", q: "", week: null };
+ 
 const $list  = document.getElementById("list");
 const $nav   = document.getElementById("themeNav");
 const $q     = document.getElementById("q");
 const $shown = document.getElementById("shown");
 const $empty = document.getElementById("empty");
-
+ 
 const ROMAN = ["I","II","III","IV","V","VI","VII","VIII","IX","X",
                "XI","XII","XIII","XIV","XV","XVI","XVII","XVIII","XIX","XX"];
 const roman = i => ROMAN[i] || String(i + 1);
-
+ 
 const esc = s => String(s).replace(/[&<>"']/g, c =>
   ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
-
+ 
+const slug = s => String(s).toLowerCase().replace(/&/g, "and")
+  .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+ 
+function copyText(text, done){
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done).catch(done);
+  } else {
+    const ta = document.createElement("textarea");
+    ta.value = text; document.body.appendChild(ta);
+    ta.select(); try{ document.execCommand("copy"); }catch(_){}
+    document.body.removeChild(ta); done();
+  }
+}
+ 
 // Theme order = THEMES, plus any theme found only in the data.
 function themeOrder(){
   const order = [...THEMES];
@@ -552,13 +637,14 @@ function themeOrder(){
   }
   return order;
 }
-
+ 
 function matches(r, q){
   if (!q) return true;
-  const hay = [r.title, r.authors, r.venue, r.theme, r.year].join(" ").toLowerCase();
+  const hay = [r.title, r.authors, r.venue, r.theme, r.year,
+               r.level || "", r.week != null ? "week " + r.week : ""].join(" ").toLowerCase();
   return hay.includes(q);
 }
-
+ 
 function titleHTML(r){
   // Books italic; papers & articles in quotes (both are set in italic type,
   // quotes distinguish the shorter forms — Chicago-ish, close enough).
@@ -569,10 +655,18 @@ function titleHTML(r){
   }
   return `<a href="${esc(r.url)}" target="_blank" rel="noopener">${text}</a>`;
 }
-
+ 
+const LEVELS = { gateway:"○ gateway", core:"◐ core", deep:"● deep end" };
+ 
 function metaHTML(r){
   const bits = [];
+  if (r.start) bits.push(`<span class="start">☞ start here</span>`);
+  if (r.level && LEVELS[r.level]) bits.push(`<span class="level">${LEVELS[r.level]}</span>`);
   if (r.venue) bits.push(esc(r.venue));
+  if (r.week != null){
+    bits.push(`<button class="week-tag${state.week === r.week ? " active" : ""}" type="button"
+      data-week="${esc(r.week)}" title="Filter to week ${esc(r.week)}">wk ${esc(r.week)}</button>`);
+  }
   if (r.pick && CURATORS[r.pick]){
     const c = CURATORS[r.pick];
     bits.push(`<span class="pick ${c.cls}">${esc(c.label)}</span>`);
@@ -582,7 +676,7 @@ function metaHTML(r){
   }
   return bits.join(`<span class="sep">·</span>`);
 }
-
+ 
 function entryHTML(r){
   return `<li class="entry">
     <div class="entry-line">
@@ -594,77 +688,133 @@ function entryHTML(r){
     <div class="entry-meta">${metaHTML(r)}</div>
   </li>`;
 }
-
+ 
 function render(){
   const q = state.q.trim().toLowerCase();
   const order = themeOrder();
   let shown = 0, html = "", sectionIndex = 0;
-
+ 
   order.forEach((theme, i) => {
     if (state.theme !== "all" && state.theme !== theme) return;
-
+ 
     const rows = READINGS
-      .filter(r => r.theme === theme && matches(r, q))
+      .filter(r => r.theme === theme
+                && (state.week == null || r.week === state.week)
+                && matches(r, q))
       .sort((a, b) => (a.year - b.year) || String(a.title).localeCompare(b.title));
-
+ 
     if (!rows.length) return;
     shown += rows.length;
-
-    html += `<section class="section" style="animation-delay:${Math.min(sectionIndex * 60, 300)}ms">
+ 
+    const s = slug(theme);
+    html += `<section class="section" id="${s}" style="animation-delay:${Math.min(sectionIndex * 60, 300)}ms">
       <div class="section-head">
         <span class="numeral">${roman(i)}</span>
         <h2>${esc(theme)}</h2>
+        <a class="perma" href="#${s}" data-slug="${s}" title="Copy a link to this theme">§</a>
         <span class="n">${rows.length}</span>
       </div>
       <ul class="entries">${rows.map(entryHTML).join("")}</ul>
     </section>`;
     sectionIndex++;
   });
-
+ 
   $list.innerHTML = html;
   $shown.textContent = `showing ${shown} of ${READINGS.length}`;
-
+ 
+  const $pill = document.getElementById("weekPill");
+  $pill.hidden = state.week == null;
+  if (state.week != null) $pill.textContent = `week ${state.week} ×`;
+ 
   const none = shown === 0;
   $empty.hidden = !none;
-  if (none) document.getElementById("emptyQ").textContent = state.q.trim();
+  if (none){
+    document.getElementById("emptyQ").textContent =
+      state.q.trim() || (state.week != null ? "week " + state.week : "");
+  }
 }
-
+ 
 function renderNav(){
   const order = themeOrder();
   const counts = {};
   READINGS.forEach(r => counts[r.theme] = (counts[r.theme] || 0) + 1);
-
+ 
   let html = `<button class="theme-btn" type="button" data-theme="all"
     aria-pressed="${state.theme === "all"}">All readings <span class="n">(${READINGS.length})</span></button>`;
-
+ 
   order.forEach((theme, i) => {
     html += `<button class="theme-btn" type="button" data-theme="${esc(theme)}"
       aria-pressed="${state.theme === theme}">${roman(i)} — ${esc(theme)} <span class="n">(${counts[theme] || 0})</span></button>`;
   });
-
+ 
   $nav.innerHTML = html;
 }
-
+ 
+function renderSessions(){
+  const $s = document.getElementById("sessionNav");
+  const weeks = [...new Set(READINGS.filter(r => r.week != null).map(r => r.week))]
+    .sort((a, b) => a - b);
+  if (!weeks.length){ $s.innerHTML = ""; return; }
+ 
+  const counts = {};
+  READINGS.forEach(r => { if (r.week != null) counts[r.week] = (counts[r.week] || 0) + 1; });
+ 
+  let html = `<p class="rail-head">Sessions</p><div class="nav-btns">`;
+  weeks.forEach(w => {
+    html += `<button class="theme-btn" type="button" data-week="${esc(w)}"
+      aria-pressed="${state.week === w}">Week ${esc(w)} <span class="n">(${counts[w]})</span></button>`;
+  });
+  $s.innerHTML = html + `</div>`;
+}
+ 
+// Permalinks: #theme-slug in the URL ⇄ the active theme filter.
+function applyHash(){
+  const s = decodeURIComponent(location.hash.replace(/^#/, ""));
+  const t = s ? themeOrder().find(th => slug(th) === s) : null;
+  state.theme = t || "all";
+  renderNav();
+  render();
+}
+ 
 /* ---------------------------- events ---------------------------- */
-
+ 
 $nav.addEventListener("click", e => {
   const btn = e.target.closest(".theme-btn");
   if (!btn) return;
   state.theme = btn.dataset.theme;
+  const h = state.theme === "all" ? "" : "#" + slug(state.theme);
+  history.replaceState(null, "", location.pathname + location.search + h);
   renderNav();
   render();
 });
-
+ 
+window.addEventListener("hashchange", applyHash);
+ 
+document.getElementById("sessionNav").addEventListener("click", e => {
+  const btn = e.target.closest("[data-week]");
+  if (!btn) return;
+  const w = Number(btn.dataset.week);
+  state.week = state.week === w ? null : w;
+  renderSessions();
+  render();
+});
+ 
+document.getElementById("weekPill").addEventListener("click", () => {
+  state.week = null;
+  renderSessions();
+  render();
+});
+ 
 $q.addEventListener("input", () => {
   state.q = $q.value;
   render();
 });
-
+ 
 document.getElementById("clearBtn").addEventListener("click", () => {
   state.q = ""; $q.value = "";
   render(); $q.focus();
 });
-
+ 
 document.addEventListener("keydown", e => {
   if (e.key === "/" && document.activeElement !== $q){
     e.preventDefault(); $q.focus();
@@ -673,35 +823,57 @@ document.addEventListener("keydown", e => {
     state.q = ""; $q.value = ""; render();
   }
 });
-
+ 
 $list.addEventListener("click", e => {
+  // Week tag → toggle the session filter
+  const wk = e.target.closest(".week-tag");
+  if (wk){
+    const w = Number(wk.dataset.week);
+    state.week = state.week === w ? null : w;
+    renderSessions();
+    render();
+    return;
+  }
+ 
+  // § → set the hash, filter to the theme, copy the permalink
+  const perma = e.target.closest(".perma");
+  if (perma){
+    e.preventDefault();
+    const s = perma.dataset.slug;
+    history.replaceState(null, "", "#" + s);
+    applyHash();
+    copyText(location.href, () => {
+      const el = document.querySelector(`.perma[data-slug="${s}"]`);
+      if (el){
+        el.textContent = "link copied";
+        setTimeout(() => { el.textContent = "§"; }, 1300);
+      }
+    });
+    return;
+  }
+ 
+  // copy link → clipboard
   const btn = e.target.closest(".copy-btn");
   if (!btn || btn.classList.contains("done")) return;
-  const url = btn.dataset.url;
-  const done = () => {
+  copyText(btn.dataset.url, () => {
     btn.classList.add("done");
     const prev = btn.textContent;
     btn.textContent = "copied";
     setTimeout(() => { btn.classList.remove("done"); btn.textContent = prev; }, 1400);
-  };
-  if (navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(url).then(done).catch(done);
-  } else {
-    const ta = document.createElement("textarea");
-    ta.value = url; document.body.appendChild(ta);
-    ta.select(); try{ document.execCommand("copy"); }catch(_){}
-    document.body.removeChild(ta); done();
-  }
+  });
 });
-
+ 
 /* ---------------------------- boot ---------------------------- */
-
+ 
 document.getElementById("updated").textContent = LAST_UPDATED;
 document.getElementById("total").textContent =
   `${READINGS.length} readings · updated ${LAST_UPDATED}`;
-
-renderNav();
-render();
+ 
+const $sug = document.getElementById("suggestLink");
+if (SUGGEST_URL){ $sug.href = SUGGEST_URL; $sug.hidden = false; }
+ 
+renderSessions();
+applyHash();   // reads #theme-slug if present, then renders nav + list
 </script>
 </body>
 </html>

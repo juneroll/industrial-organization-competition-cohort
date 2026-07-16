@@ -1,262 +1,434 @@
-
-
-Index · HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- ================================================================
+     INDUSTRIAL ORGANIZATION AND COMPETITION — SUPPLEMENTARY READINGS
+     ----------------------------------------------------------------
+     A self-contained reading-room page. Everything lives in this one
+     file: styles, markup, data, and behavior.
+
+     WHERE THINGS ARE:
+       · CONFIG + DATA ......... top of the <script> (bottom of file).
+         This is the only place you normally edit: THEMES, QUARTERS,
+         READINGS, IMAGES, SUGGEST_URL.
+       · STYLES ................ the <style> block below, organized in
+         numbered, banner-commented sections (0–13).
+       · MARKUP ................ each region marked with an HTML
+         comment (MASTHEAD / RAIL / TOOLBAR / LIST / FOOTER).
+       · BEHAVIOR .............. the machinery half of the <script>,
+         each function banner-commented.
+
+     DESIGN NOTES (so future edits stay coherent):
+       · Palette = "night archive": deep green-black ground, ivory
+         text, gilt for anything interactive, UChicago maroon for the
+         masthead band.
+       · Color means TIME here: fall / winter / spring each own an
+         accent used on their stamps and rail entries. Topics don't
+         get colors; quarters do.
+       · Chrome (buttons, tags, counts) is monospace and stamp-like;
+         the readings themselves are set in serif like a journal
+         table of contents, with dot leaders.
+     ================================================================ -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Supplementary readings for the Industrial Organization & Competition cohort.">
+<meta name="description" content="Supplementary readings for the Industrial Organization and Competition cohort at the University of Chicago.">
 <title>Industrial Organization and Competition — Supplementary Readings</title>
+
+<!-- FONTS: STIX Two Text (the scholarly-publishing serif) for reading
+     matter; IBM Plex Mono for all chrome, stamps, and labels. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
 <style>
-/* ============================================================
-   Design language: the front matter of a journal.
-   Dot-leader contents rows, Oxford rule under the masthead,
-   STIX Two (the scholarly-publishing face) + Plex Mono for meta.
-   ============================================================ */
- 
+/* ################################################################
+   0. TOKENS & RESET
+   All colors are defined once here. Change a value and it changes
+   everywhere. --gilt is "interactive"; the three season variables
+   color anything tied to a quarter.
+   ################################################################ */
 :root{
-  --paper:   #F6F5EF;
-  --panel:   #FCFBF6;
-  --ink:     #1F2A24;
-  --muted:   #5D6B62;
-  --rule:    #D8DACB;
-  --dots:    #B7BCAA;
-  --green:   #1F5C43;  /* interactive / active */
-  --ox:      #7C2F2B;  /* secondary accent      */
+  --bg:        #0D1310;               /* page ground: green-black    */
+  --bg-2:      #151D18;               /* raised panels (inputs etc.) */
+  --ink:       #EDE7D7;               /* primary ivory text          */
+  --dim:       #A9B2A2;               /* secondary text              */
+  --faint:     rgba(237,231,215,.13); /* hairline rules              */
+  --dots:      rgba(237,231,215,.30); /* dot leaders                 */
+
+  --gilt:      #C9A227;               /* interactive / active        */
+  --gilt-dim:  rgba(201,162,39,.35);  /* quiet gilt (frames, hints)  */
+  --maroon:    #8E3B32;               /* UChicago band               */
+  --stamp-ink: #141008;               /* dark text ON gilt/maroon    */
+
+  --fall:      #C98A3B;               /* season accents ------------ */
+  --winter:    #87ABC6;
+  --spring:    #83B48D;
+
+  --mint:      #8FC2A6;               /* Junio's pick                */
+  --rose:      #DE8B7F;               /* Edward's pick               */
 }
- 
+
 *{ box-sizing:border-box; }
 html{ -webkit-text-size-adjust:100%; }
- 
+
 body{
   margin:0;
-  background:var(--paper);
   color:var(--ink);
   font-family:"STIX Two Text", Georgia, "Times New Roman", serif;
   font-size:17px;
   line-height:1.55;
+  /* NIGHT AMBIENCE: (1) a faint lamplight glow from above,
+     (2) a film-grain layer (inline SVG noise), (3) the base color. */
+  background:
+    radial-gradient(120% 60% at 50% -12%, rgba(201,162,39,.075), transparent 60%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.028 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    var(--bg);
 }
- 
-::selection{ background:var(--green); color:var(--paper); }
- 
+
+::selection{ background:var(--gilt); color:var(--stamp-ink); }
 a{ color:inherit; }
- 
-:focus-visible{
-  outline:2px solid var(--green);
-  outline-offset:2px;
+:focus-visible{ outline:2px solid var(--gilt); outline-offset:2px; border-radius:2px; }
+
+/* thin archive scrollbar (cosmetic only) */
+::-webkit-scrollbar{ width:11px; }
+::-webkit-scrollbar-thumb{ background:#26312A; border:3px solid var(--bg); border-radius:8px; }
+::-webkit-scrollbar-thumb:hover{ background:var(--gilt-dim); }
+
+.wrap{ max-width:1040px; margin:0 auto; padding:0 26px; }
+
+/* ################################################################
+   1. THE FOLIO FRAME (ornamental print layer)
+   A double-ruled frame around the whole page with small corner
+   stars — the "bookplate" border. Purely decorative.
+   ################################################################ */
+.folio{
+  position:relative;
+  margin:clamp(8px, 1.8vw, 20px);
+  border:1px solid var(--gilt-dim);
+  min-height:calc(100vh - 2*clamp(8px, 1.8vw, 20px));
+}
+.folio::before{                    /* inner hairline of the frame */
+  content:"";
+  position:absolute; inset:5px;
+  border:1px solid rgba(201,162,39,.14);
+  pointer-events:none;
+}
+.corner{                           /* four gilt corner stars */
+  position:absolute;
+  font-size:13px; line-height:1;
+  color:var(--gilt);
+  background:var(--bg);            /* masks the border crossing */
+  padding:1px 3px;
+  user-select:none;
+}
+.c-tl{ top:-8px;    left:-7px; }
+.c-tr{ top:-8px;    right:-7px; }
+.c-bl{ bottom:-8px; left:-7px; }
+.c-br{ bottom:-8px; right:-7px; }
+
+/* ################################################################
+   2. MASTHEAD (mid-century cover plate)
+   Structure, top to bottom:
+     .band     — maroon Penguin-style strip (series line)
+     h1 + dek  — the big title composition
+     .bookplate— framed logo slot (see IMAGES config in the script)
+     .oxford   — heavy rule + hairline (classic journal rule pair)
+     .ledger   — auto-computed stats line (readings/themes/quarters)
+   ################################################################ */
+.masthead{ padding:34px 0 0; }
+
+.band{
+  display:flex; flex-wrap:wrap; gap:4px 20px;
+  justify-content:space-between;
+  background:var(--maroon);
+  color:var(--ink);
+  font-family:"IBM Plex Mono", monospace;
+  font-size:.68rem; font-weight:600;
+  letter-spacing:.16em; text-transform:uppercase;
+  padding:9px 14px;
   border-radius:2px;
 }
- 
-.wrap{
-  max-width:1020px;
-  margin:0 auto;
-  padding:0 24px;
-}
- 
-/* ---------- Masthead ---------- */
- 
-.masthead{
-  padding:56px 0 26px;
-  position:relative;
-}
-/* Oxford rule: one heavy line, one hairline beneath it */
-.masthead::after{
-  content:"";
-  display:block;
-  margin-top:26px;
-  border-top:2.5px solid var(--ink);
-  border-bottom:1px solid var(--ink);
-  height:4px;
-}
- 
-.eyebrow{
-  font-family:"IBM Plex Mono", monospace;
-  font-size:.72rem;
-  font-weight:500;
-  letter-spacing:.16em;
-  text-transform:uppercase;
-  color:var(--muted);
-  margin:0 0 18px;
-}
-.eyebrow b{ color:var(--green); font-weight:600; }
- 
-h1{
-  font-size:clamp(2.35rem, 5.4vw, 3.5rem);
-  font-weight:600;
-  line-height:1.05;
-  letter-spacing:-.012em;
-  margin:0 0 16px;
-  max-width:18ch;
-}
-h1 .conj{
-  font-style:italic;
-  font-weight:500;
-  color:var(--green);
-}
- 
-.dek{
-  font-size:1.06rem;
-  font-style:italic;
-  color:var(--muted);
-  max-width:52ch;
-  margin:0;
-}
-.dek b{ font-style:normal; font-weight:600; color:var(--ink); }
- 
+
 .masthead-grid{
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  gap:48px;
+  display:flex; align-items:flex-start;
+  justify-content:space-between; gap:48px;
+  padding-top:34px;
 }
 .masthead-text{ min-width:0; }
-.club-mark{
-  width:clamp(170px, 24vw, 260px);
-  height:auto;
-  flex-shrink:0;
-  margin-top:6px;
+
+h1{
+  font-size:clamp(2.5rem, 6.4vw, 4.1rem);
+  font-weight:600;
+  line-height:1.02;
+  letter-spacing:-.014em;
+  margin:0 0 18px;
 }
- 
-/* ---------- Frame: contents rail + list ---------- */
- 
+h1 .conj{ font-style:italic; font-weight:500; color:var(--gilt); }
+
+.dek{
+  font-size:1.06rem; font-style:italic;
+  color:var(--dim); max-width:54ch; margin:0;
+}
+.dek b{ font-style:normal; font-weight:600; color:var(--ink); }
+
+/* BOOKPLATE: double-framed home for the club mark. The <img> src is
+   set from IMAGES.logo in the script; the whole plate hides itself
+   if no logo is configured. */
+.bookplate{
+  margin:6px 0 0;
+  border:1px solid var(--gilt-dim);
+  outline:1px solid rgba(201,162,39,.15);
+  outline-offset:4px;
+  padding:20px 24px 14px;
+  text-align:center;
+  flex-shrink:0;
+}
+.club-mark{ width:clamp(150px, 19vw, 220px); height:auto; display:block; margin:0 auto; }
+.bookplate figcaption{
+  margin-top:10px;
+  font-family:"IBM Plex Mono", monospace;
+  font-size:.6rem; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--gilt);
+  opacity:.85;
+}
+
+.oxford{                            /* heavy + hairline rule pair */
+  margin-top:30px;
+  border-top:3px solid var(--ink);
+  border-bottom:1px solid var(--faint);
+  height:5px;
+}
+.ledger{                            /* auto-filled by the script */
+  margin:10px 0 0;
+  font-family:"IBM Plex Mono", monospace;
+  font-size:.68rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--dim);
+  display:flex; flex-wrap:wrap; gap:4px 22px;
+}
+.ledger b{ color:var(--gilt); font-weight:600; }
+
+/* ################################################################
+   3. SHARED STAMP UTILITY (working-paper brutalism)
+   .stamp = the rubber-stamp look used by tags, chips, and pills.
+   Seasonal color classes (q-fall / q-winter / q-spring) tint any
+   stamp or button they're applied to.
+   ################################################################ */
+.stamp{
+  display:inline-block;
+  font-family:"IBM Plex Mono", monospace;
+  font-size:.62rem; font-weight:600;
+  letter-spacing:.12em; text-transform:uppercase;
+  border:1px solid currentColor;
+  border-radius:2px;
+  padding:2px 7px;
+  line-height:1.5;
+  background:none;
+  color:var(--dim);
+}
+button.stamp{ cursor:pointer; }
+button.stamp:hover{ color:var(--ink); }
+button.stamp[aria-pressed="true"]{
+  background:var(--gilt); border-color:var(--gilt); color:var(--stamp-ink);
+}
+
+.q-fall   { color:var(--fall); }
+.q-winter { color:var(--winter); }
+.q-spring { color:var(--spring); }
+button.q-fall[aria-pressed="true"]  { background:var(--fall);   border-color:var(--fall);   color:var(--stamp-ink); }
+button.q-winter[aria-pressed="true"]{ background:var(--winter); border-color:var(--winter); color:var(--stamp-ink); }
+button.q-spring[aria-pressed="true"]{ background:var(--spring); border-color:var(--spring); color:var(--stamp-ink); }
+
+/* ################################################################
+   4. LAYOUT FRAME — sticky rail (left) + list (right)
+   ################################################################ */
 .frame{
   display:grid;
-  grid-template-columns:225px minmax(0,1fr);
+  grid-template-columns:250px minmax(0,1fr);
   gap:56px;
   padding:40px 0 24px;
   align-items:start;
 }
- 
-.rail{
-  position:sticky;
-  top:28px;
-}
+.rail{ position:sticky; top:24px; }
+
+/* ################################################################
+   5. THE RAIL ("card catalogue")
+   Three groups, each auto-built by the script:
+     #themeNav   — Catalogue: one button per theme (+ All)
+     #sessionNav — Sessions: quarter blocks with week chips
+     legend      — key to the ○ ◐ ● level marks (display only;
+                   the CLICKABLE level filters live in the toolbar)
+   ################################################################ */
 .rail-head{
+  display:flex; align-items:center; gap:10px;
   font-family:"IBM Plex Mono", monospace;
-  font-size:.7rem;
-  font-weight:600;
-  letter-spacing:.18em;
-  text-transform:uppercase;
-  color:var(--ink);
-  margin:0 0 12px;
-  padding-bottom:8px;
-  border-bottom:1px solid var(--rule);
+  font-size:.68rem; font-weight:600;
+  letter-spacing:.2em; text-transform:uppercase;
+  color:var(--gilt);
+  margin:0 0 10px;
 }
- 
+.rail-head::after{ content:""; flex:1; border-top:1px solid var(--faint); }
+
 .theme-btn{
-  display:block;
-  width:100%;
-  text-align:left;
-  background:none;
-  border:none;
-  border-left:2px solid transparent;
-  padding:6px 0 6px 10px;
-  margin:1px 0;
+  display:block; width:100%; text-align:left;
+  background:none; border:none;
+  padding:6px 0 6px 2px; margin:1px 0;
   font-family:"IBM Plex Mono", monospace;
-  font-size:.76rem;
-  line-height:1.4;
-  color:var(--muted);
+  font-size:.76rem; line-height:1.45;
+  color:var(--dim);
   cursor:pointer;
-  transition:color .15s ease, border-color .15s ease;
+  transition:color .15s ease;
 }
 .theme-btn:hover{ color:var(--ink); }
-.theme-btn[aria-pressed="true"]{
-  color:var(--green);
-  font-weight:600;
-  border-left-color:var(--green);
-}
-.theme-btn .n{ opacity:.65; font-weight:400; }
- 
-.rail-note{
-  margin:20px 0 0;
+.theme-btn[aria-pressed="true"]{ color:var(--gilt); font-weight:600; }
+.theme-btn[aria-pressed="true"]::before{ content:"▸ "; }
+.theme-btn .n{ opacity:.6; font-weight:400; }
+
+#sessionNav{ margin-top:26px; }
+.q-block{ margin:0 0 14px; }
+.q-btn{                           /* quarter header row */
+  display:block; width:100%; text-align:left;
+  background:none; border:none; padding:4px 0;
   font-family:"IBM Plex Mono", monospace;
-  font-size:.68rem;
-  line-height:1.7;
-  color:var(--muted);
+  font-size:.74rem; font-weight:600;
+  letter-spacing:.08em; text-transform:uppercase;
+  cursor:pointer;
 }
+.q-btn::before{ content:"● "; font-size:.6rem; vertical-align:1px; }
+.q-btn .n{ opacity:.6; font-weight:400; text-transform:none; }
+.q-btn:hover{ filter:brightness(1.25); }
+.q-btn[aria-pressed="true"]{ text-decoration:underline; text-underline-offset:4px; }
+.wk-row{ display:flex; flex-wrap:wrap; gap:6px; padding:3px 0 0 16px; }
+
+.rail-note{
+  margin:24px 0 0;
+  font-family:"IBM Plex Mono", monospace;
+  font-size:.66rem; line-height:1.8;
+  color:var(--dim);
+}
+.rail-note.legend{ margin-top:10px; letter-spacing:.03em; }
 kbd{
   font-family:inherit;
-  border:1px solid var(--rule);
-  border-bottom-width:2px;
-  border-radius:3px;
-  padding:0 5px;
-  background:var(--panel);
+  border:1px solid var(--faint); border-bottom-width:2px;
+  border-radius:3px; padding:0 5px;
+  background:var(--bg-2);
 }
- 
-#sessionNav{ margin-top:22px; }
-.rail-note.legend{ margin-top:12px; letter-spacing:.02em; }
- 
-/* ---------- Toolbar ---------- */
- 
-.toolbar{
-  display:flex;
-  align-items:baseline;
-  justify-content:space-between;
-  gap:18px;
-  margin-bottom:34px;
+
+/* ################################################################
+   6. TOOLBAR (the HUD proper)
+   Row 1: search box + live "showing x of y" counter
+   Row 2: facet strip — level toggles, type toggles, sort cycler,
+          fold/unfold, and the "draw" randomizer
+   Row 3: #tray — stamps for every active filter, each dismissible
+   ################################################################ */
+.toolbar{ margin-bottom:30px; }
+
+.search-row{ display:flex; align-items:center; gap:18px; }
+.search{ position:relative; flex:1; max-width:460px; }
+.search::before{               /* the catalogue-terminal prompt glyph */
+  content:"⌕";
+  position:absolute; left:12px; top:50%; transform:translateY(-52%);
+  font-family:"IBM Plex Mono", monospace;
+  color:var(--dim);
 }
 #q{
-  flex:1;
-  max-width:400px;
+  width:100%;
   font-family:"IBM Plex Mono", monospace;
   font-size:.84rem;
   color:var(--ink);
-  background:var(--panel);
-  border:1px solid var(--rule);
+  background:var(--bg-2);
+  border:1px solid var(--faint);
   border-radius:3px;
-  padding:9px 12px;
+  padding:10px 12px 10px 34px;
 }
-#q::placeholder{ color:var(--muted); opacity:.8; }
-#q:focus{ border-color:var(--green); outline:none; }
+#q::placeholder{ color:var(--dim); opacity:.75; }
+#q:focus{ border-color:var(--gilt); outline:none; }
 .count{
   font-family:"IBM Plex Mono", monospace;
-  font-size:.72rem;
-  color:var(--muted);
-  white-space:nowrap;
+  font-size:.7rem; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--dim); white-space:nowrap;
 }
-.pill{
+
+.facets{
+  display:flex; flex-wrap:wrap; align-items:center;
+  gap:8px 10px;
+  margin-top:14px;
+  padding-top:12px;
+  border-top:1px solid var(--faint);
+}
+.facet-label{
   font-family:"IBM Plex Mono", monospace;
-  font-size:.7rem;
-  color:var(--green);
-  background:none;
-  border:1px solid var(--green);
-  border-radius:999px;
-  padding:3px 11px;
-  cursor:pointer;
-  white-space:nowrap;
+  font-size:.62rem; font-weight:600;
+  letter-spacing:.18em; text-transform:uppercase;
+  color:var(--dim);
+  margin-right:2px;
 }
-.pill:hover{ background:var(--green); color:var(--paper); }
- 
-/* ---------- Theme sections ---------- */
- 
-.section{ margin-bottom:44px; }
- 
+.facet-sep{ width:1px; height:16px; background:var(--faint); margin:0 4px; }
+
+.tray{
+  display:flex; flex-wrap:wrap; align-items:center; gap:8px;
+  margin-top:12px;
+}
+.tray-label{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:.62rem; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--gilt);
+}
+.tray .clear-all{
+  background:none; border:none; padding:0; cursor:pointer;
+  font-family:"IBM Plex Mono", monospace;
+  font-size:.66rem; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--dim);
+  border-bottom:1px dotted var(--dots);
+}
+.tray .clear-all:hover{ color:var(--ink); }
+
+/* ################################################################
+   7. SECTIONS & ENTRIES (the reading matter)
+   Section head = oversized roman numeral (mid-century block),
+   small-caps theme title, optional theme-art slot, § permalink,
+   count stamp, and — in browse mode — a fold caret.
+   Entries keep the journal-contents dot leaders.
+   ################################################################ */
+.section{ margin-bottom:46px; }
+
 .section-head{
-  display:flex;
-  align-items:baseline;
-  gap:12px;
-  margin:0 0 6px;
-  padding-bottom:9px;
-  border-bottom:1px solid var(--rule);
+  display:flex; align-items:baseline; gap:14px;
+  margin:0 0 4px;
+  padding-bottom:10px;
+  border-bottom:2px solid var(--gilt-dim);
 }
 .section-head .numeral{
-  font-family:"IBM Plex Mono", monospace;
-  font-size:.78rem;
-  font-weight:600;
-  color:var(--ox);
-  min-width:1.6em;
+  font-size:2.3rem; font-weight:600; line-height:.8;
+  color:var(--gilt);
+  min-width:1.5em;
+  transform:translateY(4px);       /* optical baseline alignment */
 }
 .section-head h2{
-  font-size:1.08rem;
-  font-weight:600;
+  font-size:1.12rem; font-weight:600;
   font-variant-caps:small-caps;
-  letter-spacing:.05em;
+  letter-spacing:.06em;
   margin:0;
 }
+.section-head .caret{              /* fold indicator (browse mode) */
+  font-family:"IBM Plex Mono", monospace;
+  font-size:.7rem; color:var(--dim);
+  transition:transform .2s ease;
+}
+.section.folded .caret{ transform:rotate(-90deg); }
+.section-head.foldable{ cursor:pointer; }
+.section-head.foldable:hover h2{ color:var(--gilt); }
+
+/* THEME ART SLOT — a small engraving/plate per theme. Hidden unless
+   IMAGES.themeArt has an entry for the theme's slug (see script). */
+.theme-art{
+  height:44px; width:auto;
+  align-self:center;
+  opacity:.85;
+  filter:sepia(.25) saturate(.9);
+  border:1px solid var(--faint);
+  padding:2px; border-radius:2px;
+}
+
 .section-head .perma{
   margin-left:auto;
   font-family:"IBM Plex Mono", monospace;
@@ -265,371 +437,491 @@ kbd{
   text-decoration:none;
   padding:0 2px;
 }
-.section-head .perma:hover{ color:var(--green); }
-.section-head .n{
-  font-family:"IBM Plex Mono", monospace;
-  font-size:.7rem;
-  color:var(--muted);
-}
- 
+.section-head .perma:hover{ color:var(--gilt); }
+.section-head .n{ /* count stamp inherits .stamp from markup */ }
+
 .entries{ list-style:none; margin:0; padding:0; }
- 
-.entry{ padding:13px 0; border-bottom:1px solid transparent; }
- 
-/* Row 1 — the dot-leader contents line */
+
+.entry{ position:relative; padding:13px 0; }
+.entry::before{                   /* gilt hover bar in the margin */
+  content:"";
+  position:absolute; left:-16px; top:11px; bottom:11px; width:2px;
+  background:transparent;
+}
+.entry:hover::before{ background:var(--gilt); }
+
+/* row 1 — the dot-leader contents line */
 .entry-line{
-  display:flex;
-  align-items:baseline;
-  flex-wrap:wrap;
-  gap:0 10px;
+  display:flex; align-items:baseline; flex-wrap:wrap; gap:0 10px;
 }
 .authors{
-  font-variant-caps:small-caps;
-  letter-spacing:.02em;
-  font-weight:500;
-  white-space:nowrap;
+  font-variant-caps:small-caps; letter-spacing:.02em;
+  font-weight:500; white-space:nowrap;
 }
 .title a, .title .link-missing{
-  font-style:italic;
-  text-decoration:none;
-  transition:color .15s ease;
+  font-style:italic; text-decoration:none; transition:color .15s ease;
 }
-.title a:hover{ color:var(--green); }
+.title a:hover{ color:var(--gilt); }
 .title .link-missing{
-  color:var(--muted);
+  color:var(--dim);
   border-bottom:1px dashed var(--dots);
   cursor:help;
 }
-/* the leader itself: a run of printed dots */
-.leader{
-  flex:1 1 28px;
-  min-width:28px;
-  height:.85em;
-  align-self:baseline;
+.leader{                          /* the printed dots */
+  flex:1 1 28px; min-width:28px; height:.85em; align-self:baseline;
   background-image:radial-gradient(circle, var(--dots) 1.15px, transparent 1.6px);
   background-size:9px 3px;
   background-repeat:repeat-x;
   background-position:left calc(100% - 2px);
 }
 .entry:hover .leader{
-  background-image:radial-gradient(circle, var(--green) 1.15px, transparent 1.6px);
+  background-image:radial-gradient(circle, var(--gilt) 1.15px, transparent 1.6px);
 }
 .year{
   font-family:"IBM Plex Mono", monospace;
-  font-size:.78rem;
-  font-weight:500;
-  color:var(--ink);
+  font-size:.78rem; font-weight:500; color:var(--dim);
 }
- 
-/* Row 2 — quiet meta line */
+.entry:hover .year{ color:var(--ink); }
+
+/* row 2 — quiet meta line: stamps and small print */
 .entry-meta{
-  margin-top:3px;
+  margin-top:5px;
   font-family:"IBM Plex Mono", monospace;
-  font-size:.7rem;
-  letter-spacing:.01em;
-  color:var(--muted);
-  display:flex;
-  flex-wrap:wrap;
-  align-items:baseline;
-  gap:4px 8px;
+  font-size:.7rem; letter-spacing:.01em;
+  color:var(--dim);
+  display:flex; flex-wrap:wrap; align-items:center; gap:5px 8px;
 }
-.entry-meta .sep{ opacity:.55; }
+.entry-meta .sep{ opacity:.5; }
+
+.start{                            /* ☞ START HERE — rubber stamp */
+  color:var(--gilt);
+  transform:rotate(-1.6deg);
+}
+.level{ color:var(--dim); }
 .pick{ font-weight:600; }
-.pick-junio{ color:var(--green); }
-.pick-edward{ color:var(--ox); }
- 
-.start{ color:var(--green); font-weight:600; }
-.level{ color:var(--muted); }
- 
-.week-tag{
-  font-family:inherit;
-  font-size:inherit;
-  background:none;
-  border:none;
-  padding:0;
-  color:var(--muted);
-  border-bottom:1px dotted var(--dots);
-  cursor:pointer;
-}
-.week-tag:hover{ color:var(--ink); border-bottom-color:var(--ink); }
-.week-tag.active{ color:var(--green); border-bottom-color:var(--green); font-weight:600; }
- 
+.pick-junio{ color:var(--mint); }
+.pick-edward{ color:var(--rose); }
+
 .copy-btn{
-  font-family:inherit;
-  font-size:inherit;
-  background:none;
-  border:none;
-  padding:0;
-  color:var(--green);
-  border-bottom:1px dotted var(--green);
-  cursor:pointer;
+  font-family:inherit; font-size:inherit;
+  background:none; border:none; padding:0;
+  color:var(--gilt); cursor:pointer;
 }
-.copy-btn:hover{ color:var(--ink); border-bottom-color:var(--ink); }
-.copy-btn.done{ color:var(--muted); border-bottom-color:transparent; cursor:default; }
- 
-/* ---------- Empty state ---------- */
- 
-#empty{
-  padding:44px 0;
-  text-align:left;
+.copy-btn::before{ content:"[ "; opacity:.6; }
+.copy-btn::after { content:" ]"; opacity:.6; }
+.copy-btn:hover{ color:var(--ink); }
+.copy-btn.done{ color:var(--dim); cursor:default; }
+
+/* highlight pulse for the "draw" randomizer */
+@keyframes drawflash{
+  0%   { outline:2px solid var(--gilt); outline-offset:6px; background:rgba(201,162,39,.10); }
+  70%  { outline:2px solid var(--gilt); outline-offset:3px; background:rgba(201,162,39,.05); }
+  100% { outline:2px solid transparent; background:transparent; }
 }
-#empty p{
-  font-style:italic;
-  color:var(--muted);
-  margin:0 0 14px;
+.entry.flash{ animation:drawflash 1.8s ease both; }
+
+/* ################################################################
+   8. EMPTY STATE — a big "nothing filed" rubber stamp
+   ################################################################ */
+#empty{ padding:46px 0; }
+#empty .nothing{
+  display:inline-block;
+  font-family:"IBM Plex Mono", monospace;
+  font-size:.8rem; font-weight:600;
+  letter-spacing:.14em; text-transform:uppercase;
+  color:var(--rose);
+  border:3px double currentColor;
+  border-radius:3px;
+  padding:12px 18px;
+  transform:rotate(-1.5deg);
+  margin-bottom:20px;
 }
+#empty .actions{ }
 #empty button{
   font-family:"IBM Plex Mono", monospace;
-  font-size:.76rem;
-  color:var(--green);
+  font-size:.72rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--gilt);
   background:none;
-  border:1px solid var(--green);
-  border-radius:3px;
-  padding:7px 14px;
+  border:1px solid var(--gilt);
+  border-radius:2px;
+  padding:8px 15px;
   cursor:pointer;
 }
-#empty button:hover{ background:var(--green); color:var(--paper); }
- 
-/* ---------- Footer ---------- */
- 
+#empty button:hover{ background:var(--gilt); color:var(--stamp-ink); }
+
+/* ################################################################
+   9. FOOTER — fleuron + colophon + suggest link
+   ################################################################ */
 footer{
-  border-top:1px solid var(--rule);
+  border-top:1px solid var(--faint);
   margin-top:28px;
-  padding:22px 0 52px;
+  padding:20px 0 54px;
   font-family:"IBM Plex Mono", monospace;
-  font-size:.7rem;
-  line-height:1.8;
-  color:var(--muted);
+  font-size:.68rem; line-height:1.9;
+  color:var(--dim);
+}
+.fleuron{
+  text-align:center;
+  color:var(--gilt-dim);
+  font-size:1.1rem;
+  margin:2px 0 14px;
 }
 footer code{
-  font-family:inherit;
-  color:var(--ink);
-  background:var(--panel);
-  border:1px solid var(--rule);
-  border-radius:3px;
-  padding:1px 5px;
+  font-family:inherit; color:var(--ink);
+  background:var(--bg-2);
+  border:1px solid var(--faint);
+  border-radius:3px; padding:1px 5px;
 }
 footer .suggest{
-  display:inline-block;
-  margin-top:8px;
-  color:var(--green);
-  text-decoration:none;
-  border-bottom:1px dotted var(--green);
+  display:inline-block; margin-top:8px;
+  color:var(--gilt); text-decoration:none;
+  border-bottom:1px dotted var(--gilt);
 }
 footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
- 
-/* ---------- Load motion (one quiet settle) ---------- */
- 
+
+/* ################################################################
+   10. MOTION — one quiet settle on load; honors reduced motion
+   ################################################################ */
 @media (prefers-reduced-motion: no-preference){
-  .masthead .eyebrow, .masthead h1, .masthead .dek, .club-mark{
+  .band, .masthead h1, .masthead .dek, .bookplate, .ledger{
     animation:settle .55s cubic-bezier(.2,.7,.3,1) both;
   }
-  .masthead h1{ animation-delay:.06s; }
-  .club-mark{ animation-delay:.09s; }
+  .masthead h1{ animation-delay:.05s; }
+  .bookplate{ animation-delay:.09s; }
   .masthead .dek{ animation-delay:.12s; }
+  .ledger{ animation-delay:.16s; }
   .section{ animation:settle .5s cubic-bezier(.2,.7,.3,1) both; }
 }
 @keyframes settle{
   from{ opacity:0; transform:translateY(9px); }
   to{ opacity:1; transform:none; }
 }
- 
-/* ---------- Responsive ---------- */
- 
-@media (max-width: 860px){
-  .frame{ display:block; padding-top:30px; }
-  .rail{ position:static; margin-bottom:30px; }
-  .rail-head{ border-bottom:none; padding-bottom:2px; }
-  #themeNav, #sessionNav .nav-btns{ display:flex; flex-wrap:wrap; gap:2px 18px; }
-  #sessionNav{ margin-top:14px; }
-  .theme-btn{ width:auto; padding:5px 0 5px 8px; }
-  .rail-note{ margin-top:10px; }
-  .masthead{ padding-top:40px; }
+
+/* ################################################################
+   11. RESPONSIVE
+   ≤880px: rail unsticks, catalogue flows horizontally
+   ≤660px: bookplate stacks above the title
+   ≤540px: toolbar stacks; type ramps down
+   ################################################################ */
+@media (max-width: 880px){
+  .frame{ display:block; padding-top:28px; }
+  .rail{ position:static; margin-bottom:32px; }
+  #themeNav{ display:flex; flex-wrap:wrap; gap:2px 18px; }
+  .theme-btn{ width:auto; }
+  #sessionNav{ margin-top:18px; }
+  .q-block{ margin-bottom:10px; }
 }
-@media (max-width: 640px){
-  .masthead-grid{ flex-direction:column-reverse; gap:24px; }
-  .club-mark{ width:180px; margin-top:0; }
+@media (max-width: 660px){
+  .masthead-grid{ flex-direction:column-reverse; gap:26px; padding-top:26px; }
+  .bookplate{ align-self:flex-start; }
 }
 @media (max-width: 540px){
   body{ font-size:16px; }
-  .toolbar{ flex-direction:column; align-items:stretch; gap:8px; }
-  #q{ max-width:none; }
+  .search-row{ flex-direction:column; align-items:stretch; gap:8px; }
   .count{ text-align:right; }
+  .section-head .numeral{ font-size:1.7rem; }
 }
- 
-/* ---------- Print: hand it out ---------- */
- 
+
+/* ################################################################
+   12. PRINT — hand the list out: light paper, chrome hidden
+   ################################################################ */
 @media print{
-  .rail, .toolbar, footer .edit-note, footer .suggest, .perma, #empty{ display:none; }
   body{ background:#fff; color:#000; }
-  .masthead{ padding-top:0; }
-  .title a{ color:#000; }
+  .folio{ border:none; margin:0; }
+  .folio::before, .corner, .rail, .toolbar, .bookplate,
+  footer .edit-note, footer .suggest, .fleuron, .perma, .caret, #empty{ display:none; }
+  .band{ background:none; border:2px solid #000; color:#000; }
+  .oxford{ border-top-color:#000; border-bottom-color:#000; }
+  .section-head{ border-bottom-color:#000; }
+  .section-head .numeral, .title a{ color:#000; }
   .entry{ break-inside:avoid; }
+  .entry::before{ display:none; }
 }
 </style>
 </head>
 <body>
- 
-<header class="masthead wrap">
-  <div class="masthead-grid">
-    <div class="masthead-text">
-      <p class="eyebrow">Supplementary readings · <b id="updated"></b></p>
-      <h1>Industrial Organization <span class="conj">and</span> Competition</h1>
-      <p class="dek">A running index of papers, articles, and books for cohort members who want to read past the syllabus. Kept by <b>Junio</b> and <b>Edward</b>.</p>
+<div class="folio">
+  <!-- ornamental corner stars for the folio frame -->
+  <span class="corner c-tl" aria-hidden="true">✦</span>
+  <span class="corner c-tr" aria-hidden="true">✦</span>
+  <span class="corner c-bl" aria-hidden="true">✦</span>
+  <span class="corner c-br" aria-hidden="true">✦</span>
+
+  <!-- ============================================================
+       MASTHEAD — cover plate
+       ============================================================ -->
+  <header class="masthead wrap">
+    <!-- series band (maroon): edit the two spans freely -->
+    <div class="band">
+      <span>Oeconomica · Supplementary Readings</span>
+      <span>The University of Chicago</span>
     </div>
-    <img class="club-mark" src="oeconomica.png" alt="Oeconomica" width="1255" height="179">
+
+    <div class="masthead-grid">
+      <div class="masthead-text">
+        <!-- the <br>s control the cover composition; adjust to taste -->
+        <h1>Industrial<br>Organization<br><span class="conj">and</span> Competition</h1>
+        <p class="dek">A running index of papers, articles, and books for cohort members who want to read past the syllabus, fall through spring. Kept by <b>Junio</b> and <b>Edward</b>.</p>
+      </div>
+
+      <!-- BOOKPLATE: src + caption are injected from IMAGES in the
+           script; the whole <figure> hides if IMAGES.logo is "".  -->
+      <figure class="bookplate" id="bookplate" hidden>
+        <img class="club-mark" id="clubMark" src="" alt="Oeconomica">
+        <figcaption id="plateCaption"></figcaption>
+      </figure>
+    </div>
+
+    <div class="oxford" aria-hidden="true"></div>
+    <!-- LEDGER: auto-computed stats line (see updateLedger()) -->
+    <p class="ledger" id="ledger"></p>
+  </header>
+
+  <!-- ============================================================
+       FRAME — rail + main list
+       ============================================================ -->
+  <div class="frame wrap">
+
+    <!-- RAIL: catalogue (themes), sessions (quarters/weeks), notes -->
+    <nav class="rail" aria-label="Filters">
+      <p class="rail-head">Catalogue</p>
+      <div id="themeNav"></div>            <!-- built by renderNav() -->
+      <div id="sessionNav"></div>          <!-- built by renderSessions() -->
+      <p class="rail-note">Select a theme or session to filter.<br>Press <kbd>/</kbd> to search, <kbd>Esc</kbd> to clear.</p>
+      <p class="rail-note legend">○ gateway &nbsp;·&nbsp; ◐ core &nbsp;·&nbsp; ● deep end</p>
+    </nav>
+
+    <main>
+      <!-- TOOLBAR (HUD): search row / facet strip / active-filter tray -->
+      <div class="toolbar">
+        <div class="search-row">
+          <div class="search">
+            <input id="q" type="search"
+                   placeholder="Search the stacks — titles, authors, quarters…"
+                   aria-label="Search readings">
+          </div>
+          <span class="count" id="shown"></span>
+        </div>
+
+        <div class="facets" aria-label="Filters and view controls">
+          <span class="facet-label">Filter</span>
+          <div id="levelFacets" class="facet-group"></div>   <!-- ○◐● toggles -->
+          <span class="facet-sep" aria-hidden="true"></span>
+          <div id="typeFacets" class="facet-group"></div>    <!-- paper/book/… -->
+          <span class="facet-sep" aria-hidden="true"></span>
+          <button id="sortBtn" class="stamp" type="button" title="Cycle sort order"></button>
+          <button id="foldBtn" class="stamp" type="button" title="Fold or unfold all themes"></button>
+          <button id="drawBtn" class="stamp" type="button" title="Highlight a random reading from the current view">✦ draw</button>
+        </div>
+
+        <div id="tray" class="tray" hidden></div>            <!-- active filters -->
+      </div>
+
+      <div id="list"></div>                <!-- built by render() -->
+
+      <!-- EMPTY STATE -->
+      <div id="empty" hidden>
+        <div class="nothing">Nothing filed under “<span id="emptyQ"></span>”</div>
+        <div class="actions"><button id="clearBtn" type="button">Clear all filters</button></div>
+      </div>
+    </main>
   </div>
-</header>
- 
-<div class="frame wrap">
- 
-  <nav class="rail" aria-label="Filter by theme">
-    <p class="rail-head">Contents</p>
-    <div id="themeNav"></div>
-    <div id="sessionNav"></div>
-    <p class="rail-note">Select a theme to filter the list.<br>Press <kbd>/</kbd> to search.</p>
-    <p class="rail-note legend">○ gateway &nbsp;·&nbsp; ◐ core &nbsp;·&nbsp; ● deep end</p>
-  </nav>
- 
-  <main>
-    <div class="toolbar">
-      <input id="q" type="search" placeholder="Search titles, authors, themes…" aria-label="Search readings">
-      <button id="weekPill" class="pill" type="button" title="Clear week filter" hidden></button>
-      <span class="count" id="shown"></span>
+
+  <!-- ============================================================
+       FOOTER — colophon
+       ============================================================ -->
+  <footer class="wrap">
+    <div class="fleuron" aria-hidden="true">❦</div>
+    <div class="edit-note">
+      This page is self-contained. To add a reading, append an entry to the
+      <code>READINGS</code> array at the top of the script. Themes and their
+      order live in <code>THEMES</code>; quarters in <code>QUARTERS</code>;
+      image slots in <code>IMAGES</code>.
     </div>
- 
-    <div id="list"></div>
- 
-    <div id="empty" hidden>
-      <p>Nothing matches “<span id="emptyQ"></span>”.</p>
-      <button id="clearBtn" type="button">Clear search</button>
-    </div>
-  </main>
- 
+    <div class="colophon"><span id="total"></span> · set in STIX Two Text &amp; IBM Plex Mono</div>
+    <a id="suggestLink" class="suggest" hidden>Suggest a reading →</a>
+  </footer>
 </div>
- 
-<footer class="wrap">
-  <div class="edit-note">
-    This page is self-contained. To add a reading, open the file and append an entry to the
-    <code>READINGS</code> array at the top of the script — theme, title, authors, year, venue, type, url.
-    Theme names and their order live in <code>THEMES</code>.
-  </div>
-  <div id="total"></div>
-  <a id="suggestLink" class="suggest" hidden>Suggest a reading →</a>
-</footer>
- 
+
 <script>
 /* =====================================================================
+   ①  CONFIG + DATA — the only region you normally edit
+   =====================================================================
+
    HOW TO MAINTAIN THIS PAGE
    ---------------------------------------------------------------------
-   1. THEMES controls which sections exist and the order they appear in
-      (the roman numerals are generated from this order). Rename, add,
-      or reorder freely. If an entry's theme isn't listed here, its
-      section is appended automatically at the end.
- 
-   2. READINGS is the whole reading list. One object per entry:
- 
+   1. THEMES controls which sections exist and their order (the roman
+      numerals are generated from this order). If an entry's theme
+      isn't listed, its section is appended automatically at the end.
+
+   2. QUARTERS defines the academic calendar. `id` is what entries
+      reference; `label`/`short` are display text. The seasonal colors
+      live in CSS (--fall / --winter / --spring) keyed by id.
+
+   3. READINGS is the whole list. One object per entry:
+
         {
-          theme:   "Barriers to Entry",            // must match a THEMES name
+          theme:   "Barriers to Entry",       // must match a THEMES name
           title:   "Barriers to Entry",
-          authors: "Demsetz, H.",                  // free text, any format
+          authors: "Demsetz, H.",             // free text, any format
           year:    1982,
-          venue:   "American Economic Review",     // journal / publisher / site
-          type:    "paper",                        // "paper" | "article" | "book"
-                                                   //   books render italic,
-                                                   //   everything else in quotes
-          url:     "#",                            // "#" = not filled in yet;
-                                                   //   renders as a dashed stub
-          pick:    "junio",                        // optional: "junio" | "edward"
-          level:   "core",                         // optional: "gateway" | "core" | "deep"
-          start:   true,                           // optional: the one ☞ start-here
-                                                   //   entry for its theme
-          week:    4                               // optional session number; adds a
-                                                   //   clickable "wk 4" tag and a
-                                                   //   Sessions filter in the rail
+          venue:   "American Economic Review",// journal / publisher / site
+          type:    "paper",                   // "paper"|"book"|"article"…
+                                              //   books render italic,
+                                              //   the rest in quotes;
+                                              //   types also become the
+                                              //   toolbar type toggles
+          url:     "#",                       // "#" = not filled in yet →
+                                              //   renders as a dashed stub
+          pick:    "junio",                   // optional: "junio"|"edward"
+          level:   "core",                    // optional: "gateway"|"core"|"deep"
+          start:   true,                      // optional: the ☞ START HERE
+                                              //   stamp for its theme
+          quarter: "winter",                  // optional: a QUARTERS id
+          week:    2                          // optional: week within that
+                                              //   quarter (numbering may
+                                              //   restart each quarter)
         }
- 
-      Entries within a theme are sorted oldest → newest automatically
-      (delete the .sort(...) line in render() if you'd rather order
-      them by hand).
- 
-   3. Every theme has a permalink: click the § beside a section title
-      to copy a link that opens the page already filtered to that
-      theme (the address is just this page's URL + #theme-slug).
- 
-   4. SUGGEST_URL powers the "Suggest a reading" link in the footer.
-      Point it at a mailto: address or a Google Form URL. Leave it ""
-      to hide the link.
- 
-   5. The sample entries below are placeholders to show the schema —
-      replace them with your own.
+
+      quarter and week together make the session stamp ("WI · wk 2")
+      and the Sessions rail. An entry may have quarter without week
+      (stamped just "WINTER") or week without quarter.
+
+   4. IMAGES — every image slot on the page, in one place:
+        logo      : masthead bookplate image ("" hides the bookplate)
+        caption   : small line under the logo
+        favicon   : browser-tab icon ("" = none)
+        themeArt  : { "theme-slug": "path.png" } → small plate beside
+                    a section title. Slugs are the lowercase-hyphen
+                    form of the theme name (see slug() below), e.g.
+                    "Theory of the Firm" → "theory-of-the-firm".
+      Upload image files to the same repo folder as this page and
+      reference them by filename.
+
+   5. SUGGEST_URL powers the footer "Suggest a reading" link — a
+      mailto: or a Google Form URL. "" hides it.
+
+   6. Permalinks: clicking § beside a section title copies a URL
+      ending in #theme-slug that opens the page pre-filtered.
+
+   7. The sample entries below are placeholders demonstrating the
+      schema — replace them with real ones (keep your existing
+      READINGS array if you already have one; the schema is the same
+      plus the optional `quarter` field).
    ===================================================================== */
- 
+
 const LAST_UPDATED = "July 2026";
- 
-const SUGGEST_URL = "mailto:you@uchicago.edu?subject=Reading%20suggestion%20%E2%80%94%20IO%20cohort"; // EDIT ME (or set to "")
- 
+
+const SUGGEST_URL = "mailto:you@uchicago.edu?subject=Reading%20suggestion%20%E2%80%94%20IO%20cohort"; // EDIT ME (or "")
+
 const THEMES = [
   "Theory of the Firm",
   "Market Structure & Concentration",
   "Barriers to Entry",
   "Antitrust & Competition Policy"
 ];
- 
+
+const QUARTERS = [
+  { id:"fall",   label:"Fall",   short:"FA" },
+  { id:"winter", label:"Winter", short:"WI" },
+  { id:"spring", label:"Spring", short:"SP" }
+];
+
 const CURATORS = {
   junio:  { label: "Junio’s pick",  cls: "pick-junio"  },
   edward: { label: "Edward’s pick", cls: "pick-edward" }
 };
- 
+
+const IMAGES = {
+  logo:     "oeconomica-gilt.png",   // gilt version for the dark ground
+  caption:  "· reading room ·",
+  favicon:  "",                      // e.g. "favicon.png"
+  themeArt: {
+    // "theory-of-the-firm": "img/coase-plate.png",   ← example
+  }
+};
+
 const READINGS = [
   // ---- SAMPLE ENTRIES — replace with real ones ----------------------
-  { theme:"Theory of the Firm", title:"The Nature of the Firm", authors:"Coase, R. H.", year:1937, venue:"Economica", type:"paper", url:"#", level:"gateway", start:true, week:1 },
-  { theme:"Theory of the Firm", title:"The Division of Labor Is Limited by the Extent of the Market", authors:"Stigler, G. J.", year:1951, venue:"Journal of Political Economy", type:"paper", url:"#", level:"core", week:1 },
-  { theme:"Theory of the Firm", title:"Production, Information Costs, and Economic Organization", authors:"Alchian, A. A. & Demsetz, H.", year:1972, venue:"American Economic Review", type:"paper", url:"#", level:"core", week:2 },
- 
-  { theme:"Market Structure & Concentration", title:"A Theory of Oligopoly", authors:"Stigler, G. J.", year:1964, venue:"Journal of Political Economy", type:"paper", url:"#", level:"deep", week:3 },
-  { theme:"Market Structure & Concentration", title:"Industry Structure, Market Rivalry, and Public Policy", authors:"Demsetz, H.", year:1973, venue:"Journal of Law and Economics", type:"paper", url:"#", level:"gateway", start:true, week:3 },
- 
-  { theme:"Barriers to Entry", title:"Barriers to New Competition", authors:"Bain, J. S.", year:1956, venue:"Harvard University Press", type:"book", url:"#", level:"deep", week:4 },
-  { theme:"Barriers to Entry", title:"Barriers to Entry", authors:"Demsetz, H.", year:1982, venue:"American Economic Review", type:"paper", url:"#", pick:"junio", level:"core", start:true, week:4 },
- 
-  { theme:"Antitrust & Competition Policy", title:"Law and the Future: Trade Regulation", authors:"Director, A. & Levi, E. H.", year:1956, venue:"Northwestern University Law Review", type:"paper", url:"#", level:"core", week:5 },
-  { theme:"Antitrust & Competition Policy", title:"The Antitrust Paradox", authors:"Bork, R. H.", year:1978, venue:"Basic Books", type:"book", url:"#", pick:"edward", level:"gateway", start:true, week:5 }
+  // (Fall: firm + structure · Winter: barriers · Spring: antitrust)
+  { theme:"Theory of the Firm", title:"The Nature of the Firm", authors:"Coase, R. H.", year:1937, venue:"Economica", type:"paper", url:"#", level:"gateway", start:true, quarter:"fall", week:1 },
+  { theme:"Theory of the Firm", title:"The Division of Labor Is Limited by the Extent of the Market", authors:"Stigler, G. J.", year:1951, venue:"Journal of Political Economy", type:"paper", url:"#", level:"core", quarter:"fall", week:1 },
+  { theme:"Theory of the Firm", title:"Production, Information Costs, and Economic Organization", authors:"Alchian, A. A. & Demsetz, H.", year:1972, venue:"American Economic Review", type:"paper", url:"#", level:"core", quarter:"fall", week:2 },
+
+  { theme:"Market Structure & Concentration", title:"A Theory of Oligopoly", authors:"Stigler, G. J.", year:1964, venue:"Journal of Political Economy", type:"paper", url:"#", level:"deep", quarter:"fall", week:3 },
+  { theme:"Market Structure & Concentration", title:"Industry Structure, Market Rivalry, and Public Policy", authors:"Demsetz, H.", year:1973, venue:"Journal of Law and Economics", type:"paper", url:"#", level:"gateway", start:true, quarter:"fall", week:4 },
+
+  { theme:"Barriers to Entry", title:"Barriers to New Competition", authors:"Bain, J. S.", year:1956, venue:"Harvard University Press", type:"book", url:"#", level:"deep", quarter:"winter", week:1 },
+  { theme:"Barriers to Entry", title:"Barriers to Entry", authors:"Demsetz, H.", year:1982, venue:"American Economic Review", type:"paper", url:"#", pick:"junio", level:"core", start:true, quarter:"winter", week:2 },
+
+  { theme:"Antitrust & Competition Policy", title:"Law and the Future: Trade Regulation", authors:"Director, A. & Levi, E. H.", year:1956, venue:"Northwestern University Law Review", type:"paper", url:"#", level:"core", quarter:"spring", week:1 },
+  { theme:"Antitrust & Competition Policy", title:"The Antitrust Paradox", authors:"Bork, R. H.", year:1978, venue:"Basic Books", type:"book", url:"#", pick:"edward", level:"gateway", start:true, quarter:"spring", week:2 }
   // --------------------------------------------------------------------
 ];
- 
-/* ============================ machinery ============================ */
- 
-const state = { theme: "all", q: "", week: null };
- 
+
+/* =====================================================================
+   ②  MACHINERY — you shouldn't need to edit below this line
+   ===================================================================== */
+
+/* ---- view state -----------------------------------------------------
+   theme     : "all" or a theme name          (rail: Catalogue / #hash)
+   q         : free-text search               (toolbar search box)
+   quarter   : QUARTERS id or null            (rail: Sessions)
+   week      : number or null                 (rail week chips / stamps)
+   levels    : Set of active level ids        (toolbar ○◐● toggles)
+   types     : Set of active type ids         (toolbar type toggles)
+   sort      : key into SORTS                 (toolbar sort cycler)
+   folded    : Set of theme slugs, honored only in "browse mode"
+               (no search, no facets, theme = all)                     */
+const state = {
+  theme:"all", q:"", quarter:null, week:null,
+  levels:new Set(), types:new Set(),
+  sort:"year-asc", folded:new Set()
+};
+
 const $list  = document.getElementById("list");
 const $nav   = document.getElementById("themeNav");
 const $q     = document.getElementById("q");
 const $shown = document.getElementById("shown");
 const $empty = document.getElementById("empty");
- 
+
 const ROMAN = ["I","II","III","IV","V","VI","VII","VIII","IX","X",
                "XI","XII","XIII","XIV","XV","XVI","XVII","XVIII","XIX","XX"];
 const roman = i => ROMAN[i] || String(i + 1);
- 
+
+const LEVELS = { gateway:"○ gateway", core:"◐ core", deep:"● deep end" };
+
+/* sort modes for the toolbar cycler — add more here if wanted */
+const SORTS = {
+  "year-asc":  { label:"sort: year ↑", fn:(a,b)=>(a.year-b.year) || String(a.title).localeCompare(b.title) },
+  "year-desc": { label:"sort: year ↓", fn:(a,b)=>(b.year-a.year) || String(a.title).localeCompare(b.title) },
+  "author":    { label:"sort: author", fn:(a,b)=>String(a.authors).localeCompare(b.authors) || (a.year-b.year) }
+};
+const SORT_ORDER = Object.keys(SORTS);
+
+/* ---- tiny helpers -------------------------------------------------- */
 const esc = s => String(s).replace(/[&<>"']/g, c =>
   ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
- 
+
+/* "Market Structure & Concentration" → "market-structure-and-concentration"
+   (used for permalinks, section ids, and IMAGES.themeArt keys) */
 const slug = s => String(s).toLowerCase().replace(/&/g, "and")
   .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
- 
+
+const quarterById = id => QUARTERS.find(q => q.id === id) || null;
+
 function copyText(text, done){
   if (navigator.clipboard && navigator.clipboard.writeText){
     navigator.clipboard.writeText(text).then(done).catch(done);
-  } else {
+  } else {                                       /* very old browsers */
     const ta = document.createElement("textarea");
     ta.value = text; document.body.appendChild(ta);
     ta.select(); try{ document.execCommand("copy"); }catch(_){}
     document.body.removeChild(ta); done();
   }
 }
- 
-// Theme order = THEMES, plus any theme found only in the data.
+
+/* theme order = THEMES, plus any theme found only in the data */
 function themeOrder(){
   const order = [...THEMES];
   for (const r of READINGS){
@@ -637,17 +929,44 @@ function themeOrder(){
   }
   return order;
 }
- 
-function matches(r, q){
+
+/* "browse mode" = default view; folding is only honored here so a
+   fold can never hide search/filter results */
+function browsing(){
+  return !state.q.trim() && state.theme === "all" &&
+         state.quarter == null && state.week == null &&
+         !state.levels.size && !state.types.size;
+}
+
+/* ---- the filter predicate ------------------------------------------
+   An entry survives if it passes ALL active facets AND the free-text
+   search. The search haystack includes quarter names and "week n" so
+   typing "winter" or "week 2" works too. */
+function matches(r){
+  if (state.quarter != null && r.quarter !== state.quarter) return false;
+  if (state.week    != null && r.week    !== state.week)    return false;
+  if (state.levels.size && !state.levels.has(r.level || ""))  return false;
+  if (state.types.size  && !state.types.has(r.type  || ""))   return false;
+
+  const q = state.q.trim().toLowerCase();
   if (!q) return true;
-  const hay = [r.title, r.authors, r.venue, r.theme, r.year,
-               r.level || "", r.week != null ? "week " + r.week : ""].join(" ").toLowerCase();
+  const Q = quarterById(r.quarter);
+  const hay = [
+    r.title, r.authors, r.venue, r.theme, r.year,
+    r.level || "", r.type || "",
+    Q ? Q.label : "", r.week != null ? "week " + r.week : ""
+  ].join(" ").toLowerCase();
   return hay.includes(q);
 }
- 
+
+/* =====================================================================
+   RENDERERS — each builds one region of the HUD from state + data
+   ===================================================================== */
+
+/* ---- entry rows ----------------------------------------------------- */
 function titleHTML(r){
-  // Books italic; papers & articles in quotes (both are set in italic type,
-  // quotes distinguish the shorter forms — Chicago-ish, close enough).
+  /* books italic; papers & articles in quotes (both set in italic type;
+     the quotes mark the shorter forms) */
   const t = esc(r.title);
   const text = r.type === "book" ? t : "\u201C" + t + "\u201D";
   if (!r.url || r.url === "#"){
@@ -655,18 +974,29 @@ function titleHTML(r){
   }
   return `<a href="${esc(r.url)}" target="_blank" rel="noopener">${text}</a>`;
 }
- 
-const LEVELS = { gateway:"○ gateway", core:"◐ core", deep:"● deep end" };
- 
+
+function sessionStampHTML(r){
+  /* the seasonal "FA · wk 3" stamp; clicking it filters to that session */
+  if (r.quarter == null && r.week == null) return "";
+  const Q = quarterById(r.quarter);
+  const cls = Q ? " q-" + Q.id : "";
+  const label = Q
+    ? (r.week != null ? `${Q.short} · wk ${esc(r.week)}` : Q.label)
+    : `wk ${esc(r.week)}`;
+  const pressed = state.quarter === (Q ? Q.id : null) && state.week === (r.week ?? null)
+                  && (state.quarter != null || state.week != null);
+  return `<button class="stamp session${cls}" type="button"
+    data-quarter="${Q ? Q.id : ""}" data-week="${r.week != null ? esc(r.week) : ""}"
+    aria-pressed="${pressed}" title="Filter to this session">${label}</button>`;
+}
+
 function metaHTML(r){
   const bits = [];
-  if (r.start) bits.push(`<span class="start">☞ start here</span>`);
+  if (r.start) bits.push(`<span class="stamp start">☞ start here</span>`);
   if (r.level && LEVELS[r.level]) bits.push(`<span class="level">${LEVELS[r.level]}</span>`);
   if (r.venue) bits.push(esc(r.venue));
-  if (r.week != null){
-    bits.push(`<button class="week-tag${state.week === r.week ? " active" : ""}" type="button"
-      data-week="${esc(r.week)}" title="Filter to week ${esc(r.week)}">wk ${esc(r.week)}</button>`);
-  }
+  const sess = sessionStampHTML(r);
+  if (sess) bits.push(sess);
   if (r.pick && CURATORS[r.pick]){
     const c = CURATORS[r.pick];
     bits.push(`<span class="pick ${c.cls}">${esc(c.label)}</span>`);
@@ -676,9 +1006,9 @@ function metaHTML(r){
   }
   return bits.join(`<span class="sep">·</span>`);
 }
- 
+
 function entryHTML(r){
-  return `<li class="entry">
+  return `<li class="entry" data-id="${r._id}">
     <div class="entry-line">
       <span class="authors">${esc(r.authors)}</span>
       <span class="title">${titleHTML(r)}</span>
@@ -688,86 +1018,197 @@ function entryHTML(r){
     <div class="entry-meta">${metaHTML(r)}</div>
   </li>`;
 }
- 
+
+/* ---- main list ------------------------------------------------------
+   Applies theme filter + matches() + sort, groups by theme, renders
+   section heads (numeral, title, optional art, §, count, fold caret),
+   and records what's visible for the "draw" randomizer. */
+let lastVisibleIds = [];
+
 function render(){
-  const q = state.q.trim().toLowerCase();
   const order = themeOrder();
+  const browse = browsing();
+  const cmp = SORTS[state.sort].fn;
   let shown = 0, html = "", sectionIndex = 0;
- 
+  lastVisibleIds = [];
+
   order.forEach((theme, i) => {
     if (state.theme !== "all" && state.theme !== theme) return;
- 
-    const rows = READINGS
-      .filter(r => r.theme === theme
-                && (state.week == null || r.week === state.week)
-                && matches(r, q))
-      .sort((a, b) => (a.year - b.year) || String(a.title).localeCompare(b.title));
- 
+
+    const rows = READINGS.filter(r => r.theme === theme && matches(r)).sort(cmp);
     if (!rows.length) return;
     shown += rows.length;
- 
+
     const s = slug(theme);
-    html += `<section class="section" id="${s}" style="animation-delay:${Math.min(sectionIndex * 60, 300)}ms">
-      <div class="section-head">
+    const folded = browse && state.folded.has(s);
+    if (!folded) rows.forEach(r => lastVisibleIds.push(r._id));
+
+    /* optional theme art (see IMAGES.themeArt in the config) */
+    const art = IMAGES.themeArt && IMAGES.themeArt[s]
+      ? `<img class="theme-art" src="${esc(IMAGES.themeArt[s])}" alt="">`
+      : "";
+
+    html += `<section class="section${folded ? " folded" : ""}" id="${s}"
+        style="animation-delay:${Math.min(sectionIndex * 60, 300)}ms">
+      <div class="section-head${browse ? " foldable" : ""}" data-slug="${s}">
         <span class="numeral">${roman(i)}</span>
         <h2>${esc(theme)}</h2>
+        ${browse ? `<span class="caret" aria-hidden="true">▾</span>` : ""}
+        ${art}
         <a class="perma" href="#${s}" data-slug="${s}" title="Copy a link to this theme">§</a>
-        <span class="n">${rows.length}</span>
+        <span class="n stamp">${rows.length} ${rows.length === 1 ? "entry" : "entries"}</span>
       </div>
-      <ul class="entries">${rows.map(entryHTML).join("")}</ul>
+      ${folded ? "" : `<ul class="entries">${rows.map(entryHTML).join("")}</ul>`}
     </section>`;
     sectionIndex++;
   });
- 
+
   $list.innerHTML = html;
   $shown.textContent = `showing ${shown} of ${READINGS.length}`;
- 
-  const $pill = document.getElementById("weekPill");
-  $pill.hidden = state.week == null;
-  if (state.week != null) $pill.textContent = `week ${state.week} ×`;
- 
+
+  renderTray();
+  syncFoldBtn(browse);
+
   const none = shown === 0;
   $empty.hidden = !none;
   if (none){
     document.getElementById("emptyQ").textContent =
-      state.q.trim() || (state.week != null ? "week " + state.week : "");
+      state.q.trim() || describeFacets() || "these filters";
   }
 }
- 
+
+/* ---- rail: Catalogue ------------------------------------------------ */
 function renderNav(){
   const order = themeOrder();
   const counts = {};
   READINGS.forEach(r => counts[r.theme] = (counts[r.theme] || 0) + 1);
- 
+
   let html = `<button class="theme-btn" type="button" data-theme="all"
     aria-pressed="${state.theme === "all"}">All readings <span class="n">(${READINGS.length})</span></button>`;
- 
+
   order.forEach((theme, i) => {
     html += `<button class="theme-btn" type="button" data-theme="${esc(theme)}"
       aria-pressed="${state.theme === theme}">${roman(i)} — ${esc(theme)} <span class="n">(${counts[theme] || 0})</span></button>`;
   });
- 
   $nav.innerHTML = html;
 }
- 
+
+/* ---- rail: Sessions (quarter blocks + week chips) -------------------
+   Built only from what's in the data: a quarter appears if any entry
+   references it; weeks likewise, numbered within their quarter. */
 function renderSessions(){
   const $s = document.getElementById("sessionNav");
-  const weeks = [...new Set(READINGS.filter(r => r.week != null).map(r => r.week))]
-    .sort((a, b) => a - b);
-  if (!weeks.length){ $s.innerHTML = ""; return; }
- 
-  const counts = {};
-  READINGS.forEach(r => { if (r.week != null) counts[r.week] = (counts[r.week] || 0) + 1; });
- 
-  let html = `<p class="rail-head">Sessions</p><div class="nav-btns">`;
-  weeks.forEach(w => {
-    html += `<button class="theme-btn" type="button" data-week="${esc(w)}"
-      aria-pressed="${state.week === w}">Week ${esc(w)} <span class="n">(${counts[w]})</span></button>`;
+
+  /* quarters in QUARTERS order, plus any unknown ids found in data */
+  const ids = QUARTERS.map(q => q.id);
+  READINGS.forEach(r => { if (r.quarter && !ids.includes(r.quarter)) ids.push(r.quarter); });
+
+  const used = ids.filter(id => READINGS.some(r => r.quarter === id));
+  if (!used.length){ $s.innerHTML = ""; return; }
+
+  let html = `<p class="rail-head">Sessions</p>`;
+  used.forEach(id => {
+    const Q = quarterById(id) || { id, label:id, short:id.slice(0,2).toUpperCase() };
+    const inQ = READINGS.filter(r => r.quarter === id);
+    const weeks = [...new Set(inQ.filter(r => r.week != null).map(r => r.week))]
+      .sort((a, b) => a - b);
+
+    html += `<div class="q-block q-${esc(id)}">
+      <button class="q-btn q-${esc(id)}" type="button" data-quarter="${esc(id)}"
+        aria-pressed="${state.quarter === id && state.week == null}">
+        ${esc(Q.label)} <span class="n">(${inQ.length})</span></button>`;
+
+    if (weeks.length){
+      html += `<div class="wk-row">` + weeks.map(w =>
+        `<button class="stamp wk-chip q-${esc(id)}" type="button"
+           data-quarter="${esc(id)}" data-week="${esc(w)}"
+           aria-pressed="${state.quarter === id && state.week === w}">wk ${esc(w)}</button>`
+      ).join("") + `</div>`;
+    }
+    html += `</div>`;
   });
-  $s.innerHTML = html + `</div>`;
+  $s.innerHTML = html;
 }
- 
-// Permalinks: #theme-slug in the URL ⇄ the active theme filter.
+
+/* ---- toolbar: facet toggles (levels + types) + sort/fold labels ----- */
+function renderFacets(){
+  /* level toggles — one per LEVELS key that appears in the data */
+  const $lv = document.getElementById("levelFacets");
+  const lvUsed = Object.keys(LEVELS).filter(l => READINGS.some(r => r.level === l));
+  $lv.innerHTML = lvUsed.map(l =>
+    `<button class="stamp" type="button" data-level="${l}"
+       aria-pressed="${state.levels.has(l)}">${LEVELS[l]}</button>`).join(" ");
+
+  /* type toggles — derived from whatever types the data uses */
+  const $ty = document.getElementById("typeFacets");
+  const tyUsed = [...new Set(READINGS.map(r => r.type).filter(Boolean))];
+  $ty.innerHTML = tyUsed.map(t =>
+    `<button class="stamp" type="button" data-type="${esc(t)}"
+       aria-pressed="${state.types.has(t)}">${esc(t)}</button>`).join(" ");
+
+  document.getElementById("sortBtn").textContent = SORTS[state.sort].label;
+}
+
+/* ---- toolbar: active-filter tray ------------------------------------
+   One dismissible stamp per active facet + a "clear all". The search
+   text isn't restated here (it's already visible in the box). */
+function describeFacets(){
+  const bits = [];
+  if (state.quarter != null){
+    const Q = quarterById(state.quarter);
+    bits.push((Q ? Q.label : state.quarter) + (state.week != null ? " · wk " + state.week : ""));
+  } else if (state.week != null) bits.push("wk " + state.week);
+  state.levels.forEach(l => bits.push(LEVELS[l] || l));
+  state.types.forEach(t => bits.push(t));
+  return bits.join(" · ");
+}
+
+function renderTray(){
+  const $t = document.getElementById("tray");
+  const stamps = [];
+
+  if (state.quarter != null || state.week != null){
+    const Q = quarterById(state.quarter);
+    const cls = Q ? " q-" + Q.id : "";
+    const label = Q
+      ? (state.week != null ? `${Q.short} · wk ${state.week}` : Q.label)
+      : `wk ${state.week}`;
+    stamps.push(`<button class="stamp${cls}" type="button" data-off="session">${label} ✕</button>`);
+  }
+  state.levels.forEach(l =>
+    stamps.push(`<button class="stamp" type="button" data-off="level" data-val="${l}">${LEVELS[l] || l} ✕</button>`));
+  state.types.forEach(t =>
+    stamps.push(`<button class="stamp" type="button" data-off="type" data-val="${esc(t)}">${esc(t)} ✕</button>`));
+
+  if (!stamps.length){ $t.hidden = true; $t.innerHTML = ""; return; }
+  $t.hidden = false;
+  $t.innerHTML = `<span class="tray-label">Filed under</span> ` + stamps.join(" ") +
+    ` <button class="clear-all" type="button">clear all</button>`;
+}
+
+/* ---- fold button label / visibility --------------------------------- */
+function syncFoldBtn(browse){
+  const btn = document.getElementById("foldBtn");
+  btn.style.display = browse ? "" : "none";      /* folding = browse mode only */
+  const total = themeOrder().filter(t => READINGS.some(r => r.theme === t)).length;
+  btn.textContent = state.folded.size >= total ? "▸ open all" : "▾ fold all";
+}
+
+/* ---- masthead ledger (auto stats) ------------------------------------ */
+function updateLedger(){
+  const nThemes = themeOrder().filter(t => READINGS.some(r => r.theme === t)).length;
+  const qUsed = QUARTERS.filter(q => READINGS.some(r => r.quarter === q.id));
+  const span = qUsed.length
+    ? (qUsed.length > 1 ? `${qUsed[0].label}–${qUsed[qUsed.length-1].label}` : qUsed[0].label)
+    : "";
+  document.getElementById("ledger").innerHTML =
+    `<span><b>${READINGS.length}</b> readings</span>` +
+    `<span><b>${nThemes}</b> themes</span>` +
+    (span ? `<span><b>${esc(span)}</b> quarters</span>` : "") +
+    `<span>updated <b>${esc(LAST_UPDATED)}</b></span>`;
+}
+
+/* ---- permalinks: #theme-slug in the URL ⇄ the theme filter ---------- */
 function applyHash(){
   const s = decodeURIComponent(location.hash.replace(/^#/, ""));
   const t = s ? themeOrder().find(th => slug(th) === s) : null;
@@ -775,9 +1216,12 @@ function applyHash(){
   renderNav();
   render();
 }
- 
-/* ---------------------------- events ---------------------------- */
- 
+
+/* =====================================================================
+   EVENTS — one listener per HUD region (all use delegation)
+   ===================================================================== */
+
+/* rail: Catalogue → theme filter (+ writes the URL hash) */
 $nav.addEventListener("click", e => {
   const btn = e.target.closest(".theme-btn");
   if (!btn) return;
@@ -787,34 +1231,79 @@ $nav.addEventListener("click", e => {
   renderNav();
   render();
 });
- 
+
 window.addEventListener("hashchange", applyHash);
- 
+
+/* rail: Sessions → quarter / week filters (toggle on second click) */
 document.getElementById("sessionNav").addEventListener("click", e => {
-  const btn = e.target.closest("[data-week]");
+  const btn = e.target.closest("[data-quarter]");
   if (!btn) return;
-  const w = Number(btn.dataset.week);
-  state.week = state.week === w ? null : w;
+  const qid = btn.dataset.quarter;
+  const wk  = btn.dataset.week !== undefined && btn.dataset.week !== ""
+            ? Number(btn.dataset.week) : null;
+  const same = state.quarter === qid && state.week === wk;
+  state.quarter = same ? null : qid;
+  state.week    = same ? null : wk;
   renderSessions();
   render();
 });
- 
-document.getElementById("weekPill").addEventListener("click", () => {
-  state.week = null;
-  renderSessions();
-  render();
+
+/* toolbar: search (live) */
+$q.addEventListener("input", () => { state.q = $q.value; render(); });
+
+/* toolbar: facet strip — level toggles, type toggles, sort, fold, draw */
+document.querySelector(".facets").addEventListener("click", e => {
+  const lv = e.target.closest("[data-level]");
+  if (lv){
+    const l = lv.dataset.level;
+    state.levels.has(l) ? state.levels.delete(l) : state.levels.add(l);
+    renderFacets(); render(); return;
+  }
+  const ty = e.target.closest("[data-type]");
+  if (ty){
+    const t = ty.dataset.type;
+    state.types.has(t) ? state.types.delete(t) : state.types.add(t);
+    renderFacets(); render(); return;
+  }
+  if (e.target.closest("#sortBtn")){
+    const i = SORT_ORDER.indexOf(state.sort);
+    state.sort = SORT_ORDER[(i + 1) % SORT_ORDER.length];
+    renderFacets(); render(); return;
+  }
+  if (e.target.closest("#foldBtn")){
+    const all = themeOrder().filter(t => READINGS.some(r => r.theme === t)).map(slug);
+    state.folded = state.folded.size >= all.length ? new Set() : new Set(all);
+    render(); return;
+  }
+  if (e.target.closest("#drawBtn")){
+    drawFromStacks(); return;
+  }
 });
- 
-$q.addEventListener("input", () => {
-  state.q = $q.value;
-  render();
+
+/* toolbar: tray — dismiss individual facets or clear everything */
+document.getElementById("tray").addEventListener("click", e => {
+  const off = e.target.closest("[data-off]");
+  if (off){
+    if (off.dataset.off === "session"){ state.quarter = null; state.week = null; renderSessions(); }
+    if (off.dataset.off === "level")  state.levels.delete(off.dataset.val);
+    if (off.dataset.off === "type")   state.types.delete(off.dataset.val);
+    renderFacets(); render(); return;
+  }
+  if (e.target.closest(".clear-all")) clearAll();
 });
- 
-document.getElementById("clearBtn").addEventListener("click", () => {
+
+/* empty state: clear everything */
+document.getElementById("clearBtn").addEventListener("click", clearAll);
+
+function clearAll(){
   state.q = ""; $q.value = "";
-  render(); $q.focus();
-});
- 
+  state.quarter = null; state.week = null;
+  state.levels.clear(); state.types.clear();
+  renderSessions(); renderFacets(); render();
+  $q.focus();
+}
+
+/* keyboard: "/" jumps to search, Esc clears it */
 document.addEventListener("keydown", e => {
   if (e.key === "/" && document.activeElement !== $q){
     e.preventDefault(); $q.focus();
@@ -823,19 +1312,10 @@ document.addEventListener("keydown", e => {
     state.q = ""; $q.value = ""; render();
   }
 });
- 
+
+/* list: fold toggles, session stamps, § permalinks, copy buttons */
 $list.addEventListener("click", e => {
-  // Week tag → toggle the session filter
-  const wk = e.target.closest(".week-tag");
-  if (wk){
-    const w = Number(wk.dataset.week);
-    state.week = state.week === w ? null : w;
-    renderSessions();
-    render();
-    return;
-  }
- 
-  // § → set the hash, filter to the theme, copy the permalink
+  /* § — set hash, filter to the theme, copy the permalink */
   const perma = e.target.closest(".perma");
   if (perma){
     e.preventDefault();
@@ -844,36 +1324,91 @@ $list.addEventListener("click", e => {
     applyHash();
     copyText(location.href, () => {
       const el = document.querySelector(`.perma[data-slug="${s}"]`);
-      if (el){
-        el.textContent = "link copied";
-        setTimeout(() => { el.textContent = "§"; }, 1300);
-      }
+      if (el){ el.textContent = "link copied";
+               setTimeout(() => { el.textContent = "§"; }, 1300); }
     });
     return;
   }
- 
-  // copy link → clipboard
+
+  /* session stamp on an entry → filter to that quarter/week */
+  const sess = e.target.closest(".session");
+  if (sess){
+    const qid = sess.dataset.quarter || null;
+    const wk  = sess.dataset.week !== "" ? Number(sess.dataset.week) : null;
+    const same = state.quarter === qid && state.week === wk;
+    state.quarter = same ? null : qid;
+    state.week    = same ? null : wk;
+    renderSessions(); render();
+    return;
+  }
+
+  /* copy link → clipboard */
   const btn = e.target.closest(".copy-btn");
-  if (!btn || btn.classList.contains("done")) return;
-  copyText(btn.dataset.url, () => {
-    btn.classList.add("done");
-    const prev = btn.textContent;
-    btn.textContent = "copied";
-    setTimeout(() => { btn.classList.remove("done"); btn.textContent = prev; }, 1400);
-  });
+  if (btn && !btn.classList.contains("done")){
+    copyText(btn.dataset.url, () => {
+      btn.classList.add("done");
+      const prev = btn.textContent;
+      btn.textContent = "copied";
+      setTimeout(() => { btn.classList.remove("done"); btn.textContent = prev; }, 1400);
+    });
+    return;
+  }
+
+  /* section head → fold/unfold (browse mode only; § handled above) */
+  const head = e.target.closest(".section-head.foldable");
+  if (head){
+    const s = head.dataset.slug;
+    state.folded.has(s) ? state.folded.delete(s) : state.folded.add(s);
+    render();
+  }
 });
- 
-/* ---------------------------- boot ---------------------------- */
- 
-document.getElementById("updated").textContent = LAST_UPDATED;
-document.getElementById("total").textContent =
-  `${READINGS.length} readings · updated ${LAST_UPDATED}`;
- 
+
+/* ✦ draw — highlight a random reading from the current view */
+function drawFromStacks(){
+  if (!lastVisibleIds.length) return;
+  const id = lastVisibleIds[Math.floor(Math.random() * lastVisibleIds.length)];
+  const el = document.querySelector(`.entry[data-id="${id}"]`);
+  if (!el) return;
+  el.classList.remove("flash");
+  void el.offsetWidth;                       /* restart the animation */
+  el.classList.add("flash");
+  el.scrollIntoView({ behavior:"smooth", block:"center" });
+}
+
+/* =====================================================================
+   BOOT — one-time setup, then first render
+   ===================================================================== */
+
+/* stable ids so the randomizer can find entries after re-renders */
+READINGS.forEach((r, i) => r._id = i);
+
+/* IMAGES wiring: bookplate + optional favicon (theme art is handled
+   inside render()) */
+(function initImages(){
+  if (IMAGES.logo){
+    document.getElementById("clubMark").src = IMAGES.logo;
+    document.getElementById("plateCaption").textContent = IMAGES.caption || "";
+    document.getElementById("bookplate").hidden = false;
+  }
+  if (IMAGES.favicon){
+    try{
+      const l = document.createElement("link");
+      l.rel = "icon"; l.href = IMAGES.favicon;
+      document.head.appendChild(l);
+    }catch(_){}
+  }
+})();
+
 const $sug = document.getElementById("suggestLink");
 if (SUGGEST_URL){ $sug.href = SUGGEST_URL; $sug.hidden = false; }
- 
+
+document.getElementById("total").textContent =
+  `${READINGS.length} readings · updated ${LAST_UPDATED}`;
+
+updateLedger();
 renderSessions();
-applyHash();   // reads #theme-slug if present, then renders nav + list
+renderFacets();
+applyHash();      /* reads #theme-slug if present, then renders nav + list */
 </script>
 </body>
 </html>

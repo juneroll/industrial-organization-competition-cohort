@@ -661,7 +661,7 @@ footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
       <div class="masthead-text">
         <!-- the <br>s control the cover composition; adjust to taste -->
         <h1>Industrial<br>Organization<br><span class="conj">and</span> Competition</h1>
-        <p class="dek">A running index of papers, articles, and books for cohort members who want to read past the syllabus, fall through spring. Kept by <b>Junio</b> and <b>Edward</b>.</p>
+        <p class="dek">A running index of papers and articles related to industrial organization theory and antitrust for cohort members who want to read some more, from fall through spring. Kept by <b>Junio Valenzuela</b> and <b>Edward Ward</b>.</p>
       </div>
 
       <!-- BOOKPLATE: src + caption are injected from IMAGES in the
@@ -844,9 +844,19 @@ const IMAGES = {
 const READINGS = [
   // ---- SAMPLE ENTRIES — replace with real ones ----------------------
   // (Fall: firm + structure · Winter: barriers · Spring: antitrust)
-  { theme:"Theory of the Firm", title:"The Nature of the Firm", authors:"Coase, R. H.", year:1937, venue:"Economica", type:"paper", url:"#", level:"gateway", start:true, quarter:"fall", week:1 },
-  { theme:"Theory of the Firm", title:"The Division of Labor Is Limited by the Extent of the Market", authors:"Stigler, G. J.", year:1951, venue:"Journal of Political Economy", type:"paper", url:"#", level:"core", quarter:"fall", week:1 },
-  { theme:"Theory of the Firm", title:"Production, Information Costs, and Economic Organization", authors:"Alchian, A. A. & Demsetz, H.", year:1972, venue:"American Economic Review", type:"paper", url:"#", level:"core", quarter:"fall", week:2 },
+  { theme:"Theory of the Firm", title:"The Nature of the Firm", authors:"Ronald H. Coase", year: 1937, venue:"Economica", type:"paper", url:"https://www.jstor.org/stable/2626876", level:"gateway", start:true, quarter: "fall", week: 1},
+  { theme:"Theory of the Firm", title:"The Nature of the Firm: Origin", authors:"Ronald H. Coase", year: 1988, venue:"Journal of Law, Economics, & Organization", type:"paper", url:"https://www.jstor.org/stable/765011", level:"deep end", start: true, quarter:"fall", week: 5},
+  { theme:"Theory of the Firm", title:"The Nature of the Firm: Meaning", authors:"Ronald H. Coase", year: 1988, venue:"Journal of Law, Economics, & Organization", type:"paper", url:"https://www.jstor.org/stable/765012", level:"core", start: true, quarter:"fall", week: 1},
+  { theme:"Theory of the Firm", title:"The Nature of the Firm: Influence", authors:"Ronald H. Coase", year: 1988, venue:"Journal of Law, Economics, & Organization", type:"paper", url:"https://www.jstor.org/stable/765013", level:"deep end", start: true, quarter:"fall", week: 5},
+  { theme:"Theory of the Firm", title:"The Firm in Economic Theory: A Quiet Revolution", authors:"Harold Demsetz", year: 1997, venue:"The American Economic Review", type:"paper", url:"https://www.jstor.org/stable/2950959", level:"gateway", start: true, quarter:"fall", week: 1},
+  { theme:"Theory of the Firm", title:"The Theory of the Firm Revisited", authors:"Harold Demsetz", year: 1988, venue:"Journal of Law, Economics, & Organization", type:"paper", url:"https://www.jstor.org/stable/765018", level:"gateway", start: true, quarter:"fall", week: 2},
+  { theme:"Theory of the Firm", title:"The Structure of Ownership and the Theory of the Firm", authors:"Harold Demsetz", year: 1983, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/725108", level:"core", start: true, quarter:"fall", week: 3},
+  { theme:"Theory of the Firm", title:"Production, Information Costs, and Economic Organization", authors:"Armen A. Alchian, Harold Demsetz", year: 1972, venue:"The American Economic Review", type:"paper", url:"https://www.jstor.org/stable/1815199", level:"deep end", start: true, quarter:"fall", week: 4},
+  { theme:"Theory of the Firm", title:"The Contractual Nature of the Firm", authors:"Steven N.S. Cheung", year: 1983, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/725182", level:"deep end", start: true, quarter:"fall", week: 6},
+  { theme:"Theory of the Firm", title:"The Division of Labor is Limited by the Extent of the Market", authors:"George Stigler", year: 1951, venue:"Journal of Political Economy", type:"paper", url:"https://www.jstor.org/stable/1826433", level:"core", start: true, quarter:"fall", week: 2},
+  { theme:"Theory of the Firm", title:"Vertical Integration, Appropriate Rents, and the Competitive Contracting Process", authors:"Benjamin Klein, Robert G. Crawford, Armen A. Alchian", year: 1978, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/725234",level:"deep end", start: true, quarter:"fall", week: 6},
+  { theme:"Theory of the Firm", title:"Agency Problems and the Theory of the Firm", authors:"Eugene F. Fama", year: 1980, venue:"Journal of Political Economy", type:"paper", url:"https://www.jstor.org/stable/1837292", level:"deep end", start: true, quarter:"fall", week: 7},
+  { theme:"Theory of the Firm", title:"The Coasian and Knightian Theories of the Firm", authors:"Donald J. Boudreaux, Randall G. Holcombe", year: 1989, venue:"Managerial and Decision Economics", type:"paper", url:"https://www.jstor.org/stable/2487017", level:"core", start: true, quarter:"fall", week: 8},
 
   { theme:"Market Structure & Concentration", title:"A Theory of Oligopoly", authors:"Stigler, G. J.", year:1964, venue:"Journal of Political Economy", type:"paper", url:"#", level:"deep", quarter:"fall", week:3 },
   { theme:"Market Structure & Concentration", title:"Industry Structure, Market Rivalry, and Public Policy", authors:"Demsetz, H.", year:1973, venue:"Journal of Law and Economics", type:"paper", url:"#", level:"gateway", start:true, quarter:"fall", week:4 },

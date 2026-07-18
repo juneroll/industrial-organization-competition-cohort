@@ -171,6 +171,10 @@ h1 .conj{ font-style:italic; font-weight:500; color:var(--gilt); }
 }
 .dek b{ font-style:normal; font-weight:600; color:var(--ink); }
 
+.dek .byline{ text-decoration:none; }
+.dek .byline b{ border-bottom:1px dotted var(--dots); }
+.dek .byline:hover b{ color:var(--gilt); border-bottom-color:var(--gilt); }
+
 /* BOOKPLATE: double-framed home for the club mark. The <img> src is
    set from IMAGES.logo in the script; the whole plate hides itself
    if no logo is configured. */
@@ -578,7 +582,13 @@ footer .suggest{
   border-bottom:1px dotted var(--gilt);
 }
 footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
-
+     
+/* ################################################################
+   9b. APPENDIX — extra-resources band above the footer
+   Reuses the section-head and entry styles from the main list.
+   ################################################################ */
+.appendix{ padding-top:8px; padding-bottom:22px; }
+     
 /* ################################################################
    10. MOTION — one quiet settle on load; honors reduced motion
    ################################################################ */
@@ -661,7 +671,8 @@ footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
       <div class="masthead-text">
         <!-- the <br>s control the cover composition; adjust to taste -->
         <h1>Industrial<br>Organization<br><span class="conj">and</span> Competition</h1>
-        <p class="dek">A running index of papers and articles related to industrial organization theory and antitrust for cohort members who want to read some more, from fall through spring. Kept by <b>Junio Valenzuela</b> and <b>Edward Ward</b>.</p>
+        <p class="dek">A running index of papers and articles related to industrial organization theory and antitrust for cohort members who want to read some more, from fall through spring.</p>
+        <p>Kept by <a class="byline" href="https://www.linkedin.com/in/junio-valenzuela/" target="_blank" rel="noopener"><b>Junio Valenzuela</b> and <a class="byline" href="https://www.linkedin.com/in/edwardhward/" target="_blank" rel="noopener"><b>Edward Ward</b>.</p>
       </div>
 
       <!-- BOOKPLATE: src + caption are injected from IMAGES in the
@@ -727,17 +738,25 @@ footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
     </main>
   </div>
 
+ <!-- ============================================================
+       APPENDIX — extra resources (videos, slides, podcasts…)
+       Content lives in the EXTRAS array in the script; this section
+       hides itself automatically when EXTRAS is empty.
+       ============================================================ -->
+  <section class="appendix wrap" id="appendix" hidden>
+    <div class="section-head">
+      <span class="numeral">A</span>
+      <h2>Appendix — Screen &amp; Sound</h2>
+      <span class="n stamp" id="extrasCount"></span>
+    </div>
+    <ul class="entries" id="extrasList"></ul>
+  </section>
+     
   <!-- ============================================================
        FOOTER — colophon
        ============================================================ -->
   <footer class="wrap">
     <div class="fleuron" aria-hidden="true">❦</div>
-    <div class="edit-note">
-      This page is self-contained. To add a reading, append an entry to the
-      <code>READINGS</code> array at the top of the script. Themes and their
-      order live in <code>THEMES</code>; quarters in <code>QUARTERS</code>;
-      image slots in <code>IMAGES</code>.
-    </div>
     <div class="colophon"><span id="total"></span> · set in STIX Two Text &amp; IBM Plex Mono</div>
     <a id="suggestLink" class="suggest" hidden>Suggest a reading →</a>
   </footer>
@@ -888,6 +907,20 @@ const READINGS = [
   { theme:"Antitrust & Competition Policy", title:"Legislative Intent and the Policy of the Sherman Act", authors:"Robert H. Bork", year: 1966, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/724991", level:"deep", start: false, quarter:"spring", week: 7},
 
   // --------------------------------------------------------------------
+];
+
+/* EXTRAS — the Appendix: videos, slide decks, podcasts, sites…
+   kind  : free text, becomes the stamp at the row's end
+           ("video", "slides", "podcast", "site", "data" …)
+   source: who made it (channel, speaker, author) — optional
+   note  : one quiet line under the title — optional
+   url   : "#" renders as a dashed not-filled-in-yet stub */
+const EXTRAS = [
+  // ---- SAMPLE ITEMS — replace with real ones ----------------------
+  { kind:"video",   title:"Sample lecture — replace me", source:"Channel or speaker", url:"#", note:"One-line note on why it's worth watching." },
+  { kind:"slides",  title:"Sample deck — replace me",    source:"Author",             url:"#" },
+  { kind:"podcast", title:"Sample episode — replace me", source:"Show name",          url:"#" }
+  // ------------------------------------------------------------------
 ];
 
 /* =====================================================================
@@ -1239,6 +1272,31 @@ function updateLedger(){
     `<span>updated <b>${esc(LAST_UPDATED)}</b></span>`;
 }
 
+/* ---- appendix: extra resources --------------------------------------
+   Renders EXTRAS into the band above the footer. Rows mirror the
+   reading entries: source in small caps, title as the link, dot
+   leader, kind stamp at the right, optional note beneath. */
+function renderExtras(){
+  const $a = document.getElementById("appendix");
+  if (!$a) return;
+  if (!EXTRAS.length){ $a.hidden = true; return; }
+  $a.hidden = false;
+  document.getElementById("extrasCount").textContent =
+    `${EXTRAS.length} ${EXTRAS.length === 1 ? "item" : "items"}`;
+  document.getElementById("extrasList").innerHTML = EXTRAS.map(x => `
+    <li class="entry">
+      <div class="entry-line">
+        ${x.source ? `<span class="authors">${esc(x.source)}</span>` : ""}
+        <span class="title">${x.url && x.url !== "#"
+          ? `<a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.title)}</a>`
+          : `<span class="link-missing" title="No URL yet — add one in EXTRAS.">${esc(x.title)}</span>`}</span>
+        <span class="leader" aria-hidden="true"></span>
+        <span class="stamp">${esc(x.kind || "link")}</span>
+      </div>
+      ${x.note ? `<div class="entry-meta">${esc(x.note)}</div>` : ""}
+    </li>`).join("");
+}
+
 /* ---- permalinks: #theme-slug in the URL ⇄ the theme filter ---------- */
 function applyHash(){
   const s = decodeURIComponent(location.hash.replace(/^#/, ""));
@@ -1289,6 +1347,7 @@ document.querySelector(".facets").addEventListener("click", e => {
     const l = lv.dataset.level;
     state.levels.has(l) ? state.levels.delete(l) : state.levels.add(l);
     renderFacets(); render(); return;
+
   }
   const ty = e.target.closest("[data-type]");
   if (ty){
@@ -1439,6 +1498,7 @@ document.getElementById("total").textContent =
 updateLedger();
 renderSessions();
 renderFacets();
+renderExtras();
 applyHash();      /* reads #theme-slug if present, then renders nav + list */
 </script>
 </body>

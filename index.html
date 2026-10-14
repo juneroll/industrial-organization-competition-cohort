@@ -19,6 +19,8 @@
          FOOTER).
        · BEHAVIOR .............. the machinery half of the <script>,
          each function banner-commented.
+       · <head> TAGS ........... favicon + link previews live at the
+         top of <head> as plain tags (one-time setup noted there).
 
      DESIGN NOTES (so future edits stay coherent):
        · Palette = "night archive": deep green-black ground, ivory
@@ -35,6 +37,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Supplementary readings for the Industrial Organization and Competition cohort at the University of Chicago.">
 <title>Industrial Organization and Competition — Supplementary Readings</title>
+
+<!-- FAVICON: upload favicon.ico and apple-touch-icon.png next to this
+     page. (Plain tags, not script, so bookmarks + iPhones see them.) -->
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#0D1310">
+
+<!-- LINK PREVIEWS (iMessage, Slack, GroupMe, LinkedIn, X…). Previewers
+     don't run JavaScript, so these must be plain tags here.
+     ▶ ONE-TIME SETUP: replace both https://YOUR-SITE-URL/ below with the
+       page's real address (keep the trailing slash), and upload
+       og-image.png next to this page. Previewers need the full URL. -->
+<meta property="og:type"         content="website">
+<meta property="og:site_name"    content="Oeconomica">
+<meta property="og:title"        content="Industrial Organization and Competition — Supplementary Readings">
+<meta property="og:description"  content="A supplementary reading list (and other resources) for the 2026–2027 industrial organization and competition cohort at the University of Chicago.">
+<meta property="og:url"          content="https://juneroll.github.io/industrial-organization-competition-cohort/">
+<meta property="og:image"        content="https://juneroll.github.io/industrial-organization-competition-cohort/og-image.png">
+<meta property="og:image:width"  content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt"    content="Industrial Organization and Competition — Oeconomica supplementary readings, University of Chicago">
+<meta name="twitter:card"        content="summary_large_image">
 
 <!-- FONTS: STIX Two Text (the scholarly-publishing serif) for reading
      matter; IBM Plex Mono for all chrome, stamps, and labels. -->
@@ -894,13 +918,13 @@ footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
    4. IMAGES — every image slot on the page, in one place:
         logo      : masthead bookplate image ("" hides the bookplate)
         caption   : small line under the logo
-        favicon   : browser-tab icon ("" = none)
         themeArt  : { "theme-slug": "path.png" } → small plate beside
                     a section title. Slugs are the lowercase-hyphen
                     form of the theme name (see slug() below), e.g.
                     "Theory of the Firm" → "theory-of-the-firm".
       Upload image files to the same repo folder as this page and
-      reference them by filename.
+      reference them by filename. (The favicon and link-preview image
+      are set in <head>, not here.)
 
    5. SUGGEST_URL powers the footer "Suggest a reading" link — a
       mailto: or a Google Form URL. "" hides it.
@@ -957,7 +981,6 @@ const CURATORS = {
 const IMAGES = {
   logo:     "oeconomica-gilt.png",   // gilt version for the dark ground
   caption:  "· reading room ·",
-  favicon:  "",                      // e.g. "favicon.png"
   themeArt: {
     // "theory-of-the-firm": "img/coase-plate.png",   ← example
   }
@@ -1821,20 +1844,12 @@ function drawFromStacks(){
 /* stable ids so the randomizer can find entries after re-renders */
 READINGS.forEach((r, i) => r._id = i);
 
-/* IMAGES wiring: bookplate + optional favicon (theme art is handled
-   inside render()) */
+/* IMAGES wiring: the bookplate (theme art is handled inside render()) */
 (function initImages(){
   if (IMAGES.logo){
     document.getElementById("clubMark").src = IMAGES.logo;
     document.getElementById("plateCaption").textContent = IMAGES.caption || "";
     document.getElementById("bookplate").hidden = false;
-  }
-  if (IMAGES.favicon){
-    try{
-      const l = document.createElement("link");
-      l.rel = "icon"; l.href = IMAGES.favicon;
-      document.head.appendChild(l);
-    }catch(_){}
   }
 })();
 

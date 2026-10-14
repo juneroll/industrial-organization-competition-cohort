@@ -10,7 +10,8 @@
      WHERE THINGS ARE:
        · CONFIG + DATA ......... top of the <script> (bottom of file).
          This is the only place you normally edit: THEMES, QUARTERS,
-         READINGS, EXTRAS, COHORT_SLIDES, IMAGES, SUGGEST_URL.
+         THIS_WEEK, READINGS, EXTRAS, COHORT_SLIDES, IMAGES,
+         SUGGEST_URL.
        · STYLES ................ the <style> block below, organized in
          numbered, banner-commented sections (0–13).
        · MARKUP ................ each region marked with an HTML
@@ -133,6 +134,7 @@ a{ color:inherit; }
      .band     — maroon Penguin-style strip (series line)
      h1 + dek  — the big title composition
      .bookplate— framed logo slot (see IMAGES config in the script)
+     .this-week— "This week" card under the bookplate (THIS_WEEK)
      .oxford   — heavy rule + hairline (classic journal rule pair)
      .ledger   — auto-computed stats line (readings/themes/quarters)
    ################################################################ */
@@ -172,9 +174,9 @@ h1 .conj{ font-style:italic; font-weight:500; color:var(--gilt); }
 }
 .dek b{ font-style:normal; font-weight:600; color:var(--ink); }
 
-.dek .byline{ text-decoration:none; }
-.dek .byline b{ border-bottom:1px dotted var(--dots); }
-.dek .byline:hover b{ color:var(--gilt); border-bottom-color:var(--gilt); }
+.byline{ text-decoration:none; }
+.byline b{ font-weight:600; border-bottom:1px dotted var(--dots); }
+.byline:hover b{ color:var(--gilt); border-bottom-color:var(--gilt); }
 
 /* BOOKPLATE: double-framed home for the club mark. The <img> src is
    set from IMAGES.logo in the script; the whole plate hides itself
@@ -189,6 +191,31 @@ h1 .conj{ font-style:italic; font-weight:500; color:var(--gilt); }
   flex-shrink:0;
 }
 .club-mark{ width:clamp(150px, 19vw, 220px); height:auto; display:block; margin:0 auto; }
+/* RIGHT COLUMN: bookplate with the "This week" card beneath it. The
+   card takes the plate's width instead of widening the column. */
+.masthead-side{ display:grid; gap:26px; flex-shrink:0; margin-top:6px; }
+.masthead-side .bookplate{ margin:0; }
+.this-week{ width:260px; }
+.bookplate:not([hidden]) + .this-week{ width:0; min-width:100%; }
+.this-week .rail-head .stamp{ order:2; letter-spacing:.12em; }   /* stamp after the rule */
+.this-week ul{ list-style:none; margin:0 0 10px; padding:0; }
+.this-week li{ font-size:.9rem; line-height:1.38; margin:0 0 11px; }
+.this-week li .authors{
+  display:block; white-space:normal;
+  font-size:.84rem; color:var(--dim);
+}
+.tw-actions{
+  display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 16px;
+  font-family:"IBM Plex Mono", monospace; font-size:.66rem; letter-spacing:.04em;
+}
+.tw-more{                          /* "+ 2 more" / "show fewer" toggle */
+  background:none; border:none; padding:0; cursor:pointer;
+  font:inherit; letter-spacing:inherit;
+  color:var(--dim);
+  border-bottom:1px dotted var(--dots);
+}
+.tw-more:hover{ color:var(--ink); }
+
 .bookplate figcaption{
   margin-top:10px;
   font-family:"IBM Plex Mono", monospace;
@@ -620,12 +647,13 @@ footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
    10. MOTION — one quiet settle on load; honors reduced motion
    ################################################################ */
 @media (prefers-reduced-motion: no-preference){
-  .band, .masthead h1, .masthead .dek, .bookplate, .ledger{
+  .band, .masthead h1, .masthead .dek, .bookplate, .this-week, .ledger{
     animation:settle .55s cubic-bezier(.2,.7,.3,1) both;
   }
   .masthead h1{ animation-delay:.05s; }
   .bookplate{ animation-delay:.09s; }
   .masthead .dek{ animation-delay:.12s; }
+  .this-week{ animation-delay:.14s; }
   .ledger{ animation-delay:.16s; }
   .section{ animation:settle .5s cubic-bezier(.2,.7,.3,1) both; }
 }
@@ -649,8 +677,10 @@ footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
   .q-block{ margin-bottom:10px; }
 }
 @media (max-width: 660px){
-  .masthead-grid{ flex-direction:column-reverse; gap:26px; padding-top:26px; }
-  .bookplate{ align-self:flex-start; }
+  .masthead-grid{ flex-direction:column; gap:26px; padding-top:26px; }
+  .masthead-side{ display:contents; }
+  .bookplate{ align-self:flex-start; order:-1; }
+  .bookplate:not([hidden]) + .this-week, .this-week{ width:auto; min-width:0; max-width:420px; }
 }
 @media (max-width: 540px){
   body{ font-size:16px; }
@@ -665,7 +695,7 @@ footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
 @media print{
   body{ background:#fff; color:#000; }
   .folio{ border:none; margin:0; }
-  .folio::before, .corner, .rail, .toolbar, .bookplate,
+  .folio::before, .corner, .rail, .toolbar, .bookplate, .this-week,
   footer .edit-note, footer .suggest, .fleuron, .perma, .caret, #empty,
   .jump-btn, .video-embed{ display:none; }
   .band{ background:none; border:2px solid #000; color:#000; }
@@ -705,10 +735,14 @@ footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
 
       <!-- BOOKPLATE: src + caption are injected from IMAGES in the
            script; the whole <figure> hides if IMAGES.logo is "".  -->
+      <!-- RIGHT COLUMN: bookplate + "This week" card (THIS_WEEK) -->
+      <div class="masthead-side">
       <figure class="bookplate" id="bookplate" hidden>
         <img class="club-mark" id="clubMark" src="" alt="Oeconomica">
         <figcaption id="plateCaption"></figcaption>
       </figure>
+      <aside class="this-week" id="thisWeek" aria-label="This week's readings" hidden></aside>
+      </div>
     </div>
 
     <div class="oxford" aria-hidden="true"></div>
@@ -874,9 +908,20 @@ footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
       footer; each schema is documented right above its array. A band
       whose array is empty hides itself, and the bands that remain
       are re-lettered A, B… automatically.
+
+   9. THIS_WEEK drives the card under the logo: set it to the current
+      session each week. It lists that session's readings (full author
+      names + title), shows the first `show` of them, and tucks the
+      rest behind a "+ n more" toggle. null hides the card.
    ===================================================================== */
 
 const LAST_UPDATED = "2026-10-13";
+
+/* THIS_WEEK — the "This week" card under the logo.
+   quarter/week : the current session (update weekly), or set
+                  THIS_WEEK = null to hide the card
+   show         : how many readings to list before "+ n more" */
+const THIS_WEEK = { quarter:"fall", week:3, show:2 };
 
 const SUGGEST_URL = "mailto:juniov@uchicago.edu"; // EDIT ME (or "")
 
@@ -1476,6 +1521,36 @@ function renderSlides(){
   }).join("");
 }
 
+/* ---- masthead: "This week" card --------------------------------------
+   Lists THIS_WEEK's readings (full authors + linked title). The first
+   `show` are visible; the rest are hidden behind "+ n more", which
+   toggles to "show fewer". "show in the list" filters the main list
+   to the session via showSession(). Hidden if no readings match. */
+function renderThisWeek(){
+  const $w = document.getElementById("thisWeek");
+  if (!$w) return;
+  const tw = THIS_WEEK;
+  const rows = tw ? READINGS.filter(r => r.quarter === tw.quarter && r.week === tw.week) : [];
+  if (!rows.length){ $w.hidden = true; return; }
+
+  const cap   = tw.show ?? 2;
+  const extra = Math.max(rows.length - cap, 0);
+  const cls   = quarterById(tw.quarter) ? " q-" + tw.quarter : "";
+  $w.hidden = false;
+  $w.innerHTML = `
+    <p class="rail-head">This week <span class="stamp${cls}">${sessionLabel(tw.quarter, tw.week)}</span></p>
+    <ul>${rows.map((r, i) => `
+      <li${i >= cap ? " hidden" : ""}>
+        <span class="authors">${esc(r.authors)}</span>
+        <span class="title">${titleHTML(r)}</span>
+      </li>`).join("")}
+    </ul>
+    <div class="tw-actions">
+      ${extra ? `<button class="tw-more" type="button" aria-expanded="false" data-extra="${extra}">+ ${extra} more</button>` : ""}
+      <button class="jump-btn" type="button">show in the list</button>
+    </div>`;
+}
+
 /* ---- appendix letters: A, B, … over whichever bands are showing ---- */
 function letterAppendices(){
   let n = 0;
@@ -1668,6 +1743,20 @@ document.getElementById("slidesList").addEventListener("click", e => {
   showSession(qid, wk);
 });
 
+/* masthead: "This week" card → expand/collapse, or jump to the list */
+document.getElementById("thisWeek").addEventListener("click", e => {
+  const more = e.target.closest(".tw-more");
+  if (more){
+    const open = more.getAttribute("aria-expanded") !== "true";
+    const cap  = THIS_WEEK.show ?? 2;
+    document.querySelectorAll("#thisWeek li").forEach((li, i) => { if (i >= cap) li.hidden = !open; });
+    more.setAttribute("aria-expanded", String(open));
+    more.textContent = open ? "show fewer" : `+ ${more.dataset.extra} more`;
+    return;
+  }
+  if (e.target.closest(".jump-btn")) showSession(THIS_WEEK.quarter, THIS_WEEK.week);
+});
+
 /* ✦ draw — highlight a random reading from the current view */
 function drawFromStacks(){
   if (!lastVisibleIds.length) return;
@@ -1716,6 +1805,7 @@ renderFacets();
 renderExtras();
 renderSlides();
 letterAppendices();
+renderThisWeek();
 applyHash();      /* reads #theme-slug if present, then renders nav + list */
 </script>
 </body>

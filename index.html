@@ -11,7 +11,7 @@
        · CONFIG + DATA ......... top of the <script> (bottom of file).
          This is the only place you normally edit: THEMES, QUARTERS,
          THIS_WEEK, READINGS, EXTRAS, COHORT_SLIDES, IMAGES,
-         SUGGEST_URL.
+         SUGGEST_URL, GOATCOUNTER.
        · STYLES ................ the <style> block below, organized in
          numbered, banner-commented sections (0–12, plus 9b).
        · MARKUP ................ each region marked with an HTML
@@ -866,7 +866,7 @@ footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
        ============================================================ -->
   <footer class="wrap">
     <div class="fleuron" aria-hidden="true">❦</div>
-    <div class="colophon"><span id="total"></span> · Made with the help of Claude AI</div>
+    <div class="colophon"><span id="total"></span> · Made with the help of Claude AI<span id="countNote" hidden></span></div>
     <a id="suggestLink" class="suggest" hidden>Suggest a reading →</a>
   </footer>
 </div>
@@ -946,6 +946,19 @@ footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
       session each week. It lists that session's readings (full author
       names + title), shows the first `show` of them, and tucks the
       rest behind a "+ n more" toggle. null hides the card.
+
+  10. GOATCOUNTER turns on visit counts (goatcounter.com — free, no
+      cookies, no consent banner needed). Put your code in, e.g.
+      "oeconomica-io" for https://oeconomica-io.goatcounter.com.
+      Besides page visits, it records what people do on the page:
+        theme/…   a Catalogue theme picked
+        week/…    a week or quarter picked (fall-3, winter, …)
+        read/…    a reading opened          (main list or This week)
+        extra/…   a More Resources item opened
+        slides/…  a cohort deck opened
+      To stop counting your OWN visits: open the site once with
+      #toggle-goatcounter at the end of the address (per browser).
+      Testing on your own computer (file:// or localhost) never counts.
    ===================================================================== */
 
 const LAST_UPDATED = "2026-10-13";
@@ -957,6 +970,9 @@ const LAST_UPDATED = "2026-10-13";
 const THIS_WEEK = { quarter:"fall", week:3, show:2 };
 
 const SUGGEST_URL = "mailto:juniov@uchicago.edu"; // EDIT ME (or "")
+
+/* GOATCOUNTER — your GoatCounter code ("" = counting off). See note 10. */
+const GOATCOUNTER = "oeconomica-io";
 
 const THEMES = [
   "Theory of the Firm",
@@ -1633,9 +1649,56 @@ function showSession(qid, wk){
   state.theme = "all";
   history.replaceState(null, "", location.pathname + location.search);
   state.quarter = qid; state.week = wk;
+  trackSession();
   renderNav(); renderSessions(); renderFacets(); render();
   document.querySelector(".toolbar")
     .scrollIntoView({ behavior: prefersCalm() ? "auto" : "smooth", block:"start" });
+}
+
+/* ---- visit counts (GoatCounter) ---------------------------------------
+   loadCounter() adds GoatCounter's script when GOATCOUNTER is set; page
+   visits then count on their own. track() records an event; it quietly
+   does nothing if counting is off or the script hasn't loaded yet. */
+const counterCode = () => String(GOATCOUNTER || "").trim()
+  .replace(/^https?:\/\//, "").replace(/\.goatcounter\.com.*$/, "");   /* forgives a pasted URL */
+
+function loadCounter(){
+  const code = counterCode();
+  if (!code) return;
+  const sc = document.createElement("script");
+  sc.async = true;
+  sc.src = "https://gc.zgo.at/count.js";
+  sc.dataset.goatcounter = "https://" + code + ".goatcounter.com/count";
+  document.head.appendChild(sc);
+  document.getElementById("countNote").hidden = false;
+}
+
+function track(path, title){
+  const gc = window.goatcounter;
+  if (gc && typeof gc.count === "function") gc.count({ path, title, event:true });
+}
+
+/* the current week/quarter filter as an event: week/fall-3, week/winter … */
+function trackSession(){
+  if (state.quarter == null && state.week == null) return;
+  const key = state.quarter != null
+    ? state.quarter + (state.week != null ? "-" + state.week : "")
+    : "wk-" + state.week;
+  track("week/" + key, sessionLabel(state.quarter, state.week, { long:true }));
+}
+
+/* a reading / appendix link opened (left- or middle-click) */
+function trackOpen(e){
+  if (e.type === "auxclick" && e.button !== 1) return;
+  const a = e.target.closest(".title a[href]");
+  if (!a) return;
+  const kind = a.closest("#list, #thisWeek") ? "read"
+             : a.closest("#extrasList")      ? "extra"
+             : a.closest("#slidesList")      ? "slides" : null;
+  if (!kind) return;
+  const title = a.textContent.replace(/[\u201C\u201D]/g, "").trim();
+  const who   = a.closest("li")?.querySelector(".authors")?.textContent.trim();
+  track(`${kind}/${slug(title)}`, who ? `${who} — ${title}` : title);
 }
 
 /* =====================================================================
@@ -1647,6 +1710,7 @@ $nav.addEventListener("click", e => {
   const btn = e.target.closest(".theme-btn");
   if (!btn) return;
   state.theme = btn.dataset.theme;
+  if (state.theme !== "all") track("theme/" + slug(state.theme), state.theme);
   const h = state.theme === "all" ? "" : "#" + slug(state.theme);
   history.replaceState(null, "", location.pathname + location.search + h);
   renderNav();
@@ -1665,6 +1729,7 @@ document.getElementById("sessionNav").addEventListener("click", e => {
   const same = state.quarter === qid && state.week === wk;
   state.quarter = same ? null : qid;
   state.week    = same ? null : wk;
+  trackSession();
   renderSessions();
   render();
 });
@@ -1773,6 +1838,7 @@ $list.addEventListener("click", e => {
     const same = state.quarter === qid && state.week === wk;
     state.quarter = same ? null : qid;
     state.week    = same ? null : wk;
+    trackSession();
     renderSessions(); render();
     return;
   }
@@ -1825,6 +1891,10 @@ document.getElementById("thisWeek").addEventListener("click", e => {
   if (e.target.closest(".jump-btn")) showSession(THIS_WEEK.quarter, THIS_WEEK.week);
 });
 
+/* counting: readings and appendix items opened */
+document.addEventListener("click", trackOpen);
+document.addEventListener("auxclick", trackOpen);
+
 /* ✦ draw — highlight a random reading from the current view */
 function drawFromStacks(){
   if (!lastVisibleIds.length) return;
@@ -1859,6 +1929,7 @@ if (SUGGEST_URL){ $sug.href = SUGGEST_URL; $sug.hidden = false; }
 document.getElementById("total").textContent =
   `${READINGS.length} readings · updated ${LAST_UPDATED}`;
 
+loadCounter();
 updateLedger();
 renderSessions();
 renderFacets();

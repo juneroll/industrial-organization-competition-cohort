@@ -593,6 +593,16 @@ footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
    ################################################################ */
 .appendix{ padding-top:8px; padding-bottom:22px; }
 
+/* VIDEO EMBEDS: any YouTube link in EXTRAS gets a player under its
+   row, framed in quiet gilt like the bookplate. 16:9, capped width. */
+.video-embed{
+  width:100%; max-width:560px; aspect-ratio:16/9;
+  margin:12px 0 4px;
+  border:1px solid var(--gilt-dim); border-radius:2px;
+  background:var(--bg-2); overflow:hidden;
+}
+.video-embed iframe{ width:100%; height:100%; border:0; display:block; }
+
 /* COHORT SLIDES rows: the seasonal session stamp sits at the end
    of the dot leader (where a reading's year would be). The
    [ readings for this session ] link sends the main list to that
@@ -657,7 +667,7 @@ footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
   .folio{ border:none; margin:0; }
   .folio::before, .corner, .rail, .toolbar, .bookplate,
   footer .edit-note, footer .suggest, .fleuron, .perma, .caret, #empty,
-  .jump-btn{ display:none; }
+  .jump-btn, .video-embed{ display:none; }
   .band{ background:none; border:2px solid #000; color:#000; }
   .oxford{ border-top-color:#000; border-bottom-color:#000; }
   .section-head{ border-bottom-color:#000; }
@@ -966,7 +976,9 @@ const READINGS = [
            ("video", "slides", "podcast", "site", "data" …)
    source: who made it (channel, speaker, author) — optional
    note  : one quiet line under the title — optional
-   url   : "#" renders as a dashed not-filled-in-yet stub */
+   url   : "#" renders as a dashed not-filled-in-yet stub
+           YouTube links (youtu.be/… or youtube.com/watch?v=…) also
+           get an embedded player under the row automatically */
 const EXTRAS = [
   // ---- SAMPLE ITEMS — replace with real ones ----------------------
   { kind:"video",   title:"A Conversation with Harold Demsetz", source:"EconTalk", url:"https://youtu.be/vouSAM5GaeM?si=iRLQbshhJseLVDPa", note:"Harold Demsetz has contributed original research on the theory of the firm, regulation in markets, industrial organization, antitrust policy, transaction costs, externalities, and property rights." },
@@ -1046,6 +1058,13 @@ const slug = s => String(s).toLowerCase().replace(/&/g, "and")
   .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 
 const quarterById = id => QUARTERS.find(q => q.id === id) || null;
+
+/* YouTube URL → 11-character video id (youtu.be, watch?v=, embed/,
+   shorts/); null for anything that isn't a YouTube link */
+const ytId = url => {
+  const m = String(url || "").match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/)([\w-]{11})/);
+  return m ? m[1] : null;
+};
 
 function copyText(text, done){
   if (navigator.clipboard && navigator.clipboard.writeText){
@@ -1348,7 +1367,8 @@ function updateLedger(){
 /* ---- appendix: extra resources --------------------------------------
    Renders EXTRAS into the band above the footer. Rows mirror the
    reading entries: source in small caps, title as the link, dot
-   leader, kind stamp at the right, optional note beneath. */
+   leader, kind stamp at the right, optional note beneath, and an
+   embedded player for YouTube links. */
 function renderExtras(){
   const $a = document.getElementById("appendix");
   if (!$a) return;
@@ -1356,7 +1376,16 @@ function renderExtras(){
   $a.hidden = false;
   document.getElementById("extrasCount").textContent =
     `${EXTRAS.length} ${EXTRAS.length === 1 ? "item" : "items"}`;
-  document.getElementById("extrasList").innerHTML = EXTRAS.map(x => `
+  document.getElementById("extrasList").innerHTML = EXTRAS.map(x => {
+    const id = ytId(x.url);
+    const player = id
+      ? `<div class="video-embed"><iframe
+           src="https://www.youtube-nocookie.com/embed/${id}?rel=0"
+           title="${esc(x.title)}" loading="lazy"
+           allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+           referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>`
+      : "";
+    return `
     <li class="entry">
       <div class="entry-line">
         ${x.source ? `<span class="authors">${esc(x.source)}</span>` : ""}
@@ -1367,7 +1396,9 @@ function renderExtras(){
         <span class="stamp">${esc(x.kind || "link")}</span>
       </div>
       ${x.note ? `<div class="entry-meta">${esc(x.note)}</div>` : ""}
-    </li>`).join("");
+      ${player}
+    </li>`;
+  }).join("");
 }
 
 /* ---- appendix: cohort slides ----------------------------------------

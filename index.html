@@ -13,7 +13,7 @@
          THIS_WEEK, READINGS, EXTRAS, COHORT_SLIDES, IMAGES,
          SUGGEST_URL.
        · STYLES ................ the <style> block below, organized in
-         numbered, banner-commented sections (0–13).
+         numbered, banner-commented sections (0–12, plus 9b).
        · MARKUP ................ each region marked with an HTML
          comment (MASTHEAD / RAIL / TOOLBAR / LIST / APPENDICES /
          FOOTER).
@@ -40,7 +40,7 @@
      matter; IBM Plex Mono for all chrome, stamps, and labels. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
 /* ################################################################
@@ -50,6 +50,7 @@
    color anything tied to a quarter.
    ################################################################ */
 :root{
+  color-scheme:dark;                  /* native controls + scrollbars */
   --bg:        #0D1310;               /* page ground: green-black    */
   --bg-2:      #151D18;               /* raised panels (inputs etc.) */
   --ink:       #EDE7D7;               /* primary ivory text          */
@@ -172,7 +173,6 @@ h1 .conj{ font-style:italic; font-weight:500; color:var(--gilt); }
   font-size:1.06rem; font-style:italic;
   color:var(--dim); max-width:54ch; margin:0;
 }
-.dek b{ font-style:normal; font-weight:600; color:var(--ink); }
 
 .byline{ text-decoration:none; }
 .byline b{ font-weight:600; border-bottom:1px dotted var(--dots); }
@@ -191,6 +191,14 @@ h1 .conj{ font-style:italic; font-weight:500; color:var(--gilt); }
   flex-shrink:0;
 }
 .club-mark{ width:clamp(150px, 19vw, 220px); height:auto; display:block; margin:0 auto; }
+.bookplate figcaption{
+  margin-top:10px;
+  font-family:"IBM Plex Mono", monospace;
+  font-size:.6rem; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--gilt);
+  opacity:.85;
+}
+
 /* RIGHT COLUMN: bookplate with the "This week" card beneath it. The
    card takes the plate's width instead of widening the column. */
 .masthead-side{ display:grid; gap:26px; flex-shrink:0; margin-top:6px; }
@@ -215,14 +223,6 @@ h1 .conj{ font-style:italic; font-weight:500; color:var(--gilt); }
   border-bottom:1px dotted var(--dots);
 }
 .tw-more:hover{ color:var(--ink); }
-
-.bookplate figcaption{
-  margin-top:10px;
-  font-family:"IBM Plex Mono", monospace;
-  font-size:.6rem; letter-spacing:.22em; text-transform:uppercase;
-  color:var(--gilt);
-  opacity:.85;
-}
 
 .oxford{                            /* heavy + hairline rule pair */
   margin-top:30px;
@@ -297,8 +297,8 @@ button.q-spring[aria-pressed="true"]{ background:var(--spring); border-color:var
      #sessionNav  — Sessions: quarter blocks with week chips
      #appendixNav — Appendices: one button per appendix band that's
                     showing; clicking scrolls down to it
-     legend      — key to the ○ ◐ ● level marks (display only;
-                   the CLICKABLE level filters live in the toolbar)
+     legend       — key to the ○ ◐ ● level marks (display only;
+                    the CLICKABLE level filters live in the toolbar)
    ################################################################ */
 .rail-head{
   display:flex; align-items:center; gap:10px;
@@ -327,7 +327,6 @@ button.q-spring[aria-pressed="true"]{ background:var(--spring); border-color:var
 
 #sessionNav{ margin-top:26px; }
 #appendixNav{ margin-top:26px; }
-.section-head.flash{ animation:drawflash 1.8s ease both; }  /* arrival cue */
 .q-block{ margin:0 0 14px; }
 .q-btn{                           /* quarter header row */
   display:block; width:100%; text-align:left;
@@ -453,11 +452,13 @@ kbd{
   letter-spacing:.06em;
   margin:0;
 }
-.section-head .caret{              /* fold indicator (browse mode) */
+.section-head .caret{              /* fold toggle (browse mode) */
+  background:none; border:none; padding:0 4px; cursor:pointer;
   font-family:"IBM Plex Mono", monospace;
-  font-size:.7rem; color:var(--dim);
+  font-size:.7rem; line-height:1; color:var(--dim);
   transition:transform .2s ease;
 }
+.section-head .caret:hover{ color:var(--gilt); }
 .section.folded .caret{ transform:rotate(-90deg); }
 .section-head.foldable{ cursor:pointer; }
 .section-head.foldable:hover h2{ color:var(--gilt); }
@@ -482,7 +483,6 @@ kbd{
   padding:0 2px;
 }
 .section-head .perma:hover{ color:var(--gilt); }
-.section-head .n{ /* count stamp inherits .stamp from markup */ }
 
 .entries{ list-style:none; margin:0; padding:0; }
 
@@ -563,6 +563,7 @@ kbd{
   100% { outline:2px solid transparent; background:transparent; }
 }
 .entry.flash{ animation:drawflash 1.8s ease both; }
+.section-head.flash{ animation:drawflash 1.8s ease both; }  /* appendix arrival cue */
 
 /* ################################################################
    8. EMPTY STATE — a big "nothing filed" rubber stamp
@@ -580,7 +581,6 @@ kbd{
   transform:rotate(-1.5deg);
   margin-bottom:20px;
 }
-#empty .actions{ }
 #empty button{
   font-family:"IBM Plex Mono", monospace;
   font-size:.72rem; letter-spacing:.1em; text-transform:uppercase;
@@ -610,12 +610,6 @@ footer{
   font-size:1.1rem;
   margin:2px 0 14px;
 }
-footer code{
-  font-family:inherit; color:var(--ink);
-  background:var(--bg-2);
-  border:1px solid var(--faint);
-  border-radius:3px; padding:1px 5px;
-}
 footer .suggest{
   display:inline-block; margin-top:8px;
   color:var(--gilt); text-decoration:none;
@@ -642,10 +636,9 @@ footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
 }
 .video-embed iframe{ width:100%; height:100%; border:0; display:block; }
 
-/* COHORT SLIDES rows: the seasonal session stamp sits at the end
-   of the dot leader (where a reading's year would be). The
-   [ readings for this session ] link sends the main list to that
-   quarter/week — same bracket style as [ copy link ]. */
+/* JUMP LINKS: [ readings for this session ] on cohort-slide rows and
+   [ show in the list ] on the "This week" card — both send the main
+   list to a quarter/week. Same bracket style as [ copy link ]. */
 .jump-btn{
   font-family:inherit; font-size:inherit;
   background:none; border:none; padding:0;
@@ -667,7 +660,7 @@ footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
   .masthead .dek{ animation-delay:.12s; }
   .this-week{ animation-delay:.14s; }
   .ledger{ animation-delay:.16s; }
-  .section{ animation:settle .5s cubic-bezier(.2,.7,.3,1) both; }
+  .section.intro{ animation:settle .5s cubic-bezier(.2,.7,.3,1) both; }  /* first render only */
 }
 @keyframes settle{
   from{ opacity:0; transform:translateY(9px); }
@@ -677,7 +670,7 @@ footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
 /* ################################################################
    11. RESPONSIVE
    ≤880px: rail unsticks, catalogue flows horizontally
-   ≤660px: bookplate stacks above the title
+   ≤660px: masthead stacks — logo, title, then the "This week" card
    ≤540px: toolbar stacks; type ramps down
    ################################################################ */
 @media (max-width: 880px){
@@ -707,11 +700,12 @@ footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
    12. PRINT — hand the list out: light paper, chrome hidden
    ################################################################ */
 @media print{
+  :root{ color-scheme:light; }
   body{ background:#fff; color:#000; }
   .folio{ border:none; margin:0; }
   .folio::before, .corner, .rail, .toolbar, .bookplate, .this-week,
-  footer .edit-note, footer .suggest, .fleuron, .perma, .caret, #empty,
-  .jump-btn, .video-embed{ display:none; }
+  footer .suggest, .fleuron, .perma, .caret, #empty,
+  .jump-btn, .copy-btn, .video-embed{ display:none; }
   .band{ background:none; border:2px solid #000; color:#000; }
   .oxford{ border-top-color:#000; border-bottom-color:#000; }
   .section-head{ border-bottom-color:#000; }
@@ -747,15 +741,15 @@ footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
         <p>By <a class="byline" href="https://www.linkedin.com/in/junio-valenzuela/" target="_blank" rel="noopener"><b>Junio Valenzuela</b></a> and <a class="byline" href="https://www.linkedin.com/in/edwardhward/" target="_blank" rel="noopener"><b>Edward Ward</b></a>.</p>
       </div>
 
-      <!-- BOOKPLATE: src + caption are injected from IMAGES in the
-           script; the whole <figure> hides if IMAGES.logo is "".  -->
-      <!-- RIGHT COLUMN: bookplate + "This week" card (THIS_WEEK) -->
+      <!-- RIGHT COLUMN: bookplate + "This week" card.
+           Bookplate src + caption come from IMAGES (hidden if IMAGES.logo
+           is ""); the card is built from THIS_WEEK by renderThisWeek(). -->
       <div class="masthead-side">
-      <figure class="bookplate" id="bookplate" hidden>
-        <img class="club-mark" id="clubMark" src="" alt="Oeconomica">
-        <figcaption id="plateCaption"></figcaption>
-      </figure>
-      <aside class="this-week" id="thisWeek" aria-label="This week's readings" hidden></aside>
+        <figure class="bookplate" id="bookplate" hidden>
+          <img class="club-mark" id="clubMark" src="" alt="Oeconomica">
+          <figcaption id="plateCaption"></figcaption>
+        </figure>
+        <aside class="this-week" id="thisWeek" aria-label="This week's readings" hidden></aside>
       </div>
     </div>
 
@@ -769,7 +763,7 @@ footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
        ============================================================ -->
   <div class="frame wrap">
 
-    <!-- RAIL: catalogue (themes), sessions (quarters/weeks), notes -->
+    <!-- RAIL: catalogue (themes), sessions (quarters/weeks), appendices, notes -->
     <nav class="rail" aria-label="Filters">
       <p class="rail-head">Catalogue</p>
       <div id="themeNav"></div>            <!-- built by renderNav() -->
@@ -788,7 +782,7 @@ footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
                    placeholder="Search the stacks — titles, authors, quarters…"
                    aria-label="Search readings">
           </div>
-          <span class="count" id="shown"></span>
+          <span class="count" id="shown" aria-live="polite"></span>
         </div>
 
         <div class="facets" aria-label="Filters and view controls">
@@ -824,7 +818,7 @@ footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
        ============================================================ -->
 
   <!-- APPENDIX: extra resources (videos, podcasts, sites…) -->
-  <section class="appendix wrap" id="appendix" hidden>
+  <section class="appendix wrap" id="extrasAppendix" hidden>
     <div class="section-head">
       <span class="numeral appendix-letter">A</span>
       <h2>Appendix — More Resources</h2>
@@ -873,7 +867,7 @@ footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
         {
           theme:   "Barriers to Entry",       // must match a THEMES name
           title:   "Barriers to Entry",
-          authors: "Demsetz, H.",             // free text, any format
+          authors: "Harold Demsetz",          // free text, any format
           year:    1982,
           venue:   "American Economic Review",// journal / publisher / site
           type:    "paper",                   // "paper"|"book"|"article"…
@@ -914,10 +908,10 @@ footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
    6. Permalinks: clicking § beside a section title copies a URL
       ending in #theme-slug that opens the page pre-filtered.
 
-   7. The sample entries below are placeholders demonstrating the
-      schema — replace them with real ones (keep your existing
-      READINGS array if you already have one; the schema is the same
-      plus the optional `quarter` field).
+   7. Order: the order you type READINGS in doesn't matter for the
+      main list (the toolbar's sort decides), but it IS the order the
+      "This week" card lists that week's readings in — put the one you
+      most want people to see first.
 
    8. EXTRAS and COHORT_SLIDES feed the two appendix bands above the
       footer; each schema is documented right above its array. A band
@@ -965,13 +959,12 @@ const IMAGES = {
   caption:  "· reading room ·",
   favicon:  "",                      // e.g. "favicon.png"
   themeArt: {
-    // "teory-of-the-firm": "img/coase-plate.png",   ← example
+    // "theory-of-the-firm": "img/coase-plate.png",   ← example
   }
 };
 
 const READINGS = [
-  // ---- SAMPLE ENTRIES — replace with real ones ----------------------
-  // (Fall: firm + structure · Winter: barriers · Spring: antitrust)
+  // ---- Theory of the Firm ------------------------------------------
   { theme:"Theory of the Firm", title:"The Nature of the Firm", authors:"Ronald H. Coase", year: 1937, venue:"Economica", type:"paper", url:"https://www.jstor.org/stable/2626876", pick:"junio", level:"gateway", start:true, quarter:"fall", week: 3},
   { theme:"Theory of the Firm", title:"The Nature of the Firm: Origin", authors:"Ronald H. Coase", year: 1988, venue:"Journal of Law, Economics, & Organization", type:"paper", url:"https://www.jstor.org/stable/765011", level:"deep", start: false, quarter:"fall", week: 5},
   { theme:"Theory of the Firm", title:"The Nature of the Firm: Meaning", authors:"Ronald H. Coase", year: 1988, venue:"Journal of Law, Economics, & Organization", type:"paper", url:"https://www.jstor.org/stable/765012", level:"core", start: false, quarter:"fall", week: 1},
@@ -982,10 +975,11 @@ const READINGS = [
   { theme:"Theory of the Firm", title:"Production, Information Costs, and Economic Organization", authors:"Armen A. Alchian, Harold Demsetz", year: 1972, venue:"The American Economic Review", type:"paper", url:"https://www.jstor.org/stable/1815199", level:"deep", start: false, quarter:"fall", week: 4},
   { theme:"Theory of the Firm", title:"The Contractual Nature of the Firm", authors:"Steven N.S. Cheung", year: 1983, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/725182", level:"deep", start: false, quarter:"fall", week: 6},
   { theme:"Theory of the Firm", title:"The Division of Labor is Limited by the Extent of the Market", authors:"George J. Stigler", year: 1951, venue:"Journal of Political Economy", type:"paper", url:"https://www.jstor.org/stable/1826433", level:"core", start: false, quarter:"fall", week: 2},
-  { theme:"Theory of the Firm", title:"Vertical Integration, Appropriate Rents, and the Competitive Contracting Process", authors:"Benjamin Klein, Robert G. Crawford, Armen A. Alchian", year: 1978, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/725234",level:"deep", start: false, quarter:"fall", week: 6},
+  { theme:"Theory of the Firm", title:"Vertical Integration, Appropriable Rents, and the Competitive Contracting Process", authors:"Benjamin Klein, Robert G. Crawford, Armen A. Alchian", year: 1978, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/725234",level:"deep", start: false, quarter:"fall", week: 6},
   { theme:"Theory of the Firm", title:"Agency Problems and the Theory of the Firm", authors:"Eugene F. Fama", year: 1980, venue:"Journal of Political Economy", type:"paper", url:"https://www.jstor.org/stable/1837292", level:"deep", start: false, quarter:"fall", week: 7},
   { theme:"Theory of the Firm", title:"The Coasian and Knightian Theories of the Firm", authors:"Donald J. Boudreaux, Randall G. Holcombe", year: 1989, venue:"Managerial and Decision Economics", type:"paper", url:"https://www.jstor.org/stable/2487017", level:"core", start: false, quarter:"fall", week: 8},
 
+  // ---- The Concept of Competition ----------------------------------
   { theme:"The Concept of Competition", title:"Perfect Competition, Historically Contemplated", authors:"George J. Stigler", year: 1957, venue:"Journal of Political Economy", type:"paper", url:"https://www.jstor.org/stable/1824830", pick:"junio", level:"gateway", start: true, quarter:"fall", week: 3},
   { theme:"The Concept of Competition", title:"A Note on the History of Perfect Competition", authors:"Paul J. McNulty", year: 1967, venue:"Journal of Political Economy", type:"paper", url:"https://www.jstor.org/stable/1828600", level:"core", start: false, quarter:"fall", week: 3},
   { theme:"The Concept of Competition", title:"Economic Theory and the Meaning of Competition", authors:"Paul J. McNulty", year: 1968, venue:"The Quarterly Journal of Economics", type:"paper", url:"https://www.jstor.org/stable/1879604", level:"deep", start: false, quarter:"fall", week: 5},
@@ -993,9 +987,10 @@ const READINGS = [
   { theme:"The Concept of Competition", title:"The Meaning of Competition: A Graphical Exposition", authors:"Donghyun Park", year: 1998, venue:"The Journal of Economic Education", type:"paper", url:"https://www.jstor.org/stable/1182925", level:"deep", start: false, quarter:"fall", week: 7},
   { theme:"The Concept of Competition", title:"Concepts of Competition", authors:"John Vickers", year: 1995, venue: "Oxford Economic Papers", type:"paper", url:"https://www.jstor.org/stable/2663661", level: "deep", start: false, quarter:"winter", week: 1},
 
+  // ---- Market Structure & Concentration ----------------------------
   { theme:"Market Structure & Concentration", title:"A Theory of Oligopoly", authors:"George J. Stigler", year: 1964, venue:"Journal of Political Economy", type:"paper", url:"https://www.jstor.org/stable/1828791", start: true, level:"core", quarter:"fall", week: 1},
-  { theme:"Market Structure & Concentration", title:"Industry Structure, Market Rivalry, and Public Policy", authors:"Harold Demsetz", year: 1973, venue:"Journal of Law and Economics", type:"paper", url:"https://www.jstor.org/stable/724822", level:"deep", start: false, quarter:"fall", week: 4},
-  { theme:"Market Structure & Concentration", title:"Durability and Monopoly", authors:"Ronald H. Coase", year: 1972, venue:"The Journal of Law and Economics", type:"paper", url:"https://www.jstor.org/stable/725018", start: false, level:"core", quarter:"fall", week: 8},
+  { theme:"Market Structure & Concentration", title:"Industry Structure, Market Rivalry, and Public Policy", authors:"Harold Demsetz", year: 1973, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/724822", level:"deep", start: false, quarter:"fall", week: 4},
+  { theme:"Market Structure & Concentration", title:"Durability and Monopoly", authors:"Ronald H. Coase", year: 1972, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/725018", start: false, level:"core", quarter:"fall", week: 8},
   { theme:"Market Structure & Concentration", title:"Economists' Views: The Concentration-Collusion Doctrine", authors:"Yale Brozen", year: 1977, venue:"Antitrust Law Journal", type:"paper", url:"https://www.jstor.org/stable/40842727", start: false, level:"core", quarter:"winter", week: 1},
   { theme:"Market Structure & Concentration", title:"Bain's Concentration and Rates of Return Revisited", authors:"Yale Brozen", year: 1971, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/724950", start: false, level:"deep", quarter:"winter", week: 1},
   { theme:"Market Structure & Concentration", title:"Why Regulate Utilities?", authors:"Harold Demsetz", year: 1968, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/724970", start: false, level:"deep", quarter:"winter", week: 2},
@@ -1005,8 +1000,9 @@ const READINGS = [
   { theme:"Market Structure & Concentration", title:"The Extent of the Market", authors:"George J. Stigler, Robert A. Sherwin", year: 1985, venue:"The Journal of Law & Economics", url:"https://www.jstor.org/stable/725346", start: false, level:"core", quarter:"winter", week: 1},
   { theme:"Market Structure & Concentration", title:"The Marginal Cost Controversy", authors:"Ronald H. Coase", year: 1946, venue:"Economica", url:"https://www.jstor.org/stable/2549764", start: false, level:"deep", quarter:"spring", week: 3},
 
+  // ---- Vertical Integration and Vertical Restraints ----------------
   { theme:"Vertical Integration and Vertical Restraints", title:"Vertical Integration as a Self-Enforcing Contractual Arrangement", authors:"Benjamin Klein, Kevin M. Murphy", year: 1997, venue:"The American Economic Review", type:"paper", url:"https://www.jstor.org/stable/2950957", start: false, level:"core", quarter:"spring", week: 2},
-  { theme:"Vertical Integration and Vertical Restraints", title:"Vertical Integration as Organizational Ownership: The Fish Body-General Motors Relationship Revisited", authors:"Benjamin Klein", year: 1988, venue:"Journal of Law, Economics, & Organization", type:"paper", url:"https://www.jstor.org/stable/765021", level:"core", start: false, quarter:"spring", week: 3},
+  { theme:"Vertical Integration and Vertical Restraints", title:"Vertical Integration as Organizational Ownership: The Fisher Body-General Motors Relationship Revisited", authors:"Benjamin Klein", year: 1988, venue:"Journal of Law, Economics, & Organization", type:"paper", url:"https://www.jstor.org/stable/765021", level:"core", start: false, quarter:"spring", week: 3},
   { theme:"Vertical Integration and Vertical Restraints", title:"The Logic of Vertical Restraints", authors:"Patrick Rey, Jean Tirole", year: 1986, venue:"The American Economic Review", type:"paper", url:"https://www.jstor.org/stable/1816460", level:"core", start: false, quarter:"spring", week: 3},
   { theme:"Vertical Integration and Vertical Restraints", title:"Vertical Restraints as Contract Enforcement Mechanisms", authors:"Benjamin Klein, Kevin M. Murphy", year: 1988, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/725332", level:"core", start: false, quarter:"spring", week: 4},
   { theme:"Vertical Integration and Vertical Restraints", title:"The Vertical Integration of Production: Market Failure Considerations", authors:"Oliver E. Williamson", year: 1971, venue:"The American Economic Review", type:"paper", url:"https://www.jstor.org/stable/1816983", level:"core", start: false, quarter:"spring", week: 4},
@@ -1014,12 +1010,14 @@ const READINGS = [
   { theme:"Vertical Integration and Vertical Restraints", title:"The Acquisition of Fisher Body by General Motors", authors:"Ronald H. Coase", year: 2000, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/10.1086/467446", level:"core", start: false, quarter:"spring", week: 5},
   { theme:"Vertical Integration and Vertical Restraints", title:"Fisher—General Motors and the Nature of the Firm", authors:"Benjamin Klein", year: 2000, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/10.1086/467449", level:"core", start: false, quarter:"spring", week: 6},
 
-  { theme:"Barriers to Entry", title:"Barriers to Entry", authors:"Harold Demsetz", year: 1982, venue:"American Economic Review", type:"paper", url:"https://www.jstor.org/stable/1808574", pick:"junio", level:"gateway", start: true, quarter:"winter", week: 2 },
+  // ---- Barriers to Entry -------------------------------------------
+  { theme:"Barriers to Entry", title:"Barriers to Entry", authors:"Harold Demsetz", year: 1982, venue:"The American Economic Review", type:"paper", url:"https://www.jstor.org/stable/1808574", pick:"junio", level:"gateway", start: true, quarter:"winter", week: 2 },
   { theme:"Barriers to Entry", title:"Why Barriers to Entry Are Barriers to Understanding", authors:"Dennis W. Carlton", year: 2004, venue:"The American Economic Review", type:"paper", url:"https://www.jstor.org/stable/3592929", level:"deep", start: false, quarter:"winter", week: 3},
   { theme:"Barriers to Entry", title:"Sunk Costs and Antitrust Barriers to Entry", authors:"Richard Schmalensee", year: 2004, venue:"The American Economic Review", type:"paper", url:"https://www.jstor.org/stable/3592930", level:"deep", start: false, quarter:"winter", week: 3},
-  { theme:"Barriers to Entry", title:"The Economies of Scale", authors:"George J. Stigler", year: 1954, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/724882", level:"core", start: false, quarter:"fall", week: 9},
-  { theme:"Barriers to Entry", title:"What Is a Barrier to Entry", authors:"R. Preston McAfee, Hugo M. Mialon, Michael A. Williams", year: 2004, venue:"The American Economic Review", type:"paper", url:"https://www.jstor.org/stable/3592928", level:"core", start: false, quarter:"winter", week: 5},
+  { theme:"Barriers to Entry", title:"The Economies of Scale", authors:"George J. Stigler", year: 1958, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/724882", level:"core", start: false, quarter:"fall", week: 9},
+  { theme:"Barriers to Entry", title:"What Is a Barrier to Entry?", authors:"R. Preston McAfee, Hugo M. Mialon, Michael A. Williams", year: 2004, venue:"The American Economic Review", type:"paper", url:"https://www.jstor.org/stable/3592928", level:"core", start: false, quarter:"winter", week: 5},
 
+  // ---- Antitrust & Competition Policy ------------------------------
   { theme:"Antitrust & Competition Policy", title:"Predatory Price Cutting: The Standard Oil (N. J.) Case", authors:"John S. McGee", year: 1958, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/724888", pick:"junio", level:"gateway", start: true, quarter:"spring", week: 2},
   { theme:"Antitrust & Competition Policy", title:"How Many Cheers for Antitrust's 100 Years?", authors:"Harold Demsetz", year: 1992, venue:"Economic Inquiry", type:"paper", url:"https://doi.org/10.1111/j.1465-7295.1992.tb01653.x", pick:"junio", level:"core", start: true, quarter:"spring", week: 3},
   { theme:"Antitrust & Competition Policy", title:"The Origin of the Sherman Act", authors:"George J. Stigler", year: 1985, venue:"The Journal of Legal Studies", type:"paper", url:"https://www.jstor.org/stable/724314", level:"deep", start: false, quarter:"spring", week: 4},
@@ -1027,8 +1025,6 @@ const READINGS = [
   { theme:"Antitrust & Competition Policy", title:"The Microsoft Case: What Can a Dominant Firm Do to Defend Its Market Position?", authors:"Benjamin Klein", year: 2001, venue:"The Journal of Economic Perspectives", type:"paper", url:"https://www.jstor.org/stable/2696591", level:"core", start: false, quarter:"spring", week: 6},
   { theme:"Antitrust & Competition Policy", title:"Legislative Intent and the Policy of the Sherman Act", authors:"Robert H. Bork", year: 1966, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/724991", level:"deep", start: false, quarter:"spring", week: 7},
   { theme:"Antitrust & Competition Policy", title:"Aaron Director’s Influence on Antitrust Policy", authors:"Sam Peltzman", year: 2005, venue:"The Journal of Law & Economics", url:"https://www.jstor.org/stable/10.1086/497527", level:"core", start: false, quarter:"spring", week: 9},
-
-  // --------------------------------------------------------------------
 ];
 
 /* EXTRAS — the "More Resources" appendix: videos, podcasts, sites…
@@ -1040,11 +1036,9 @@ const READINGS = [
            YouTube links (youtu.be/… or youtube.com/watch?v=…) also
            get an embedded player under the row automatically */
 const EXTRAS = [
-  // ---- SAMPLE ITEMS — replace with real ones ----------------------
   { kind:"video",   title:"A Conversation with Harold Demsetz", source:"EconTalk", url:"https://youtu.be/vouSAM5GaeM?si=iRLQbshhJseLVDPa", note:"Harold Demsetz has contributed original research on the theory of the firm, regulation in markets, industrial organization, antitrust policy, transaction costs, externalities, and property rights." },
   { kind:"video",  title:"Markets, Firms and Property Rights: A Celebration of the Research of Ronald Coase", source:"University of Chicago Law School", url:"https://youtu.be/efQ5gYr5_5k?si=8_UoEeodRJWipEA9", note:"The conference brought together a group of scholars to honor the life and research of Ronald Coase. 2009 marked the 50th anniversary of the publication of Coase's seminal paper on the Federal Communications Commission. 2010 marks the 50th anniversary of the publication of his paper on 'The Problem of Social Cost,' and his 100th birthday." },
   { kind:"book", title:"The Essential UCLA School of Economics", source:"Fraser Institute: David R. Henderson and Steven Globerman", url:"https://essentialscholars.org/sites/default/files/2023-01/essential-UCLA-school-of-economics.pdf", note:"The most important economists at UCLA during the 1970s were Armen Alchian, Harold Demsetz, Sam Peltzman, Benjamin Klein, Robert Clower, Alex Leijonhufvud, Jack Hirshleifer, William Allen, and George Hilton." },
-  // ------------------------------------------------------------------
 ];
 
 /* COHORT_SLIDES — the "Cohort Slides" appendix: decks presented in
@@ -1064,9 +1058,8 @@ const EXTRAS = [
    link both jump the main list to that session.
    Google Slides / Drive links: set sharing to "Anyone with the link". */
 const COHORT_SLIDES = [
-  // ---- SAMPLE DECKS — replace with real ones ----------------------
+  // EXAMPLE — copy this line, delete the leading //, and fill it in:
   //{ title:"Why Do Firms Exist?", presenter:"Junio Valenzuela", quarter:"fall", week:1, date:"Oct 2", format:"slides", url:"#", note:"Opening session: Coase (1937) and Demsetz (1997) side by side." },
-  // ------------------------------------------------------------------
 ];
 
 /* =====================================================================
@@ -1120,6 +1113,9 @@ const slug = s => String(s).toLowerCase().replace(/&/g, "and")
 
 const quarterById = id => QUARTERS.find(q => q.id === id) || null;
 
+/* true when the visitor has asked their OS for reduced motion */
+const prefersCalm = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
 /* YouTube URL → 11-character video id (youtu.be, watch?v=, embed/,
    shorts/); null for anything that isn't a YouTube link */
 const ytId = url => {
@@ -1136,6 +1132,22 @@ function copyText(text, done){
     ta.select(); try{ document.execCommand("copy"); }catch(_){}
     document.body.removeChild(ta); done();
   }
+}
+
+/* session label, HTML-escaped — the one place it's built:
+     ("fall", 3) → "FA · wk 3"     ("fall", 3, {long:true}) → "Fall · wk 3"
+     ("fall", null) → "Fall"       (null, 3) → "wk 3"                    */
+function sessionLabel(qid, wk, { long = false } = {}){
+  const Q = quarterById(qid);
+  const name = Q ? (long || wk == null ? Q.label : Q.short) : (qid || "");
+  return esc([name, wk != null ? `wk ${wk}` : ""].filter(Boolean).join(" · "));
+}
+
+/* does any reading belong to this quarter/week? */
+function sessionHasReadings(qid, wk){
+  if (qid == null && wk == null) return false;
+  return READINGS.some(r =>
+    (qid == null || r.quarter === qid) && (wk == null || r.week === wk));
 }
 
 /* theme order = THEMES, plus any theme found only in the data */
@@ -1197,9 +1209,8 @@ function sessionStampHTML(r){
   if (r.quarter == null && r.week == null) return "";
   const Q = quarterById(r.quarter);
   const cls = Q ? " q-" + Q.id : "";
-  const label = Q
-    ? (r.week != null ? `${Q.short} · wk ${esc(r.week)}` : Q.label)
-    : `wk ${esc(r.week)}`;
+  const label = sessionLabel(Q ? Q.id : null, r.week ?? null);
+  if (!label) return "";
   const pressed = state.quarter === (Q ? Q.id : null) && state.week === (r.week ?? null)
                   && (state.quarter != null || state.week != null);
   return `<button class="stamp session${cls}" type="button"
@@ -1241,6 +1252,7 @@ function entryHTML(r){
    section heads (numeral, title, optional art, §, count, fold caret),
    and records what's visible for the "draw" randomizer. */
 let lastVisibleIds = [];
+let introDone = false;   /* sections get the settle animation on the first render only */
 
 function render(){
   const order = themeOrder();
@@ -1265,12 +1277,13 @@ function render(){
       ? `<img class="theme-art" src="${esc(IMAGES.themeArt[s])}" alt="">`
       : "";
 
-    html += `<section class="section${folded ? " folded" : ""}" id="${s}"
-        style="animation-delay:${Math.min(sectionIndex * 60, 300)}ms">
+    const intro = introDone ? "" : ` intro" style="animation-delay:${Math.min(sectionIndex * 60, 300)}ms`;
+    html += `<section class="section${folded ? " folded" : ""}${intro}" id="${s}">
       <div class="section-head${browse ? " foldable" : ""}" data-slug="${s}">
         <span class="numeral">${roman(i)}</span>
         <h2>${esc(theme)}</h2>
-        ${browse ? `<span class="caret" aria-hidden="true">▾</span>` : ""}
+        ${browse ? `<button class="caret" type="button" aria-expanded="${!folded}"
+           aria-label="${folded ? "Unfold" : "Fold"} ${esc(theme)}">▾</button>` : ""}
         ${art}
         <a class="perma" href="#${s}" data-slug="${s}" title="Copy a link to this theme">§</a>
         <span class="n stamp">${rows.length} ${rows.length === 1 ? "entry" : "entries"}</span>
@@ -1281,6 +1294,7 @@ function render(){
   });
 
   $list.innerHTML = html;
+  introDone = true;
   $shown.textContent = `showing ${shown} of ${READINGS.length}`;
 
   renderTray();
@@ -1371,10 +1385,8 @@ function renderFacets(){
    text isn't restated here (it's already visible in the box). */
 function describeFacets(){
   const bits = [];
-  if (state.quarter != null){
-    const Q = quarterById(state.quarter);
-    bits.push((Q ? Q.label : state.quarter) + (state.week != null ? " · wk " + state.week : ""));
-  } else if (state.week != null) bits.push("wk " + state.week);
+  if (state.quarter != null || state.week != null)
+    bits.push(sessionLabel(state.quarter, state.week, { long:true }));
   state.levels.forEach(l => bits.push(LEVELS[l] || l));
   state.types.forEach(t => bits.push(t));
   return bits.join(" · ");
@@ -1385,11 +1397,8 @@ function renderTray(){
   const stamps = [];
 
   if (state.quarter != null || state.week != null){
-    const Q = quarterById(state.quarter);
-    const cls = Q ? " q-" + Q.id : "";
-    const label = Q
-      ? (state.week != null ? `${Q.short} · wk ${state.week}` : Q.label)
-      : `wk ${state.week}`;
+    const cls = quarterById(state.quarter) ? " q-" + state.quarter : "";
+    const label = sessionLabel(state.quarter, state.week);
     stamps.push(`<button class="stamp${cls}" type="button" data-off="session">${label} ✕</button>`);
   }
   state.levels.forEach(l =>
@@ -1431,7 +1440,7 @@ function updateLedger(){
    leader, kind stamp at the right, optional note beneath, and an
    embedded player for YouTube links. */
 function renderExtras(){
-  const $a = document.getElementById("appendix");
+  const $a = document.getElementById("extrasAppendix");
   if (!$a) return;
   if (!EXTRAS.length){ $a.hidden = true; return; }
   $a.hidden = false;
@@ -1469,19 +1478,6 @@ function renderExtras(){
    Sorted into calendar order. When readings exist for a deck's
    session, the stamp and a [ readings for this session ] link both
    call showSession(). */
-function sessionLabel(qid, wk){
-  const Q = quarterById(qid);
-  if (Q)   return wk != null ? `${Q.short} · wk ${esc(wk)}` : esc(Q.label);
-  if (qid) return esc(qid) + (wk != null ? ` · wk ${esc(wk)}` : "");
-  return wk != null ? `wk ${esc(wk)}` : "";
-}
-
-function sessionHasReadings(qid, wk){
-  if (qid == null && wk == null) return false;
-  return READINGS.some(r =>
-    (qid == null || r.quarter === qid) && (wk == null || r.week === wk));
-}
-
 function renderSlides(){
   const $a = document.getElementById("slidesAppendix");
   if (!$a) return;
@@ -1604,7 +1600,7 @@ function applyHash(){
   render();
 }
 
-/* ---- jump to a session from an appendix deck ------------------------
+/* ---- jump to a session (cohort-slide rows + "This week" card) ------
    Clears search, facets, and the theme filter (so nothing hides the
    session's readings), applies the quarter/week filter, then scrolls
    back up to the toolbar. */
@@ -1615,9 +1611,8 @@ function showSession(qid, wk){
   history.replaceState(null, "", location.pathname + location.search);
   state.quarter = qid; state.week = wk;
   renderNav(); renderSessions(); renderFacets(); render();
-  const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   document.querySelector(".toolbar")
-    .scrollIntoView({ behavior: calm ? "auto" : "smooth", block:"start" });
+    .scrollIntoView({ behavior: prefersCalm() ? "auto" : "smooth", block:"start" });
 }
 
 /* =====================================================================
@@ -1657,7 +1652,7 @@ document.getElementById("appendixNav").addEventListener("click", e => {
   if (!btn) return;
   const $a = document.getElementById(btn.dataset.target);
   if (!$a) return;
-  const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const calm = prefersCalm();
   $a.scrollIntoView({ behavior: calm ? "auto" : "smooth", block:"start" });
   if (!calm){
     const head = $a.querySelector(".section-head");
@@ -1675,7 +1670,6 @@ document.querySelector(".facets").addEventListener("click", e => {
     const l = lv.dataset.level;
     state.levels.has(l) ? state.levels.delete(l) : state.levels.add(l);
     renderFacets(); render(); return;
-
   }
   const ty = e.target.closest("[data-type]");
   if (ty){
@@ -1772,12 +1766,16 @@ $list.addEventListener("click", e => {
     return;
   }
 
-  /* section head → fold/unfold (browse mode only; § handled above) */
+  /* section head → fold/unfold (browse mode only; § handled above).
+     Mouse users can click anywhere on the head; keyboard users Tab to
+     the ▾ button. Focus returns to that button after the re-render. */
   const head = e.target.closest(".section-head.foldable");
   if (head){
     const s = head.dataset.slug;
+    const viaCaret = !!e.target.closest(".caret");
     state.folded.has(s) ? state.folded.delete(s) : state.folded.add(s);
     render();
+    if (viaCaret) document.querySelector(`.section-head[data-slug="${s}"] .caret`)?.focus();
   }
 });
 
@@ -1813,7 +1811,7 @@ function drawFromStacks(){
   el.classList.remove("flash");
   void el.offsetWidth;                       /* restart the animation */
   el.classList.add("flash");
-  el.scrollIntoView({ behavior:"smooth", block:"center" });
+  el.scrollIntoView({ behavior: prefersCalm() ? "auto" : "smooth", block:"center" });
 }
 
 /* =====================================================================

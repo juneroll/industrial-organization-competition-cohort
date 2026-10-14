@@ -280,13 +280,23 @@ button.q-spring[aria-pressed="true"]{ background:var(--spring); border-color:var
   padding:40px 0 24px;
   align-items:start;
 }
-.rail{ position:sticky; top:24px; }
+.rail{
+  position:sticky; top:24px;
+  /* the rail is taller than many laptop screens now, so it scrolls on
+     its own instead of hiding its bottom groups below the fold */
+  max-height:calc(100vh - 48px);
+  overflow-y:auto; overscroll-behavior:contain;
+  scrollbar-width:thin; scrollbar-color:#26312A transparent;
+  padding:2px 6px 2px 2px; margin:-2px -6px -2px -2px;   /* room for focus rings */
+}
 
 /* ################################################################
    5. THE RAIL ("card catalogue")
-   Three groups, each auto-built by the script:
-     #themeNav   — Catalogue: one button per theme (+ All)
-     #sessionNav — Sessions: quarter blocks with week chips
+   Four groups, each auto-built by the script:
+     #themeNav    — Catalogue: one button per theme (+ All)
+     #sessionNav  — Sessions: quarter blocks with week chips
+     #appendixNav — Appendices: one button per appendix band that's
+                    showing; clicking scrolls down to it
      legend      — key to the ○ ◐ ● level marks (display only;
                    the CLICKABLE level filters live in the toolbar)
    ################################################################ */
@@ -316,6 +326,8 @@ button.q-spring[aria-pressed="true"]{ background:var(--spring); border-color:var
 .theme-btn .n{ opacity:.6; font-weight:400; }
 
 #sessionNav{ margin-top:26px; }
+#appendixNav{ margin-top:26px; }
+.section-head.flash{ animation:drawflash 1.8s ease both; }  /* arrival cue */
 .q-block{ margin:0 0 14px; }
 .q-btn{                           /* quarter header row */
   display:block; width:100%; text-align:left;
@@ -670,10 +682,12 @@ footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
    ################################################################ */
 @media (max-width: 880px){
   .frame{ display:block; padding-top:28px; }
-  .rail{ position:static; margin-bottom:32px; }
+  .rail{ position:static; margin-bottom:32px; max-height:none; overflow:visible; padding:0; }
   #themeNav{ display:flex; flex-wrap:wrap; gap:2px 18px; }
   .theme-btn{ width:auto; }
   #sessionNav{ margin-top:18px; }
+  #appendixNav{ display:flex; flex-wrap:wrap; gap:2px 18px; margin-top:18px; }
+  #appendixNav .rail-head{ flex-basis:100%; }
   .q-block{ margin-bottom:10px; }
 }
 @media (max-width: 660px){
@@ -760,6 +774,7 @@ footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
       <p class="rail-head">Catalogue</p>
       <div id="themeNav"></div>            <!-- built by renderNav() -->
       <div id="sessionNav"></div>          <!-- built by renderSessions() -->
+      <div id="appendixNav"></div>         <!-- built by renderAppendixNav() -->
       <p class="rail-note">Select a theme or session to filter.<br>Press <kbd>/</kbd> to search, <kbd>Esc</kbd> to clear.</p>
       <p class="rail-note legend">○ gateway &nbsp;·&nbsp; ◐ core &nbsp;·&nbsp; ● deep end</p>
     </nav>
@@ -1562,6 +1577,24 @@ function letterAppendices(){
   });
 }
 
+/* ---- rail: Appendices ------------------------------------------------
+   One button per appendix band that's showing, read straight from the
+   page (letter, title minus the "Appendix —" prefix, item count), so
+   it always matches the bands. Hidden when no appendix is showing. */
+function renderAppendixNav(){
+  const $n = document.getElementById("appendixNav");
+  if (!$n) return;
+  const bands = [...document.querySelectorAll(".appendix")].filter(a => !a.hidden);
+  if (!bands.length){ $n.innerHTML = ""; return; }
+  $n.innerHTML = `<p class="rail-head">Appendices</p>` + bands.map(a => {
+    const letter = a.querySelector(".appendix-letter")?.textContent || "";
+    const title  = a.querySelector("h2").textContent.replace(/^Appendix\s*[—–-]\s*/, "");
+    const count  = parseInt(a.querySelector(".n")?.textContent, 10);
+    return `<button class="theme-btn" type="button" data-target="${esc(a.id)}">${esc(letter)} — ${esc(title)}${
+      isNaN(count) ? "" : ` <span class="n">(${count})</span>`}</button>`;
+  }).join("");
+}
+
 /* ---- permalinks: #theme-slug in the URL ⇄ the theme filter ---------- */
 function applyHash(){
   const s = decodeURIComponent(location.hash.replace(/^#/, ""));
@@ -1616,6 +1649,20 @@ document.getElementById("sessionNav").addEventListener("click", e => {
   state.week    = same ? null : wk;
   renderSessions();
   render();
+});
+
+/* rail: Appendices → scroll down to the band, with a brief gilt flash */
+document.getElementById("appendixNav").addEventListener("click", e => {
+  const btn = e.target.closest("[data-target]");
+  if (!btn) return;
+  const $a = document.getElementById(btn.dataset.target);
+  if (!$a) return;
+  const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  $a.scrollIntoView({ behavior: calm ? "auto" : "smooth", block:"start" });
+  if (!calm){
+    const head = $a.querySelector(".section-head");
+    head.classList.remove("flash"); void head.offsetWidth; head.classList.add("flash");
+  }
 });
 
 /* toolbar: search (live) */
@@ -1805,6 +1852,7 @@ renderFacets();
 renderExtras();
 renderSlides();
 letterAppendices();
+renderAppendixNav();
 renderThisWeek();
 applyHash();      /* reads #theme-slug if present, then renders nav + list */
 </script>

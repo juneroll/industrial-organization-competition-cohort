@@ -10,11 +10,12 @@
      WHERE THINGS ARE:
        · CONFIG + DATA ......... top of the <script> (bottom of file).
          This is the only place you normally edit: THEMES, QUARTERS,
-         READINGS, IMAGES, SUGGEST_URL.
+         READINGS, EXTRAS, COHORT_SLIDES, IMAGES, SUGGEST_URL.
        · STYLES ................ the <style> block below, organized in
          numbered, banner-commented sections (0–13).
        · MARKUP ................ each region marked with an HTML
-         comment (MASTHEAD / RAIL / TOOLBAR / LIST / FOOTER).
+         comment (MASTHEAD / RAIL / TOOLBAR / LIST / APPENDICES /
+         FOOTER).
        · BEHAVIOR .............. the machinery half of the <script>,
          each function banner-commented.
 
@@ -582,13 +583,29 @@ footer .suggest{
   border-bottom:1px dotted var(--gilt);
 }
 footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
-     
+
 /* ################################################################
-   9b. APPENDIX — extra-resources band above the footer
-   Reuses the section-head and entry styles from the main list.
+   9b. APPENDICES — bands above the footer
+   A = extra resources (EXTRAS), B = cohort slides (COHORT_SLIDES).
+   Both reuse the section-head and entry styles from the main list.
+   Letters are assigned by the script to whichever bands are
+   showing, so an empty band never leaves a gap in the lettering.
    ################################################################ */
 .appendix{ padding-top:8px; padding-bottom:22px; }
-     
+
+/* COHORT SLIDES rows: the seasonal session stamp sits at the end
+   of the dot leader (where a reading's year would be). The
+   [ readings for this session ] link sends the main list to that
+   quarter/week — same bracket style as [ copy link ]. */
+.jump-btn{
+  font-family:inherit; font-size:inherit;
+  background:none; border:none; padding:0;
+  color:var(--gilt); cursor:pointer;
+}
+.jump-btn::before{ content:"[ "; opacity:.6; }
+.jump-btn::after { content:" ]"; opacity:.6; }
+.jump-btn:hover{ color:var(--ink); }
+
 /* ################################################################
    10. MOTION — one quiet settle on load; honors reduced motion
    ################################################################ */
@@ -639,7 +656,8 @@ footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
   body{ background:#fff; color:#000; }
   .folio{ border:none; margin:0; }
   .folio::before, .corner, .rail, .toolbar, .bookplate,
-  footer .edit-note, footer .suggest, .fleuron, .perma, .caret, #empty{ display:none; }
+  footer .edit-note, footer .suggest, .fleuron, .perma, .caret, #empty,
+  .jump-btn{ display:none; }
   .band{ background:none; border:2px solid #000; color:#000; }
   .oxford{ border-top-color:#000; border-bottom-color:#000; }
   .section-head{ border-bottom-color:#000; }
@@ -738,20 +756,34 @@ footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
     </main>
   </div>
 
- <!-- ============================================================
-       APPENDIX — extra resources (videos, slides, podcasts…)
-       Content lives in the EXTRAS array in the script; this section
-       hides itself automatically when EXTRAS is empty.
+  <!-- ============================================================
+       APPENDICES — bands above the footer
+       Each band's content lives in its own array in the script
+       (EXTRAS, COHORT_SLIDES) and hides itself when that array is
+       empty. The letter in .appendix-letter is assigned in page
+       order by letterAppendices(), so A/B stay gapless.
        ============================================================ -->
+
+  <!-- APPENDIX: extra resources (videos, podcasts, sites…) -->
   <section class="appendix wrap" id="appendix" hidden>
     <div class="section-head">
-      <span class="numeral">A</span>
+      <span class="numeral appendix-letter">A</span>
       <h2>Appendix — More Resources</h2>
       <span class="n stamp" id="extrasCount"></span>
     </div>
     <ul class="entries" id="extrasList"></ul>
   </section>
-     
+
+  <!-- APPENDIX: cohort slides (the decks presented in session) -->
+  <section class="appendix wrap" id="slidesAppendix" hidden>
+    <div class="section-head">
+      <span class="numeral appendix-letter">B</span>
+      <h2>Appendix — Cohort Slide Presentations and Other Material</h2>
+      <span class="n stamp" id="slidesCount"></span>
+    </div>
+    <ul class="entries" id="slidesList"></ul>
+  </section>
+
   <!-- ============================================================
        FOOTER — colophon
        ============================================================ -->
@@ -827,6 +859,11 @@ footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
       schema — replace them with real ones (keep your existing
       READINGS array if you already have one; the schema is the same
       plus the optional `quarter` field).
+
+   8. EXTRAS and COHORT_SLIDES feed the two appendix bands above the
+      footer; each schema is documented right above its array. A band
+      whose array is empty hides itself, and the bands that remain
+      are re-lettered A, B… automatically.
    ===================================================================== */
 
 const LAST_UPDATED = "July 2026";
@@ -885,7 +922,7 @@ const READINGS = [
   { theme:"The Concept of Competition", title:"The Meaning of Competition", authors:"Friedrich A. Hayek", year: 1946, type:"paper", url:"https://competitionandappropriation.econ.ucla.edu/wp-content/uploads/sites/95/2018/06/HayekMeaningOfCompetition.pdf", level:"deep", start: false, quarter:"fall", week: 6},
   { theme:"The Concept of Competition", title:"The Meaning of Competition: A Graphical Exposition", authors:"Donghyun Park", year: 1998, venue:"The Journal of Economic Education", type:"paper", url:"https://www.jstor.org/stable/1182925", level:"deep", start: false, quarter:"fall", week: 7},
   { theme:"The Concept of Competition", title:"Concepts of Competition", authors:"John Vickers", year: 1995, venue: "Oxford Economic Papers", type:"paper", url:"https://www.jstor.org/stable/2663661", level: "deep", start: false, quarter:"winter", week: 1},
-       
+
   { theme:"Market Structure & Concentration", title:"A Theory of Oligopoly", authors:"George J. Stigler", year: 1964, venue:"Journal of Political Economy", type:"paper", url:"https://www.jstor.org/stable/1828791", start: true, level:"core", quarter:"fall", week: 1},
   { theme:"Market Structure & Concentration", title:"Industry Structure, Market Rivalry, and Public Policy", authors:"Harold Demsetz", year: 1973, venue:"Journal of Law and Economics", type:"paper", url:"https://www.jstor.org/stable/724822", level:"deep", start: false, quarter:"fall", week: 4},
   { theme:"Market Structure & Concentration", title:"Durability and Monopoly", authors:"Ronald H. Coase", year: 1972, venue:"The Journal of Law and Economics", type:"paper", url:"https://www.jstor.org/stable/725018", start: false, level:"core", quarter:"fall", week: 8},
@@ -904,15 +941,15 @@ const READINGS = [
   { theme:"Vertical Integration and Vertical Restraints", title:"Vertical Restraints as Contract Enforcement Mechanisms", authors:"Benjamin Klein, Kevin M. Murphy", year: 1988, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/725332", level:"core", start: false, quarter:"spring", week: 4},
   { theme:"Vertical Integration and Vertical Restraints", title:"The Vertical Integration of Production: Market Failure Considerations", authors:"Oliver E. Williamson", year: 1971, venue:"The American Economic Review", type:"paper", url:"https://www.jstor.org/stable/1816983", level:"core", start: false, quarter:"spring", week: 4},
   { theme:"Vertical Integration and Vertical Restraints", title:"Vertical Integration in Competitive Markets Under Uncertainty", authors:"Dennis W. Carlton", year: 1979, venue:"The Journal of Industrial Economics", type:"paper", url:"https://www.jstor.org/stable/2098317", level:"core", start: false, quarter:"spring", week: 5},
-  { theme:"Vertical Integration and Vertical Restraints", title:"The Acquisition of Fisher Body by General Motors", authors:"Ronald H. Coase", year: 2000, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/10.1086/467446", level:"core", start: false, quarter:"spring", week: 5}, 
+  { theme:"Vertical Integration and Vertical Restraints", title:"The Acquisition of Fisher Body by General Motors", authors:"Ronald H. Coase", year: 2000, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/10.1086/467446", level:"core", start: false, quarter:"spring", week: 5},
   { theme:"Vertical Integration and Vertical Restraints", title:"Fisher—General Motors and the Nature of the Firm", authors:"Benjamin Klein", year: 2000, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/10.1086/467449", level:"core", start: false, quarter:"spring", week: 6},
-     
+
   { theme:"Barriers to Entry", title:"Barriers to Entry", authors:"Harold Demsetz", year: 1982, venue:"American Economic Review", type:"paper", url:"https://www.jstor.org/stable/1808574", pick:"junio", level:"gateway", start: true, quarter:"winter", week: 2 },
   { theme:"Barriers to Entry", title:"Why Barriers to Entry Are Barriers to Understanding", authors:"Dennis W. Carlton", year: 2004, venue:"The American Economic Review", type:"paper", url:"https://www.jstor.org/stable/3592929", level:"deep", start: false, quarter:"winter", week: 3},
   { theme:"Barriers to Entry", title:"Sunk Costs and Antitrust Barriers to Entry", authors:"Richard Schmalensee", year: 2004, venue:"The American Economic Review", type:"paper", url:"https://www.jstor.org/stable/3592930", level:"deep", start: false, quarter:"winter", week: 3},
   { theme:"Barriers to Entry", title:"The Economies of Scale", authors:"George J. Stigler", year: 1954, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/3592930", level:"core", start: false, quarter:"fall", week: 9},
   { theme:"Barriers to Entry", title:"What Is a Barrier to Entry", authors:"R. Preston McAfee, Hugo M. Mialon, Michael A. Williams", year: 2004, venue:"The American Economic Review", type:"paper", url:"https://www.jstor.org/stable/3592928", level:"core", start: false, quarter:"winter", week: 5},
-     
+
   { theme:"Antitrust & Competition Policy", title:"Predatory Price Cutting: The Standard Oil (N. J.) Case", authors:"John S. McGee", year: 1958, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/724888", pick:"junio", level:"gateway", start: true, quarter:"spring", week: 2},
   { theme:"Antitrust & Competition Policy", title:"How Many Cheers for Antitrust's 100 Years?", authors:"Harold Demsetz", year: 1992, venue:"Economic Inquiry", type:"paper", url:"https://doi.org/10.1111/j.1465-7295.1992.tb01653.x", pick:"junio", level:"core", start: true, quarter:"spring", week: 3},
   { theme:"Antitrust & Competition Policy", title:"The Origin of the Sherman Act", authors:"George J. Stigler", year: 1985, venue:"The Journal of Legal Studies", type:"paper", url:"https://www.jstor.org/stable/724314", level:"deep", start: false, quarter:"spring", week: 4},
@@ -920,11 +957,11 @@ const READINGS = [
   { theme:"Antitrust & Competition Policy", title:"The Microsoft Case: What Can a Dominant Firm Do to Defend Its Market Position?", authors:"Benjamin Klein", year: 2001, venue:"The Journal of Economic Perspectives", type:"paper", url:"https://www.jstor.org/stable/2696591", level:"core", start: false, quarter:"spring", week: 6},
   { theme:"Antitrust & Competition Policy", title:"Legislative Intent and the Policy of the Sherman Act", authors:"Robert H. Bork", year: 1966, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/724991", level:"deep", start: false, quarter:"spring", week: 7},
   { theme:"Antitrust & Competition Policy", title:"Aaron Director’s Influence on Antitrust Policy", authors:"Sam Peltzman", year: 2005, venue:"The Journal of Law & Economics", url:"https://www.jstor.org/stable/10.1086/497527", level:"core", start: false, quarter:"spring", week: 9},
-     
+
   // --------------------------------------------------------------------
 ];
 
-/* EXTRAS — the Appendix: videos, slide decks, podcasts, sites…
+/* EXTRAS — the "More Resources" appendix: videos, podcasts, sites…
    kind  : free text, becomes the stamp at the row's end
            ("video", "slides", "podcast", "site", "data" …)
    source: who made it (channel, speaker, author) — optional
@@ -932,8 +969,30 @@ const READINGS = [
    url   : "#" renders as a dashed not-filled-in-yet stub */
 const EXTRAS = [
   // ---- SAMPLE ITEMS — replace with real ones ----------------------
-  { kind:"video",   title:"A Conversation with Harold Demsetz", source:"EconTalk", url:"https://youtu.be/vouSAM5GaeM?si=55nyHNxuVAjG-YXK", note:"Harold Demsetz has contributed original research on the theory of the firm, regulation in markets, industrial organization, antitrust policy, transaction costs, externalities, and property rights." },
+  { kind:"video",   title:"A Conversation with Harold Demsetz", source:"EconTalk", url:"https://youtu.be/vouSAM5GaeM?si=iRLQbshhJseLVDPa", note:"Harold Demsetz has contributed original research on the theory of the firm, regulation in markets, industrial organization, antitrust policy, transaction costs, externalities, and property rights." },
   { kind:"video",  title:"Markets, Firms and Property Rights: A Celebration of the Research of Ronald Coase", source:"University of Chicago Law School", url:"https://youtu.be/efQ5gYr5_5k?si=8_UoEeodRJWipEA9", note:"The conference brought together a group of scholars to honor the life and research of Ronald Coase. 2009 marked the 50th anniversary of the publication of Coase's seminal paper on the Federal Communications Commission. 2010 marks the 50th anniversary of the publication of his paper on 'The Problem of Social Cost,' and his 100th birthday." },
+  // ------------------------------------------------------------------
+];
+
+/* COHORT_SLIDES — the "Cohort Slides" appendix: decks presented in
+   session by cohort members.
+   title    : deck title (required)
+   presenter: who presented it — optional, shown in small caps
+   quarter  : a QUARTERS id — optional; tints the session stamp
+   week     : week within that quarter — optional
+   date     : free text, e.g. "Oct 2" — optional
+   format   : free-text stamp ("slides", "pdf", "keynote"…) — optional
+   note     : one quiet line under the title — optional
+   url      : "#" renders as a dashed not-filled-in-yet stub
+
+   Decks always list in calendar order (QUARTERS order, then week),
+   whatever order you type them in. If any readings share a deck's
+   quarter/week, its session stamp and a [ readings for this session ]
+   link both jump the main list to that session.
+   Google Slides / Drive links: set sharing to "Anyone with the link". */
+const COHORT_SLIDES = [
+  // ---- SAMPLE DECKS — replace with real ones ----------------------
+  //{ title:"Why Do Firms Exist?", presenter:"Junio Valenzuela", quarter:"fall", week:1, date:"Oct 2", format:"slides", url:"#", note:"Opening session: Coase (1937) and Demsetz (1997) side by side." },
   // ------------------------------------------------------------------
 ];
 
@@ -1311,6 +1370,91 @@ function renderExtras(){
     </li>`).join("");
 }
 
+/* ---- appendix: cohort slides ----------------------------------------
+   Renders COHORT_SLIDES. Same row anatomy as the readings: presenter
+   in small caps, deck title as the link, dot leader, and the
+   seasonal session stamp at the end (where a reading's year sits).
+   Sorted into calendar order. When readings exist for a deck's
+   session, the stamp and a [ readings for this session ] link both
+   call showSession(). */
+function sessionLabel(qid, wk){
+  const Q = quarterById(qid);
+  if (Q)   return wk != null ? `${Q.short} · wk ${esc(wk)}` : esc(Q.label);
+  if (qid) return esc(qid) + (wk != null ? ` · wk ${esc(wk)}` : "");
+  return wk != null ? `wk ${esc(wk)}` : "";
+}
+
+function sessionHasReadings(qid, wk){
+  if (qid == null && wk == null) return false;
+  return READINGS.some(r =>
+    (qid == null || r.quarter === qid) && (wk == null || r.week === wk));
+}
+
+function renderSlides(){
+  const $a = document.getElementById("slidesAppendix");
+  if (!$a) return;
+  if (!COHORT_SLIDES.length){ $a.hidden = true; return; }
+  $a.hidden = false;
+  document.getElementById("slidesCount").textContent =
+    `${COHORT_SLIDES.length} ${COHORT_SLIDES.length === 1 ? "deck" : "decks"}`;
+
+  /* calendar order: QUARTERS order, then week, then as entered */
+  const qIndex = id => {
+    const i = QUARTERS.findIndex(q => q.id === id);
+    return i < 0 ? QUARTERS.length : i;
+  };
+  const decks = COHORT_SLIDES.map((d, i) => ({ ...d, _i:i })).sort((a, b) =>
+    (qIndex(a.quarter) - qIndex(b.quarter)) ||
+    ((a.week ?? Infinity) - (b.week ?? Infinity)) ||
+    (a._i - b._i));
+
+  document.getElementById("slidesList").innerHTML = decks.map(d => {
+    const qid = d.quarter ?? null;
+    const wk  = d.week ?? null;
+    const label  = sessionLabel(qid, wk);
+    const linked = sessionHasReadings(qid, wk);
+    const cls    = quarterById(qid) ? " q-" + qid : "";
+    const jump   = `data-jump data-quarter="${qid ? esc(qid) : ""}" data-week="${wk != null ? esc(wk) : ""}"`;
+
+    let stamp = "";
+    if (label){
+      stamp = linked
+        ? `<button class="stamp${cls}" type="button" ${jump} title="Show the readings for this session">${label}</button>`
+        : `<span class="stamp${cls}">${label}</span>`;
+    }
+
+    const meta = [];
+    if (d.format) meta.push(`<span class="stamp">${esc(d.format)}</span>`);
+    if (d.date)   meta.push(esc(d.date));
+    if (d.note)   meta.push(esc(d.note));
+    if (linked)   meta.push(`<button class="jump-btn" type="button" ${jump}>readings for this session</button>`);
+
+    return `
+    <li class="entry">
+      <div class="entry-line">
+        ${d.presenter ? `<span class="authors">${esc(d.presenter)}</span>` : ""}
+        <span class="title">${d.url && d.url !== "#"
+          ? `<a href="${esc(d.url)}" target="_blank" rel="noopener">${esc(d.title)}</a>`
+          : `<span class="link-missing" title="No URL yet — add one in COHORT_SLIDES.">${esc(d.title)}</span>`}</span>
+        <span class="leader" aria-hidden="true"></span>
+        ${stamp}
+      </div>
+      ${meta.length ? `<div class="entry-meta">${meta.join(`<span class="sep">·</span>`)}</div>` : ""}
+    </li>`;
+  }).join("");
+}
+
+/* ---- appendix letters: A, B, … over whichever bands are showing ---- */
+function letterAppendices(){
+  let n = 0;
+  document.querySelectorAll(".appendix").forEach($a => {
+    if ($a.hidden) return;
+    const el = $a.querySelector(".appendix-letter");
+    if (el) el.textContent = String.fromCharCode(65 + n);
+    n++;
+  });
+}
+
 /* ---- permalinks: #theme-slug in the URL ⇄ the theme filter ---------- */
 function applyHash(){
   const s = decodeURIComponent(location.hash.replace(/^#/, ""));
@@ -1318,6 +1462,22 @@ function applyHash(){
   state.theme = t || "all";
   renderNav();
   render();
+}
+
+/* ---- jump to a session from an appendix deck ------------------------
+   Clears search, facets, and the theme filter (so nothing hides the
+   session's readings), applies the quarter/week filter, then scrolls
+   back up to the toolbar. */
+function showSession(qid, wk){
+  state.q = ""; $q.value = "";
+  state.levels.clear(); state.types.clear();
+  state.theme = "all";
+  history.replaceState(null, "", location.pathname + location.search);
+  state.quarter = qid; state.week = wk;
+  renderNav(); renderSessions(); renderFacets(); render();
+  const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  document.querySelector(".toolbar")
+    .scrollIntoView({ behavior: calm ? "auto" : "smooth", block:"start" });
 }
 
 /* =====================================================================
@@ -1467,6 +1627,15 @@ $list.addEventListener("click", e => {
   }
 });
 
+/* appendix: cohort slides → jump the main list to a deck's session */
+document.getElementById("slidesList").addEventListener("click", e => {
+  const btn = e.target.closest("[data-jump]");
+  if (!btn) return;
+  const qid = btn.dataset.quarter || null;
+  const wk  = btn.dataset.week !== "" ? Number(btn.dataset.week) : null;
+  showSession(qid, wk);
+});
+
 /* ✦ draw — highlight a random reading from the current view */
 function drawFromStacks(){
   if (!lastVisibleIds.length) return;
@@ -1513,6 +1682,8 @@ updateLedger();
 renderSessions();
 renderFacets();
 renderExtras();
+renderSlides();
+letterAppendices();
 applyHash();      /* reads #theme-slug if present, then renders nav + list */
 </script>
 </body>

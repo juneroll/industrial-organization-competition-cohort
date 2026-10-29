@@ -961,13 +961,13 @@ footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
       Testing on your own computer (file:// or localhost) never counts.
    ===================================================================== */
 
-const LAST_UPDATED = "2026-10-13";
+const LAST_UPDATED = "2026-10-28";
 
 /* THIS_WEEK — the "This week" card under the logo.
    quarter/week : the current session (update weekly), or set
                   THIS_WEEK = null to hide the card
    show         : how many readings to list before "+ n more" */
-const THIS_WEEK = { quarter:"fall", week:3, show:2 };
+const THIS_WEEK = { quarter:"fall", week:5, show:2 };
 
 const SUGGEST_URL = "mailto:juniov@uchicago.edu"; // EDIT ME (or "")
 
@@ -1005,9 +1005,9 @@ const IMAGES = {
 const READINGS = [
   // ---- Theory of the Firm ------------------------------------------
   { theme:"Theory of the Firm", title:"The Nature of the Firm", authors:"Ronald H. Coase", year: 1937, venue:"Economica", type:"paper", url:"https://www.jstor.org/stable/2626876", pick:"junio", level:"gateway", start:true, quarter:"fall", week: 3},
-  { theme:"Theory of the Firm", title:"The Nature of the Firm: Origin", authors:"Ronald H. Coase", year: 1988, venue:"Journal of Law, Economics, & Organization", type:"paper", url:"https://www.jstor.org/stable/765011", level:"deep", start: false, quarter:"fall", week: 5},
+  { theme:"Theory of the Firm", title:"The Nature of the Firm: Origin", authors:"Ronald H. Coase", year: 1988, venue:"Journal of Law, Economics, & Organization", type:"paper", url:"https://www.jstor.org/stable/765011", level:"deep", start: false, quarter:"fall", week: 4},
   { theme:"Theory of the Firm", title:"The Nature of the Firm: Meaning", authors:"Ronald H. Coase", year: 1988, venue:"Journal of Law, Economics, & Organization", type:"paper", url:"https://www.jstor.org/stable/765012", level:"core", start: false, quarter:"fall", week: 1},
-  { theme:"Theory of the Firm", title:"The Nature of the Firm: Influence", authors:"Ronald H. Coase", year: 1988, venue:"Journal of Law, Economics, & Organization", type:"paper", url:"https://www.jstor.org/stable/765013", level:"deep", start: false, quarter:"fall", week: 5},
+  { theme:"Theory of the Firm", title:"The Nature of the Firm: Influence", authors:"Ronald H. Coase", year: 1988, venue:"Journal of Law, Economics, & Organization", type:"paper", url:"https://www.jstor.org/stable/765013", level:"deep", start: false, quarter:"fall", week: 4},
   { theme:"Theory of the Firm", title:"The Firm in Economic Theory: A Quiet Revolution", authors:"Harold Demsetz", year: 1997, venue:"The American Economic Review", type:"paper", url:"https://www.jstor.org/stable/2950959", pick:"junio", level:"gateway", start: true, quarter:"fall", week: 3},
   { theme:"Theory of the Firm", title:"The Theory of the Firm Revisited", authors:"Harold Demsetz", year: 1988, venue:"Journal of Law, Economics, & Organization", type:"paper", url:"https://www.jstor.org/stable/765018", level:"gateway", start: false, quarter:"fall", week: 2},
   { theme:"Theory of the Firm", title:"The Structure of Ownership and the Theory of the Firm", authors:"Harold Demsetz", year: 1983, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/725108", level:"core", start: false, quarter:"fall", week: 8},
@@ -1021,7 +1021,7 @@ const READINGS = [
   // ---- The Concept of Competition ----------------------------------
   { theme:"The Concept of Competition", title:"Perfect Competition, Historically Contemplated", authors:"George J. Stigler", year: 1957, venue:"Journal of Political Economy", type:"paper", url:"https://www.jstor.org/stable/1824830", pick:"junio", level:"gateway", start: true, quarter:"fall", week: 3},
   { theme:"The Concept of Competition", title:"A Note on the History of Perfect Competition", authors:"Paul J. McNulty", year: 1967, venue:"Journal of Political Economy", type:"paper", url:"https://www.jstor.org/stable/1828600", level:"core", start: false, quarter:"fall", week: 3},
-  { theme:"The Concept of Competition", title:"Economic Theory and the Meaning of Competition", authors:"Paul J. McNulty", year: 1968, venue:"The Quarterly Journal of Economics", type:"paper", url:"https://www.jstor.org/stable/1879604", level:"deep", start: false, quarter:"fall", week: 5},
+  { theme:"The Concept of Competition", title:"Economic Theory and the Meaning of Competition", authors:"Paul J. McNulty", year: 1968, venue:"The Quarterly Journal of Economics", type:"paper", url:"https://www.jstor.org/stable/1879604", level:"deep", start: false, quarter:"fall", week: 4},
   { theme:"The Concept of Competition", title:"The Meaning of Competition", authors:"Friedrich A. Hayek", year: 1946, type:"paper", url:"https://competitionandappropriation.econ.ucla.edu/wp-content/uploads/sites/95/2018/06/HayekMeaningOfCompetition.pdf", level:"deep", start: false, quarter:"fall", week: 6},
   { theme:"The Concept of Competition", title:"The Meaning of Competition: A Graphical Exposition", authors:"Donghyun Park", year: 1998, venue:"The Journal of Economic Education", type:"paper", url:"https://www.jstor.org/stable/1182925", level:"deep", start: false, quarter:"fall", week: 7},
   { theme:"The Concept of Competition", title:"Concepts of Competition", authors:"John Vickers", year: 1995, venue: "Oxford Economic Papers", type:"paper", url:"https://www.jstor.org/stable/2663661", level: "deep", start: false, quarter:"winter", week: 1},
@@ -1045,8 +1045,8 @@ const READINGS = [
   { theme:"Vertical Integration and Vertical Restraints", title:"The Logic of Vertical Restraints", authors:"Patrick Rey, Jean Tirole", year: 1986, venue:"The American Economic Review", type:"paper", url:"https://www.jstor.org/stable/1816460", level:"core", start: false, quarter:"spring", week: 3},
   { theme:"Vertical Integration and Vertical Restraints", title:"Vertical Restraints as Contract Enforcement Mechanisms", authors:"Benjamin Klein, Kevin M. Murphy", year: 1988, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/725332", level:"core", start: false, quarter:"spring", week: 4},
   { theme:"Vertical Integration and Vertical Restraints", title:"The Vertical Integration of Production: Market Failure Considerations", authors:"Oliver E. Williamson", year: 1971, venue:"The American Economic Review", type:"paper", url:"https://www.jstor.org/stable/1816983", level:"core", start: false, quarter:"spring", week: 4},
-  { theme:"Vertical Integration and Vertical Restraints", title:"Vertical Integration in Competitive Markets Under Uncertainty", authors:"Dennis W. Carlton", year: 1979, venue:"The Journal of Industrial Economics", type:"paper", url:"https://www.jstor.org/stable/2098317", level:"core", start: false, quarter:"spring", week: 5},
-  { theme:"Vertical Integration and Vertical Restraints", title:"The Acquisition of Fisher Body by General Motors", authors:"Ronald H. Coase", year: 2000, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/10.1086/467446", level:"core", start: false, quarter:"spring", week: 5},
+  { theme:"Vertical Integration and Vertical Restraints", title:"Vertical Integration in Competitive Markets Under Uncertainty", authors:"Dennis W. Carlton", year: 1979, venue:"The Journal of Industrial Economics", type:"paper", url:"https://www.jstor.org/stable/2098317", level:"core", start: false, quarter:"spring", week: 4},
+  { theme:"Vertical Integration and Vertical Restraints", title:"The Acquisition of Fisher Body by General Motors", authors:"Ronald H. Coase", year: 2000, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/10.1086/467446", level:"core", start: false, quarter:"spring", week: 4},
   { theme:"Vertical Integration and Vertical Restraints", title:"Fisher—General Motors and the Nature of the Firm", authors:"Benjamin Klein", year: 2000, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/10.1086/467449", level:"core", start: false, quarter:"spring", week: 6},
 
   // ---- Barriers to Entry -------------------------------------------
@@ -1054,14 +1054,14 @@ const READINGS = [
   { theme:"Barriers to Entry", title:"Why Barriers to Entry Are Barriers to Understanding", authors:"Dennis W. Carlton", year: 2004, venue:"The American Economic Review", type:"paper", url:"https://www.jstor.org/stable/3592929", level:"deep", start: false, quarter:"winter", week: 3},
   { theme:"Barriers to Entry", title:"Sunk Costs and Antitrust Barriers to Entry", authors:"Richard Schmalensee", year: 2004, venue:"The American Economic Review", type:"paper", url:"https://www.jstor.org/stable/3592930", level:"deep", start: false, quarter:"winter", week: 3},
   { theme:"Barriers to Entry", title:"The Economies of Scale", authors:"George J. Stigler", year: 1958, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/724882", level:"core", start: false, quarter:"fall", week: 9},
-  { theme:"Barriers to Entry", title:"What Is a Barrier to Entry?", authors:"R. Preston McAfee, Hugo M. Mialon, Michael A. Williams", year: 2004, venue:"The American Economic Review", type:"paper", url:"https://www.jstor.org/stable/3592928", level:"core", start: false, quarter:"winter", week: 5},
+  { theme:"Barriers to Entry", title:"What Is a Barrier to Entry?", authors:"R. Preston McAfee, Hugo M. Mialon, Michael A. Williams", year: 2004, venue:"The American Economic Review", type:"paper", url:"https://www.jstor.org/stable/3592928", level:"core", start: false, quarter:"winter", week: 4},
 
   // ---- Antitrust & Competition Policy ------------------------------
-  { theme:"Antitrust & Competition Policy", title:"Predatory Price Cutting: The Standard Oil (N. J.) Case", authors:"John S. McGee", year: 1958, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/724888", pick:"junio", level:"gateway", start: true, quarter:"spring", week: 2},
-  { theme:"Antitrust & Competition Policy", title:"How Many Cheers for Antitrust's 100 Years?", authors:"Harold Demsetz", year: 1992, venue:"Economic Inquiry", type:"paper", url:"https://doi.org/10.1111/j.1465-7295.1992.tb01653.x", pick:"junio", level:"core", start: true, quarter:"spring", week: 3},
+  { theme:"Antitrust & Competition Policy", title:"Predatory Price Cutting: The Standard Oil (N. J.) Case", authors:"John S. McGee", year: 1958, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/724888", pick:"junio", level:"gateway", start: true, quarter:"spring", week: 5},
+  { theme:"Antitrust & Competition Policy", title:"How Many Cheers for Antitrust's 100 Years?", authors:"Harold Demsetz", year: 1992, venue:"Economic Inquiry", type:"paper", url:"https://doi.org/10.1111/j.1465-7295.1992.tb01653.x", pick:"junio", level:"core", start: true, quarter:"spring", week: 5},
   { theme:"Antitrust & Competition Policy", title:"The Origin of the Sherman Act", authors:"George J. Stigler", year: 1985, venue:"The Journal of Legal Studies", type:"paper", url:"https://www.jstor.org/stable/724314", level:"deep", start: false, quarter:"spring", week: 4},
   { theme:"Antitrust & Competition Policy", title:"The Economists and the Problem of Monopoly", authors:"George J. Stigler", year: 1982, venue:"The American Economic Review", type:"paper", url:"https://www.jstor.org/stable/1802294", level:"deep", start: false, quarter:"spring", week: 5},
-  { theme:"Antitrust & Competition Policy", title:"The Microsoft Case: What Can a Dominant Firm Do to Defend Its Market Position?", authors:"Benjamin Klein", year: 2001, venue:"The Journal of Economic Perspectives", type:"paper", url:"https://www.jstor.org/stable/2696591", level:"core", start: false, quarter:"spring", week: 6},
+  { theme:"Antitrust & Competition Policy", title:"The Microsoft Case: What Can a Dominant Firm Do to Defend Its Market Position?", authors:"Benjamin Klein", year: 2001, venue:"The Journal of Economic Perspectives", type:"paper", url:"https://www.jstor.org/stable/2696591", level:"core", start: false, quarter:"spring", week: 5},
   { theme:"Antitrust & Competition Policy", title:"Legislative Intent and the Policy of the Sherman Act", authors:"Robert H. Bork", year: 1966, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/724991", level:"deep", start: false, quarter:"spring", week: 7},
   { theme:"Antitrust & Competition Policy", title:"Aaron Director’s Influence on Antitrust Policy", authors:"Sam Peltzman", year: 2005, venue:"The Journal of Law & Economics", url:"https://www.jstor.org/stable/10.1086/497527", level:"core", start: false, quarter:"spring", week: 9},
 ];

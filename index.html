@@ -309,7 +309,7 @@ button.q-spring[aria-pressed="true"]{ background:var(--spring); border-color:var
   /* the rail is taller than many laptop screens now, so it scrolls on
      its own instead of hiding its bottom groups below the fold */
   max-height:calc(100vh - 48px);
-  overflow-y:auto; overscroll-behavior:contain;
+  overflow-y:auto; overscroll-behavior:contain;5
   scrollbar-width:thin; scrollbar-color:#26312A transparent;
   padding:2px 6px 2px 2px; margin:-2px -6px -2px -2px;   /* room for focus rings */
 }
@@ -961,13 +961,13 @@ footer .suggest:hover{ color:var(--ink); border-bottom-color:var(--ink); }
       Testing on your own computer (file:// or localhost) never counts.
    ===================================================================== */
 
-const LAST_UPDATED = "2026-10-28";
+const LAST_UPDATED = "2026-11-26";
 
 /* THIS_WEEK — the "This week" card under the logo.
    quarter/week : the current session (update weekly), or set
                   THIS_WEEK = null to hide the card
    show         : how many readings to list before "+ n more" */
-const THIS_WEEK = { quarter:"fall", week:5, show:2 };
+const THIS_WEEK = { quarter:"fall", week:7, show:2 };
 
 const SUGGEST_URL = "mailto:juniov@uchicago.edu"; // EDIT ME (or "")
 
@@ -1015,7 +1015,7 @@ const READINGS = [
   { theme:"Theory of the Firm", title:"The Contractual Nature of the Firm", authors:"Steven N.S. Cheung", year: 1983, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/725182", level:"deep", start: false, quarter:"fall", week: 6},
   { theme:"Theory of the Firm", title:"The Division of Labor is Limited by the Extent of the Market", authors:"George J. Stigler", year: 1951, venue:"Journal of Political Economy", type:"paper", url:"https://www.jstor.org/stable/1826433", level:"core", start: false, quarter:"fall", week: 2},
   { theme:"Theory of the Firm", title:"Vertical Integration, Appropriable Rents, and the Competitive Contracting Process", authors:"Benjamin Klein, Robert G. Crawford, Armen A. Alchian", year: 1978, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/725234",level:"deep", start: false, quarter:"fall", week: 6},
-  { theme:"Theory of the Firm", title:"Agency Problems and the Theory of the Firm", authors:"Eugene F. Fama", year: 1980, venue:"Journal of Political Economy", type:"paper", url:"https://www.jstor.org/stable/1837292", level:"deep", start: false, quarter:"fall", week: 7},
+  { theme:"Theory of the Firm", title:"Agency Problems and the Theory of the Firm", authors:"Eugene F. Fama", year: 1980, venue:"Journal of Political Economy", type:"paper", url:"https://www.jstor.org/stable/1837292", level:"deep", start: false, quarter:"fall", week: 6},
   { theme:"Theory of the Firm", title:"The Coasian and Knightian Theories of the Firm", authors:"Donald J. Boudreaux, Randall G. Holcombe", year: 1989, venue:"Managerial and Decision Economics", type:"paper", url:"https://www.jstor.org/stable/2487017", level:"core", start: false, quarter:"fall", week: 8},
 
   // ---- The Concept of Competition ----------------------------------
@@ -1023,12 +1023,12 @@ const READINGS = [
   { theme:"The Concept of Competition", title:"A Note on the History of Perfect Competition", authors:"Paul J. McNulty", year: 1967, venue:"Journal of Political Economy", type:"paper", url:"https://www.jstor.org/stable/1828600", level:"core", start: false, quarter:"fall", week: 4},
   { theme:"The Concept of Competition", title:"Economic Theory and the Meaning of Competition", authors:"Paul J. McNulty", year: 1968, venue:"The Quarterly Journal of Economics", type:"paper", url:"https://www.jstor.org/stable/1879604", level:"deep", start: false, quarter:"fall", week: 3},
   { theme:"The Concept of Competition", title:"The Meaning of Competition", authors:"Friedrich A. Hayek", year: 1946, type:"paper", url:"https://competitionandappropriation.econ.ucla.edu/wp-content/uploads/sites/95/2018/06/HayekMeaningOfCompetition.pdf", level:"deep", start: false, quarter:"fall", week: 6},
-  { theme:"The Concept of Competition", title:"The Meaning of Competition: A Graphical Exposition", authors:"Donghyun Park", year: 1998, venue:"The Journal of Economic Education", type:"paper", url:"https://www.jstor.org/stable/1182925", level:"deep", start: false, quarter:"fall", week: 7},
+  { theme:"The Concept of Competition", title:"The Meaning of Competition: A Graphical Exposition", authors:"Donghyun Park", year: 1998, venue:"The Journal of Economic Education", type:"paper", url:"https://www.jstor.org/stable/1182925", level:"deep", start: false, quarter:"fall", week: 6},
   { theme:"The Concept of Competition", title:"Concepts of Competition", authors:"John Vickers", year: 1995, venue: "Oxford Economic Papers", type:"paper", url:"https://www.jstor.org/stable/2663661", level: "deep", start: false, quarter:"winter", week: 1},
 
   // ---- Market Structure & Concentration ----------------------------
-  { theme:"Market Structure & Concentration", title:"A Theory of Oligopoly", authors:"George J. Stigler", year: 1964, venue:"Journal of Political Economy", type:"paper", url:"https://www.jstor.org/stable/1828791", start: true, level:"core", quarter:"fall", week: 1},
-  { theme:"Market Structure & Concentration", title:"Industry Structure, Market Rivalry, and Public Policy", authors:"Harold Demsetz", year: 1973, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/724822", level:"deep", start: false, quarter:"fall", week: 3},
+  { theme:"Market Structure & Concentration", title:"A Theory of Oligopoly", authors:"George J. Stigler", year: 1964, venue:"Journal of Political Economy", type:"paper", url:"https://www.jstor.org/stable/1828791", start: true, level:"core", quarter:"fall", week: 7},
+  { theme:"Market Structure & Concentration", title:"Industry Structure, Market Rivalry, and Public Policy", authors:"Harold Demsetz", year: 1973, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/724822", level:"deep", start: false, quarter:"fall", week: 7},
   { theme:"Market Structure & Concentration", title:"Durability and Monopoly", authors:"Ronald H. Coase", year: 1972, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/725018", start: false, level:"core", quarter:"fall", week: 8},
   { theme:"Market Structure & Concentration", title:"Economists' Views: The Concentration-Collusion Doctrine", authors:"Yale Brozen", year: 1977, venue:"Antitrust Law Journal", type:"paper", url:"https://www.jstor.org/stable/40842727", start: false, level:"core", quarter:"winter", week: 1},
   { theme:"Market Structure & Concentration", title:"Bain's Concentration and Rates of Return Revisited", authors:"Yale Brozen", year: 1971, venue:"The Journal of Law & Economics", type:"paper", url:"https://www.jstor.org/stable/724950", start: false, level:"deep", quarter:"winter", week: 1},
